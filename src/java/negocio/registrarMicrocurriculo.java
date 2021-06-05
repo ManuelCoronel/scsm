@@ -26,17 +26,30 @@ public class registrarMicrocurriculo {
    
    public String[] formatearContenidos(String unidad){
    
-       String text[] = unidad.split("");
+       String[] text = unidad.split("-");
+       
+       System.out.println("Formateo");
+       System.out.println(text.length);
+       for (String string : text) {
+           System.out.println(string); 
+       }
        return null;
    }
         
     public static void main(String[] args) {
         Scanner sc = new Scanner (System.in);
-        String cadena = sc.next();
         
-        registrarMicrocurriculo rm = new registrarMicrocurriculo();
-        rm.obtenerContenidos(cadena);
-        System.out.println(cadena);
+        
+         String cadena = "";
+            while(sc.hasNext()){
+            cadena += sc.next();
+            
+            }
+         System.out.println("ORIGINAL");
+          System.out.println(cadena);
+         registrarMicrocurriculo rm = new registrarMicrocurriculo();
+         rm.obtenerContenidos(cadena);
+        
     }
    
     
