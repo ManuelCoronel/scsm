@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -37,12 +38,16 @@ public class PrerrequisitoMateria implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia")
+    @JoinColumns({
+        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia"),
+        @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
     @ManyToOne(optional = false)
-    private Materia materiaCodigoMateria;
-    @JoinColumn(name = "materia_codigo_prerrequisito", referencedColumnName = "codigo_materia")
+    private Materia materia;
+    @JoinColumns({
+        @JoinColumn(name = "materia_codigo_prerrequisito", referencedColumnName = "codigo_materia"),
+        @JoinColumn(name = "materia_pensum_prerrequisito", referencedColumnName = "pensum_codigo")})
     @ManyToOne(optional = false)
-    private Materia materiaCodigoPrerrequisito;
+    private Materia materia1;
 
     public PrerrequisitoMateria() {
     }
@@ -59,20 +64,20 @@ public class PrerrequisitoMateria implements Serializable {
         this.id = id;
     }
 
-    public Materia getMateriaCodigoMateria() {
-        return materiaCodigoMateria;
+    public Materia getMateria() {
+        return materia;
     }
 
-    public void setMateriaCodigoMateria(Materia materiaCodigoMateria) {
-        this.materiaCodigoMateria = materiaCodigoMateria;
+    public void setMateria(Materia materia) {
+        this.materia = materia;
     }
 
-    public Materia getMateriaCodigoPrerrequisito() {
-        return materiaCodigoPrerrequisito;
+    public Materia getMateria1() {
+        return materia1;
     }
 
-    public void setMateriaCodigoPrerrequisito(Materia materiaCodigoPrerrequisito) {
-        this.materiaCodigoPrerrequisito = materiaCodigoPrerrequisito;
+    public void setMateria1(Materia materia1) {
+        this.materia1 = materia1;
     }
 
     @Override

@@ -6,9 +6,7 @@
 package dao;
 
 import dao.exceptions.NonexistentEntityException;
-import dao.exceptions.PreexistingEntityException;
 import dto.EquivalenciaMateria;
-import dto.EquivalenciaMateriaPK;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -34,11 +32,7 @@ public class EquivalenciaMateriaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(EquivalenciaMateria equivalenciaMateria) throws PreexistingEntityException, Exception {
-        if (equivalenciaMateria.getEquivalenciaMateriaPK() == null) {
-            equivalenciaMateria.setEquivalenciaMateriaPK(new EquivalenciaMateriaPK());
-        }
-        equivalenciaMateria.getEquivalenciaMateriaPK().setMateriaCodigoMateria(equivalenciaMateria.getMateria().getMateriaPK().getCodigoMateria());
+    public void create(EquivalenciaMateria equivalenciaMateria) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -54,11 +48,6 @@ public class EquivalenciaMateriaJpaController implements Serializable {
                 materia = em.merge(materia);
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findEquivalenciaMateria(equivalenciaMateria.getEquivalenciaMateriaPK()) != null) {
-                throw new PreexistingEntityException("EquivalenciaMateria " + equivalenciaMateria + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -67,12 +56,11 @@ public class EquivalenciaMateriaJpaController implements Serializable {
     }
 
     public void edit(EquivalenciaMateria equivalenciaMateria) throws NonexistentEntityException, Exception {
-        equivalenciaMateria.getEquivalenciaMateriaPK().setMateriaCodigoMateria(equivalenciaMateria.getMateria().getMateriaPK().getCodigoMateria());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            EquivalenciaMateria persistentEquivalenciaMateria = em.find(EquivalenciaMateria.class, equivalenciaMateria.getEquivalenciaMateriaPK());
+            EquivalenciaMateria persistentEquivalenciaMateria = em.find(EquivalenciaMateria.class, equivalenciaMateria.getId());
             Materia materiaOld = persistentEquivalenciaMateria.getMateria();
             Materia materiaNew = equivalenciaMateria.getMateria();
             if (materiaNew != null) {
@@ -92,7 +80,7 @@ public class EquivalenciaMateriaJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                EquivalenciaMateriaPK id = equivalenciaMateria.getEquivalenciaMateriaPK();
+                Integer id = equivalenciaMateria.getId();
                 if (findEquivalenciaMateria(id) == null) {
                     throw new NonexistentEntityException("The equivalenciaMateria with id " + id + " no longer exists.");
                 }
@@ -105,7 +93,7 @@ public class EquivalenciaMateriaJpaController implements Serializable {
         }
     }
 
-    public void destroy(EquivalenciaMateriaPK id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -113,7 +101,7 @@ public class EquivalenciaMateriaJpaController implements Serializable {
             EquivalenciaMateria equivalenciaMateria;
             try {
                 equivalenciaMateria = em.getReference(EquivalenciaMateria.class, id);
-                equivalenciaMateria.getEquivalenciaMateriaPK();
+                equivalenciaMateria.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The equivalenciaMateria with id " + id + " no longer exists.", enfe);
             }
@@ -155,7 +143,7 @@ public class EquivalenciaMateriaJpaController implements Serializable {
         }
     }
 
-    public EquivalenciaMateria findEquivalenciaMateria(EquivalenciaMateriaPK id) {
+    public EquivalenciaMateria findEquivalenciaMateria(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(EquivalenciaMateria.class, id);

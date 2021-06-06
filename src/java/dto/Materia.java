@@ -18,7 +18,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -66,14 +65,14 @@ public class Materia implements Serializable {
     private int hti;
     @Column(name = "cr")
     private Integer cr;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materiaCodigoMateria")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
     private List<PrerrequisitoMateria> prerrequisitoMateriaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materiaCodigoPrerrequisito")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia1")
     private List<PrerrequisitoMateria> prerrequisitoMateriaList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
     private List<EquivalenciaMateria> equivalenciaMateriaList;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "materia")
-    private Microcurriculo microcurriculo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
+    private List<Microcurriculo> microcurriculoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
     private List<MateriaPeriodo> materiaPeriodoList;
     @JoinColumns({
@@ -194,12 +193,13 @@ public class Materia implements Serializable {
         this.equivalenciaMateriaList = equivalenciaMateriaList;
     }
 
-    public Microcurriculo getMicrocurriculo() {
-        return microcurriculo;
+    @XmlTransient
+    public List<Microcurriculo> getMicrocurriculoList() {
+        return microcurriculoList;
     }
 
-    public void setMicrocurriculo(Microcurriculo microcurriculo) {
-        this.microcurriculo = microcurriculo;
+    public void setMicrocurriculoList(List<Microcurriculo> microcurriculoList) {
+        this.microcurriculoList = microcurriculoList;
     }
 
     @XmlTransient

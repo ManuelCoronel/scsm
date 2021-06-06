@@ -13,11 +13,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -44,8 +44,10 @@ public class Microcurriculo implements Serializable {
     @JoinColumn(name = "area_de_formacion_id", referencedColumnName = "id")
     @ManyToOne
     private AreaFormacion areaDeFormacionId;
-    @JoinColumn(name = "codigo_materia", referencedColumnName = "codigo_materia", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @JoinColumns({
+        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia"),
+        @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
+    @ManyToOne(optional = false)
     private Materia materia;
     @JoinColumn(name = "tipo_asignatura_id", referencedColumnName = "id")
     @ManyToOne(optional = false)

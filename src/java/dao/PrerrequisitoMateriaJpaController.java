@@ -37,24 +37,24 @@ public class PrerrequisitoMateriaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Materia materiaCodigoMateria = prerrequisitoMateria.getMateriaCodigoMateria();
-            if (materiaCodigoMateria != null) {
-                materiaCodigoMateria = em.getReference(materiaCodigoMateria.getClass(), materiaCodigoMateria.getMateriaPK());
-                prerrequisitoMateria.setMateriaCodigoMateria(materiaCodigoMateria);
+            Materia materia = prerrequisitoMateria.getMateria();
+            if (materia != null) {
+                materia = em.getReference(materia.getClass(), materia.getMateriaPK());
+                prerrequisitoMateria.setMateria(materia);
             }
-            Materia materiaCodigoPrerrequisito = prerrequisitoMateria.getMateriaCodigoPrerrequisito();
-            if (materiaCodigoPrerrequisito != null) {
-                materiaCodigoPrerrequisito = em.getReference(materiaCodigoPrerrequisito.getClass(), materiaCodigoPrerrequisito.getMateriaPK());
-                prerrequisitoMateria.setMateriaCodigoPrerrequisito(materiaCodigoPrerrequisito);
+            Materia materia1 = prerrequisitoMateria.getMateria1();
+            if (materia1 != null) {
+                materia1 = em.getReference(materia1.getClass(), materia1.getMateriaPK());
+                prerrequisitoMateria.setMateria1(materia1);
             }
             em.persist(prerrequisitoMateria);
-            if (materiaCodigoMateria != null) {
-                materiaCodigoMateria.getPrerrequisitoMateriaList().add(prerrequisitoMateria);
-                materiaCodigoMateria = em.merge(materiaCodigoMateria);
+            if (materia != null) {
+                materia.getPrerrequisitoMateriaList().add(prerrequisitoMateria);
+                materia = em.merge(materia);
             }
-            if (materiaCodigoPrerrequisito != null) {
-                materiaCodigoPrerrequisito.getPrerrequisitoMateriaList().add(prerrequisitoMateria);
-                materiaCodigoPrerrequisito = em.merge(materiaCodigoPrerrequisito);
+            if (materia1 != null) {
+                materia1.getPrerrequisitoMateriaList().add(prerrequisitoMateria);
+                materia1 = em.merge(materia1);
             }
             em.getTransaction().commit();
         } finally {
@@ -70,34 +70,34 @@ public class PrerrequisitoMateriaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             PrerrequisitoMateria persistentPrerrequisitoMateria = em.find(PrerrequisitoMateria.class, prerrequisitoMateria.getId());
-            Materia materiaCodigoMateriaOld = persistentPrerrequisitoMateria.getMateriaCodigoMateria();
-            Materia materiaCodigoMateriaNew = prerrequisitoMateria.getMateriaCodigoMateria();
-            Materia materiaCodigoPrerrequisitoOld = persistentPrerrequisitoMateria.getMateriaCodigoPrerrequisito();
-            Materia materiaCodigoPrerrequisitoNew = prerrequisitoMateria.getMateriaCodigoPrerrequisito();
-            if (materiaCodigoMateriaNew != null) {
-                materiaCodigoMateriaNew = em.getReference(materiaCodigoMateriaNew.getClass(), materiaCodigoMateriaNew.getMateriaPK());
-                prerrequisitoMateria.setMateriaCodigoMateria(materiaCodigoMateriaNew);
+            Materia materiaOld = persistentPrerrequisitoMateria.getMateria();
+            Materia materiaNew = prerrequisitoMateria.getMateria();
+            Materia materia1Old = persistentPrerrequisitoMateria.getMateria1();
+            Materia materia1New = prerrequisitoMateria.getMateria1();
+            if (materiaNew != null) {
+                materiaNew = em.getReference(materiaNew.getClass(), materiaNew.getMateriaPK());
+                prerrequisitoMateria.setMateria(materiaNew);
             }
-            if (materiaCodigoPrerrequisitoNew != null) {
-                materiaCodigoPrerrequisitoNew = em.getReference(materiaCodigoPrerrequisitoNew.getClass(), materiaCodigoPrerrequisitoNew.getMateriaPK());
-                prerrequisitoMateria.setMateriaCodigoPrerrequisito(materiaCodigoPrerrequisitoNew);
+            if (materia1New != null) {
+                materia1New = em.getReference(materia1New.getClass(), materia1New.getMateriaPK());
+                prerrequisitoMateria.setMateria1(materia1New);
             }
             prerrequisitoMateria = em.merge(prerrequisitoMateria);
-            if (materiaCodigoMateriaOld != null && !materiaCodigoMateriaOld.equals(materiaCodigoMateriaNew)) {
-                materiaCodigoMateriaOld.getPrerrequisitoMateriaList().remove(prerrequisitoMateria);
-                materiaCodigoMateriaOld = em.merge(materiaCodigoMateriaOld);
+            if (materiaOld != null && !materiaOld.equals(materiaNew)) {
+                materiaOld.getPrerrequisitoMateriaList().remove(prerrequisitoMateria);
+                materiaOld = em.merge(materiaOld);
             }
-            if (materiaCodigoMateriaNew != null && !materiaCodigoMateriaNew.equals(materiaCodigoMateriaOld)) {
-                materiaCodigoMateriaNew.getPrerrequisitoMateriaList().add(prerrequisitoMateria);
-                materiaCodigoMateriaNew = em.merge(materiaCodigoMateriaNew);
+            if (materiaNew != null && !materiaNew.equals(materiaOld)) {
+                materiaNew.getPrerrequisitoMateriaList().add(prerrequisitoMateria);
+                materiaNew = em.merge(materiaNew);
             }
-            if (materiaCodigoPrerrequisitoOld != null && !materiaCodigoPrerrequisitoOld.equals(materiaCodigoPrerrequisitoNew)) {
-                materiaCodigoPrerrequisitoOld.getPrerrequisitoMateriaList().remove(prerrequisitoMateria);
-                materiaCodigoPrerrequisitoOld = em.merge(materiaCodigoPrerrequisitoOld);
+            if (materia1Old != null && !materia1Old.equals(materia1New)) {
+                materia1Old.getPrerrequisitoMateriaList().remove(prerrequisitoMateria);
+                materia1Old = em.merge(materia1Old);
             }
-            if (materiaCodigoPrerrequisitoNew != null && !materiaCodigoPrerrequisitoNew.equals(materiaCodigoPrerrequisitoOld)) {
-                materiaCodigoPrerrequisitoNew.getPrerrequisitoMateriaList().add(prerrequisitoMateria);
-                materiaCodigoPrerrequisitoNew = em.merge(materiaCodigoPrerrequisitoNew);
+            if (materia1New != null && !materia1New.equals(materia1Old)) {
+                materia1New.getPrerrequisitoMateriaList().add(prerrequisitoMateria);
+                materia1New = em.merge(materia1New);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -128,15 +128,15 @@ public class PrerrequisitoMateriaJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The prerrequisitoMateria with id " + id + " no longer exists.", enfe);
             }
-            Materia materiaCodigoMateria = prerrequisitoMateria.getMateriaCodigoMateria();
-            if (materiaCodigoMateria != null) {
-                materiaCodigoMateria.getPrerrequisitoMateriaList().remove(prerrequisitoMateria);
-                materiaCodigoMateria = em.merge(materiaCodigoMateria);
+            Materia materia = prerrequisitoMateria.getMateria();
+            if (materia != null) {
+                materia.getPrerrequisitoMateriaList().remove(prerrequisitoMateria);
+                materia = em.merge(materia);
             }
-            Materia materiaCodigoPrerrequisito = prerrequisitoMateria.getMateriaCodigoPrerrequisito();
-            if (materiaCodigoPrerrequisito != null) {
-                materiaCodigoPrerrequisito.getPrerrequisitoMateriaList().remove(prerrequisitoMateria);
-                materiaCodigoPrerrequisito = em.merge(materiaCodigoPrerrequisito);
+            Materia materia1 = prerrequisitoMateria.getMateria1();
+            if (materia1 != null) {
+                materia1.getPrerrequisitoMateriaList().remove(prerrequisitoMateria);
+                materia1 = em.merge(materia1);
             }
             em.remove(prerrequisitoMateria);
             em.getTransaction().commit();

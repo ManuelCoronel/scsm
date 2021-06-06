@@ -26,9 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "MateriaPeriodoGrupo.findAll", query = "SELECT m FROM MateriaPeriodoGrupo m"),
     @NamedQuery(name = "MateriaPeriodoGrupo.findByGrupo", query = "SELECT m FROM MateriaPeriodoGrupo m WHERE m.materiaPeriodoGrupoPK.grupo = :grupo"),
-    @NamedQuery(name = "MateriaPeriodoGrupo.findByMateriaPeriodoMateriaCodigoMateria", query = "SELECT m FROM MateriaPeriodoGrupo m WHERE m.materiaPeriodoGrupoPK.materiaPeriodoMateriaCodigoMateria = :materiaPeriodoMateriaCodigoMateria"),
-    @NamedQuery(name = "MateriaPeriodoGrupo.findByMateriaPeriodoAnio", query = "SELECT m FROM MateriaPeriodoGrupo m WHERE m.materiaPeriodoGrupoPK.materiaPeriodoAnio = :materiaPeriodoAnio"),
-    @NamedQuery(name = "MateriaPeriodoGrupo.findByMateriaPeriodoSemestreAnio", query = "SELECT m FROM MateriaPeriodoGrupo m WHERE m.materiaPeriodoGrupoPK.materiaPeriodoSemestreAnio = :materiaPeriodoSemestreAnio"),
     @NamedQuery(name = "MateriaPeriodoGrupo.findByDocenteCodigo", query = "SELECT m FROM MateriaPeriodoGrupo m WHERE m.materiaPeriodoGrupoPK.docenteCodigo = :docenteCodigo")})
 public class MateriaPeriodoGrupo implements Serializable {
 
@@ -39,9 +36,9 @@ public class MateriaPeriodoGrupo implements Serializable {
     @ManyToOne(optional = false)
     private Docente docente;
     @JoinColumns({
-        @JoinColumn(name = "materia_periodo_materia_codigo_materia", referencedColumnName = "materia_codigo_materia", insertable = false, updatable = false),
-        @JoinColumn(name = "materia_periodo_anio", referencedColumnName = "anio", insertable = false, updatable = false),
-        @JoinColumn(name = "materia_periodo_semestre_anio", referencedColumnName = "semestre_anio", insertable = false, updatable = false)})
+        @JoinColumn(name = "materia_periodo_materia_codigo_materia", referencedColumnName = "materia_codigo_materia"),
+        @JoinColumn(name = "materia_periodo_anio", referencedColumnName = "anio"),
+        @JoinColumn(name = "materia_periodo_semestre_anio", referencedColumnName = "semestre_anio")})
     @ManyToOne(optional = false)
     private MateriaPeriodo materiaPeriodo;
 
@@ -52,8 +49,8 @@ public class MateriaPeriodoGrupo implements Serializable {
         this.materiaPeriodoGrupoPK = materiaPeriodoGrupoPK;
     }
 
-    public MateriaPeriodoGrupo(String grupo, int materiaPeriodoMateriaCodigoMateria, int materiaPeriodoAnio, int materiaPeriodoSemestreAnio, int docenteCodigo) {
-        this.materiaPeriodoGrupoPK = new MateriaPeriodoGrupoPK(grupo, materiaPeriodoMateriaCodigoMateria, materiaPeriodoAnio, materiaPeriodoSemestreAnio, docenteCodigo);
+    public MateriaPeriodoGrupo(String grupo, int docenteCodigo) {
+        this.materiaPeriodoGrupoPK = new MateriaPeriodoGrupoPK(grupo, docenteCodigo);
     }
 
     public MateriaPeriodoGrupoPK getMateriaPeriodoGrupoPK() {

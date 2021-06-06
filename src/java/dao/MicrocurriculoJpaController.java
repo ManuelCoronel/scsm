@@ -38,23 +38,9 @@ public class MicrocurriculoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Microcurriculo microcurriculo) throws IllegalOrphanException, PreexistingEntityException, Exception {
+    public void create(Microcurriculo microcurriculo) throws PreexistingEntityException, Exception {
         if (microcurriculo.getSeccionMicrocurriculoList() == null) {
             microcurriculo.setSeccionMicrocurriculoList(new ArrayList<SeccionMicrocurriculo>());
-        }
-        List<String> illegalOrphanMessages = null;
-        Materia materiaOrphanCheck = microcurriculo.getMateria();
-        if (materiaOrphanCheck != null) {
-            Microcurriculo oldMicrocurriculoOfMateria = materiaOrphanCheck.getMicrocurriculo();
-            if (oldMicrocurriculoOfMateria != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Materia " + materiaOrphanCheck + " already has an item of type Microcurriculo whose materia column cannot be null. Please make another selection for the materia field.");
-            }
-        }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
         }
         EntityManager em = null;
         try {
@@ -87,7 +73,7 @@ public class MicrocurriculoJpaController implements Serializable {
                 areaDeFormacionId = em.merge(areaDeFormacionId);
             }
             if (materia != null) {
-                materia.setMicrocurriculo(microcurriculo);
+                materia.getMicrocurriculoList().add(microcurriculo);
                 materia = em.merge(materia);
             }
             if (tipoAsignaturaId != null) {
@@ -131,15 +117,6 @@ public class MicrocurriculoJpaController implements Serializable {
             List<SeccionMicrocurriculo> seccionMicrocurriculoListOld = persistentMicrocurriculo.getSeccionMicrocurriculoList();
             List<SeccionMicrocurriculo> seccionMicrocurriculoListNew = microcurriculo.getSeccionMicrocurriculoList();
             List<String> illegalOrphanMessages = null;
-            if (materiaNew != null && !materiaNew.equals(materiaOld)) {
-                Microcurriculo oldMicrocurriculoOfMateria = materiaNew.getMicrocurriculo();
-                if (oldMicrocurriculoOfMateria != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Materia " + materiaNew + " already has an item of type Microcurriculo whose materia column cannot be null. Please make another selection for the materia field.");
-                }
-            }
             for (SeccionMicrocurriculo seccionMicrocurriculoListOldSeccionMicrocurriculo : seccionMicrocurriculoListOld) {
                 if (!seccionMicrocurriculoListNew.contains(seccionMicrocurriculoListOldSeccionMicrocurriculo)) {
                     if (illegalOrphanMessages == null) {
@@ -180,11 +157,11 @@ public class MicrocurriculoJpaController implements Serializable {
                 areaDeFormacionIdNew = em.merge(areaDeFormacionIdNew);
             }
             if (materiaOld != null && !materiaOld.equals(materiaNew)) {
-                materiaOld.setMicrocurriculo(null);
+                materiaOld.getMicrocurriculoList().remove(microcurriculo);
                 materiaOld = em.merge(materiaOld);
             }
             if (materiaNew != null && !materiaNew.equals(materiaOld)) {
-                materiaNew.setMicrocurriculo(microcurriculo);
+                materiaNew.getMicrocurriculoList().add(microcurriculo);
                 materiaNew = em.merge(materiaNew);
             }
             if (tipoAsignaturaIdOld != null && !tipoAsignaturaIdOld.equals(tipoAsignaturaIdNew)) {
@@ -253,7 +230,7 @@ public class MicrocurriculoJpaController implements Serializable {
             }
             Materia materia = microcurriculo.getMateria();
             if (materia != null) {
-                materia.setMicrocurriculo(null);
+                materia.getMicrocurriculoList().remove(microcurriculo);
                 materia = em.merge(materia);
             }
             TipoAsignatura tipoAsignaturaId = microcurriculo.getTipoAsignaturaId();

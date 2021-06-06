@@ -11,6 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -36,7 +37,9 @@ public class MateriaPeriodo implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected MateriaPeriodoPK materiaPeriodoPK;
-    @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia", insertable = false, updatable = false)
+    @JoinColumns({
+        @JoinColumn(name = "materia_codigo_materia1", referencedColumnName = "codigo_materia"),
+        @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
     @ManyToOne(optional = false)
     private Materia materia;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materiaPeriodo")

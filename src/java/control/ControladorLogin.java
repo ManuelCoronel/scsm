@@ -69,19 +69,19 @@ public class ControladorLogin extends HttpServlet {
 
         if (rol == 1) {
             System.out.println(docente.getProgramaList().get(0).getNombrePrograma());
-            cargarPrograma();
+            cargarPrograma(request, response, docente);
         } else {
-            cargarDepartamento();
+            cargarDepartamento(request, response, docente);
         }
 
     }
 
-    public static void cargarDepartamento() {
-
+    public static void cargarDepartamento(HttpServletRequest request, HttpServletResponse response,dto.Docente docente) {
+          //  request.getSession().setAttribute(, request);
     }
 
-    public static void cargarPrograma() {
-
+    public static void cargarPrograma(HttpServletRequest request, HttpServletResponse response,dto.Docente docente) {
+        
     }
 
     @Override
