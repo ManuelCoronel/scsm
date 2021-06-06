@@ -7,6 +7,7 @@ package control;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,9 +35,11 @@ public class ControladorMicrocurriculo extends HttpServlet {
     
     }
     
-public static void listar(){
+public static void listar(HttpServletRequest request, HttpServletResponse response){
 
-
+negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
+dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
+ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodosMicrocurriculos(usuario.getDocente().getProgramaList().get(0).getCodigo());
 
 }
  
@@ -46,7 +49,7 @@ public static void listar(){
 
             String accion = request.getParameter("accion");
             if (accion.equalsIgnoreCase("listar")){
-            
+                listar(request, response);
             
             
             }

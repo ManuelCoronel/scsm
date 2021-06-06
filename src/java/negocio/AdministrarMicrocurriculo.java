@@ -19,22 +19,19 @@ public class AdministrarMicrocurriculo {
     public AdministrarMicrocurriculo() {
     }
     
-//       public ArrayList<dto.Microcurriculo> obtenerMicrocurriculosPensum(int idPrograma,int codigo, int programaCodigo) {
-//        
-//        Conexion con = Conexion.getConexion();
-//        dao.ProgramaJpaController daoPrograma = new dao.ProgramaJpaController(con.getBd());
-//        dto.Programa programa = daoPrograma.findPrograma(idPrograma);
-//        ArrayList<dto.Pensum> pensum 
-//        ArrayList<dto.Microcurriculo> microcurriculos = new ArrayList<>();
-//        for (Pensum pensum : pensums) {
-//            ArrayList<dto.Materia> materias = (ArrayList<dto.Materia>) pensum.getMateriaList();
-//            for (Materia materia : materias) {
-//                microcurriculos.add(materia.getMicrocurriculoList().get(0));
-//            }
-//        }
-//        
-//        return microcurriculos;
-//    }
+       public ArrayList<dto.Microcurriculo> obtenerMicrocurriculosPensum(int codigo, int programaCodigo) {
+        
+        Conexion con = Conexion.getConexion();
+        AdministrarPensum administrarPensum = new AdministrarPensum();
+        dto.Pensum pensum = administrarPensum.obtenerPensum(codigo, programaCodigo);
+        
+        ArrayList<dto.Microcurriculo> microcurriculos = new ArrayList<>();
+           for (Materia materia : pensum.getMateriaList()) {
+               microcurriculos.add(materia.getMicrocurriculoList().get(0));
+           }
+        
+        return microcurriculos;
+    }
     
     public ArrayList<dto.Microcurriculo> obtenerTodosMicrocurriculos(int idPrograma) {
         
