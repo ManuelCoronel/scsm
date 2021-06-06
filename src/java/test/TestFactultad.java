@@ -22,16 +22,18 @@ public class TestFactultad {
         FacultadJpaController facultadDao = new dao.FacultadJpaController(con.getBd());
       
    
-        for (Facultad findFacultadEntity : facultadDao.findFacultadEntities()) {
-            
-        
-        dto.Facultad facultad = findFacultadEntity;
-            System.out.println(facultad.getNombre());
-            
-            for (Departamento departamento : facultad.getDepartamentoList()) {
-                System.out.println(departamento.getNombreDepartamento());
-            }
-        }
+//        for (Facultad findFacultadEntity : facultadDao.findFacultadEntities()) {
+//            
+//        
+//        dto.Facultad facultad = findFacultadEntity;
+//            System.out.println(facultad.getNombre());
+//            
+//            for (Departamento departamento : facultad.getDepartamentoList()) {
+//                System.out.println(departamento.getNombreDepartamento());
+//            }
+//        }
+
+
     }
         
     
