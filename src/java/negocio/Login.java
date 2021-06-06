@@ -20,21 +20,29 @@ public class Login {
         Conexion con = Conexion.getConexion();
         dao.UsuarioJpaController daoUsuario = new dao.UsuarioJpaController(con.getBd());
         dto.UsuarioPK usuarioPk = new dto.UsuarioPK(rol, codigo);
-         dto.Usuario usuario = daoUsuario.findUsuario(usuarioPk);
+        dto.Usuario usuario = daoUsuario.findUsuario(usuarioPk);
         System.out.println(usuario);
-        
-        if (usuario!=null&& usuario.getClave().equals(contrasena)) {
+
+        if (usuario != null && usuario.getClave().equals(contrasena)) {
             return true;
         } else {
             return false;
         }
 
     }
-    
-    
-    public dto.Docente obtenerDocente(int codigo){
-       Conexion con = Conexion.getConexion();
-       dao.DocenteJpaController daoDocente = new dao.DocenteJpaController(con.getBd());
-       return daoDocente.findDocente(codigo);
+
+    public dto.Usuario obtenerUsuario(int codigo, int rol) {
+        Conexion con = Conexion.getConexion();
+        dao.UsuarioJpaController daoUsuario = new dao.UsuarioJpaController(con.getBd());
+        dto.UsuarioPK usuarioPk = new dto.UsuarioPK(rol, codigo);
+        dto.Usuario usuario = daoUsuario.findUsuario(usuarioPk);
+        
+        return usuario;
+    }
+
+    public dto.Docente obtenerDocente(int codigo) {
+        Conexion con = Conexion.getConexion();
+        dao.DocenteJpaController daoDocente = new dao.DocenteJpaController(con.getBd());
+        return daoDocente.findDocente(codigo);
     }
 }

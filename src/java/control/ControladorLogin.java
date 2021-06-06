@@ -63,25 +63,27 @@ public class ControladorLogin extends HttpServlet {
     }
 
     public static void cargarInformacion(HttpServletRequest request, HttpServletResponse response, int codigo, Login login, int rol) {
-        dto.Docente docente = login.obtenerDocente(codigo);
-        request.setAttribute("sesion", docente);
-        request.setAttribute("rol", rol);
-
+        dto.Usuario usuario = login.obtenerUsuario(codigo, rol);
+        request.setAttribute("sesion", usuario);
+        
         if (rol == 1) {
-            System.out.println(docente.getProgramaList().get(0).getNombrePrograma());
-            cargarPrograma(request, response, docente);
+            System.out.println(usuario.getDocente().getProgramaList().get(0).getNombrePrograma());
+            cargarPrograma(request, response, usuario);
+           
         } else {
-            cargarDepartamento(request, response, docente);
+            cargarDepartamento(request, response, usuario);
         }
 
     }
+    
+   
 
-    public static void cargarDepartamento(HttpServletRequest request, HttpServletResponse response,dto.Docente docente) {
-          //  request.getSession().setAttribute(, request);
+    public static void cargarDepartamento(HttpServletRequest request, HttpServletResponse response,dto.Usuario usuario) {
+            request.getSession().setAttribute("departamentoSesion",usuario.getDocente().getDepartamentoId().getNombreDepartamento());
     }
 
-    public static void cargarPrograma(HttpServletRequest request, HttpServletResponse response,dto.Docente docente) {
-        
+    public static void cargarPrograma(HttpServletRequest request, HttpServletResponse response,dto.Usuario usuario) {
+           request.getSession().setAttribute("programaSesion",usuario.getDocente().getProgramaList().get(0));
     }
 
     @Override
