@@ -10,10 +10,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>A</title>
+        <script src="../js/JQuery.js"></script>
+        <script src="../js/index.js"></script>
     </head>
     <body>
         <h2>Cargar pensum</h2>
         <form action="../ControladorPensum?action=registrar" method="POST" enctype="multipart/form-data">
+            <select name="programa" id="pro_option">
+            </select>
             <input type="file" name="pensum">
             <input type="submit">
         </form>
