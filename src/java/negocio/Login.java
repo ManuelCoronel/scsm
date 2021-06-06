@@ -21,9 +21,9 @@ public class Login {
         dao.UsuarioJpaController daoUsuario = new dao.UsuarioJpaController(con.getBd());
         dto.UsuarioPK usuarioPk = new dto.UsuarioPK(rol, codigo);
          dto.Usuario usuario = daoUsuario.findUsuario(usuarioPk);
-   
+        System.out.println(usuario);
         
-        if (usuario.getClave().equals(contrasena)) {
+        if (usuario!=null&& usuario.getClave().equals(contrasena)) {
             return true;
         } else {
             return false;

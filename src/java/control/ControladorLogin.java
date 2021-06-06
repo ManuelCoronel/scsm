@@ -21,55 +21,18 @@ import negocio.Login;
 @WebServlet(name = "ControladorLogin", urlPatterns = {"/ControladorLogin"})
 public class ControladorLogin extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ControladorLogin</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ControladorLogin at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -81,41 +44,46 @@ public class ControladorLogin extends HttpServlet {
         }
 
     }
-    
-   
 
     public static void verificarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int codigo = Integer.parseInt(request.getParameter("codigo"));
- 
-        String contrasena = request.getParameter("contrasena");
+
+        String contrasena = request.getParameter("clave");
         int rol = Integer.parseInt(request.getParameter("rol"));
         Login login = new Login();
-        boolean valido = login.validarUsuario(codigo,contrasena, rol);
-
+        boolean valido = login.validarUsuario(codigo, contrasena, rol);
+        System.out.println(valido);
         if (valido) {
-            dto.Docente docente = login.obtenerDocente(codigo);
-            request.setAttribute("sesion", docente);
-             response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
-        }else{
-              response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
+            cargarInformacion(request, response, codigo, login, rol);
+            response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
+        } else {
+         
         }
-        
-       
+
     }
-//    public static boolean cargarPrograma(){
-//    
-//    }
-    
-//    public static boolean cargarDepartamento(){
-//    
-//    
-//    }
-//   
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+
+    public static void cargarInformacion(HttpServletRequest request, HttpServletResponse response, int codigo, Login login, int rol) {
+        dto.Docente docente = login.obtenerDocente(codigo);
+        request.setAttribute("sesion", docente);
+        request.setAttribute("rol", rol);
+
+        if (rol == 1) {
+            System.out.println(docente.getProgramaList().get(0).getNombrePrograma());
+            cargarPrograma();
+        } else {
+            cargarDepartamento();
+        }
+
+    }
+
+    public static void cargarDepartamento() {
+
+    }
+
+    public static void cargarPrograma() {
+
+    }
+
     @Override
     public String getServletInfo() {
         return "Short description";
