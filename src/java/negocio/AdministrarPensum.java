@@ -5,7 +5,7 @@
  */
 package negocio;
 
-import dao.MateriaJpaAlternativo;
+import dao_alternativo.MateriaJpaAlternativo;
 import dao.PensumJpaController;
 import dao.ProgramaJpaController;
 import dto.Pensum;
@@ -33,20 +33,22 @@ public class AdministrarPensum {
     public void registrar(Integer id_programa, InputStream pensumFile) throws IOException, Exception {
         LectorPensum l = new LectorPensum();
         l.parsePDFDocument(cargarPensum(pensumFile, id_programa));
-
+        
         int count = 1;
         ProgramaJpaController prjpa = new ProgramaJpaController(Conexion.getConexion().getBd());
         PensumJpaController pjpa = new PensumJpaController(Conexion.getConexion().getBd());
         List<Pensum> lp = pjpa.findPensumEntities();
+        
         for (Pensum p : lp) {
-            if (p.getPensumPK().getCodigo() == id_programa) {
+            if (p.getPensumPK().getProgramaCodigo()== id_programa) {
                 count++;
             }
         }
-
+        
         Pensum p = new Pensum(new PensumPK(count, id_programa));
         p.setPrograma(prjpa.findPrograma(id_programa));
         pjpa.create(p);
+        
         p.setMateriaList(l.getMaterias());
         new MateriaJpaAlternativo(MyConnection.getConnection()).create(p);
     }

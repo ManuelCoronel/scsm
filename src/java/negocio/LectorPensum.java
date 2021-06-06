@@ -5,7 +5,10 @@
  */
 package negocio;
 
+import dto.EquivalenciaMateria;
 import dto.Materia;
+import dto.MateriaPK;
+import dto.PrerrequisitoMateria;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -22,16 +25,17 @@ import org.apache.pdfbox.text.TextPosition;
  *
  * @author dunke
  */
-public class LectorPensum extends PDFTextStripper{
+public class LectorPensum extends PDFTextStripper {
+
     private final String COL_NAMES[] = {"codigo", "nombre", "ht", "hp", "hti", "cr", "prereq", "si", "rc", "te", "equis"};
     private HashMap<String, TextPosition[]> encaPos;
     private List<HashMap<String, Object>> materias;
 
-    public LectorPensum() throws IOException{
+    public LectorPensum() throws IOException {
         this.encaPos = new HashMap<>();
         this.materias = new ArrayList<>();
     }
-    
+
     /**
      *
      * @param filePath Ruta del archivo(pensum)
@@ -126,9 +130,9 @@ public class LectorPensum extends PDFTextStripper{
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param text Texto a ubicar
      * @param textP Posición de la primera letra del texto
      */
@@ -136,11 +140,11 @@ public class LectorPensum extends PDFTextStripper{
         for (int i = 1; i < COL_NAMES.length; i++) {
             if (textP.getX() < this.encaPos.get(COL_NAMES[i])[1].getEndX() && textP.getX() > this.encaPos.get(COL_NAMES[i - 1])[1].getEndX()) {
                 if (i == 6 || i == 10) {
-                    if(i == 6 || text.split("-").length == 2){
+                    if (i == 6 || text.split("-").length == 2) {
                         ((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).add(text);
-                    }else if(i == 10){
-                        String ac = ((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).get(((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).size()-1).toString()+" "+text;
-                        ((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).set(((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).size()-1, ac);
+                    } else if (i == 10) {
+                        String ac = ((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).get(((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).size() - 1).toString() + " " + text;
+                        ((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).set(((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).size() - 1, ac);
                     }
                 } else {
                     this.materias.get(this.materias.size() - 1).put(COL_NAMES[i], this.materias.get(this.materias.size() - 1).get(COL_NAMES[i]).toString() + " " + text);
@@ -150,75 +154,67 @@ public class LectorPensum extends PDFTextStripper{
         }
     }
 
-    @Override
-    public String toString() {
-        String r = "";
-        for (HashMap<String, Object> h : this.materias) {
-            for (String s : COL_NAMES) {
-                r += s + ":{\n";
-                Object o = h.get(s);
-                if (o instanceof ArrayList) {
-                    ArrayList<String> ar = (ArrayList) o;
-                    for (String st : ar) {
-                        r += st + "\n";
-                    }
-                } else {
-                    r += o.toString() + "\n";
-                }
-                r += "}\n";
-            }
-            r += "------------------------------------------\n";
-        }
-        return r;
-    }
-
     //    0         1       2     3      4      5       6      7      8     9      10
     //{"codigo", "nombre", "ht", "hp", "hti", "cr", "prereq", "si", "rc", "te", "equis"}
     public List<Materia> getMaterias() {
         List<Materia> materias_rs = new ArrayList<>();
         for (HashMap<String, Object> h : this.materias) {
             Integer prob = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", "").substring(3, 5));
-            Integer semestre = prob < 20 ? prob : prob/10;
+            Integer semestre = prob < 20 ? prob : prob / 10;
             Integer codigo = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", ""));
             String nombre = h.get(COL_NAMES[1]).toString();
-            
+
             Integer ht = campoValido(h.get(COL_NAMES[2]).toString().replaceAll("\\s+", ""));
             Integer hp = campoValido(h.get(COL_NAMES[3]).toString().replaceAll("\\s+", ""));
             Integer hti = campoValido(h.get(COL_NAMES[4]).toString().replaceAll("\\s+", ""));
             Integer creditos = campoValido(h.get(COL_NAMES[5]).toString().replaceAll("\\s+", ""));
-            
-            List<Materia> prerreq = new ArrayList<>();
-            for(String s: ((ArrayList<String>)h.get(COL_NAMES[6]))){
-                prerreq.add(new Materia(Integer.parseInt(s)));
-            }
-            
             Integer cre = campoValido(h.get(COL_NAMES[8]).toString().replaceAll("\\s+", ""));
-            
-            List<Materia> equis = new ArrayList<>();
-            for(String s: ((ArrayList<String>)h.get(COL_NAMES[10]))){
-                String data[] = s.split("-");
-                Materia mt = new Materia(Integer.parseInt(data[0]));
-                mt.setNombre(data[1]);
-                equis.add(mt);
-            }
-            
-            Materia m = new Materia(codigo, nombre, creditos, semestre, ht, hp, hti);
-            m.setMateriaList(prerreq);
-            m.setMateriaList1(equis);
+
+            Materia m = new Materia(new MateriaPK(codigo, 0), nombre, creditos, semestre, ht, hp, hti);
+
+            List<PrerrequisitoMateria> prerreq = this.formatPrerreq(m, ((ArrayList<String>) h.get(COL_NAMES[6])));
+
+            List<EquivalenciaMateria> equis = this.formatEquis(m, ((ArrayList<String>) h.get(COL_NAMES[10])));
+
+            m.setEquivalenciaMateriaList(equis);
+            m.setPrerrequisitoMateriaList(prerreq);
             m.setCr(cre);
             materias_rs.add(m);
         }
-        
         return materias_rs;
     }
-    
+
     /**
-     * 
+     *
      * @param text Texto a validar
-     * @return 
-     * 
+     * @return
+     *
      */
-    private Integer campoValido(String text){
+    private Integer campoValido(String text) {
         return text.isEmpty() ? 0 : Integer.parseInt(text);
+    }
+
+    private List<EquivalenciaMateria>  formatEquis(Materia parent, ArrayList<String> listEquis) {
+        List<EquivalenciaMateria> equis = new ArrayList<>();
+        for (String s : listEquis) {
+            String data[] = s.split("-");
+            EquivalenciaMateria eq = new EquivalenciaMateria();
+            eq.setMateria(parent);
+            eq.setEquivalenciaMateria(Integer.parseInt(data[0]));
+            eq.setNombre(data[1]);
+            equis.add(eq);
+        }
+        return equis;
+    }
+
+    private List<PrerrequisitoMateria> formatPrerreq(Materia parent, ArrayList<String> listPrerreq) {
+        List<PrerrequisitoMateria> prerreqForm = new ArrayList<>();
+        for (String s : listPrerreq) {
+            PrerrequisitoMateria pr = new PrerrequisitoMateria();
+            pr.setMateria(parent);
+            pr.setMateria1(new Materia(Integer.parseInt(s), 0));
+            prerreqForm.add(pr);
+        }
+        return prerreqForm;
     }
 }
