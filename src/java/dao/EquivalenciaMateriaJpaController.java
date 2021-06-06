@@ -5,17 +5,16 @@
  */
 package dao;
 
-import dao.exceptions.IllegalOrphanException;
 import dao.exceptions.NonexistentEntityException;
 import dao.exceptions.PreexistingEntityException;
 import dto.EquivalenciaMateria;
+import dto.EquivalenciaMateriaPK;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import dto.Materia;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -35,21 +34,11 @@ public class EquivalenciaMateriaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(EquivalenciaMateria equivalenciaMateria) throws IllegalOrphanException, PreexistingEntityException, Exception {
-        List<String> illegalOrphanMessages = null;
-        Materia materiaOrphanCheck = equivalenciaMateria.getMateria();
-        if (materiaOrphanCheck != null) {
-            EquivalenciaMateria oldEquivalenciaMateriaOfMateria = materiaOrphanCheck.getEquivalenciaMateria();
-            if (oldEquivalenciaMateriaOfMateria != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Materia " + materiaOrphanCheck + " already has an item of type EquivalenciaMateria whose materia column cannot be null. Please make another selection for the materia field.");
-            }
+    public void create(EquivalenciaMateria equivalenciaMateria) throws PreexistingEntityException, Exception {
+        if (equivalenciaMateria.getEquivalenciaMateriaPK() == null) {
+            equivalenciaMateria.setEquivalenciaMateriaPK(new EquivalenciaMateriaPK());
         }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
-        }
+        equivalenciaMateria.getEquivalenciaMateriaPK().setMateriaCodigoMateria(equivalenciaMateria.getMateria().getCodigoMateria());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -61,12 +50,12 @@ public class EquivalenciaMateriaJpaController implements Serializable {
             }
             em.persist(equivalenciaMateria);
             if (materia != null) {
-                materia.setEquivalenciaMateria(equivalenciaMateria);
+                materia.getEquivalenciaMateriaList().add(equivalenciaMateria);
                 materia = em.merge(materia);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findEquivalenciaMateria(equivalenciaMateria.getMateriaCodigoMateria()) != null) {
+            if (findEquivalenciaMateria(equivalenciaMateria.getEquivalenciaMateriaPK()) != null) {
                 throw new PreexistingEntityException("EquivalenciaMateria " + equivalenciaMateria + " already exists.", ex);
             }
             throw ex;
@@ -77,45 +66,33 @@ public class EquivalenciaMateriaJpaController implements Serializable {
         }
     }
 
-    public void edit(EquivalenciaMateria equivalenciaMateria) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(EquivalenciaMateria equivalenciaMateria) throws NonexistentEntityException, Exception {
+        equivalenciaMateria.getEquivalenciaMateriaPK().setMateriaCodigoMateria(equivalenciaMateria.getMateria().getCodigoMateria());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            EquivalenciaMateria persistentEquivalenciaMateria = em.find(EquivalenciaMateria.class, equivalenciaMateria.getMateriaCodigoMateria());
+            EquivalenciaMateria persistentEquivalenciaMateria = em.find(EquivalenciaMateria.class, equivalenciaMateria.getEquivalenciaMateriaPK());
             Materia materiaOld = persistentEquivalenciaMateria.getMateria();
             Materia materiaNew = equivalenciaMateria.getMateria();
-            List<String> illegalOrphanMessages = null;
-            if (materiaNew != null && !materiaNew.equals(materiaOld)) {
-                EquivalenciaMateria oldEquivalenciaMateriaOfMateria = materiaNew.getEquivalenciaMateria();
-                if (oldEquivalenciaMateriaOfMateria != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Materia " + materiaNew + " already has an item of type EquivalenciaMateria whose materia column cannot be null. Please make another selection for the materia field.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             if (materiaNew != null) {
                 materiaNew = em.getReference(materiaNew.getClass(), materiaNew.getCodigoMateria());
                 equivalenciaMateria.setMateria(materiaNew);
             }
             equivalenciaMateria = em.merge(equivalenciaMateria);
             if (materiaOld != null && !materiaOld.equals(materiaNew)) {
-                materiaOld.setEquivalenciaMateria(null);
+                materiaOld.getEquivalenciaMateriaList().remove(equivalenciaMateria);
                 materiaOld = em.merge(materiaOld);
             }
             if (materiaNew != null && !materiaNew.equals(materiaOld)) {
-                materiaNew.setEquivalenciaMateria(equivalenciaMateria);
+                materiaNew.getEquivalenciaMateriaList().add(equivalenciaMateria);
                 materiaNew = em.merge(materiaNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = equivalenciaMateria.getMateriaCodigoMateria();
+                EquivalenciaMateriaPK id = equivalenciaMateria.getEquivalenciaMateriaPK();
                 if (findEquivalenciaMateria(id) == null) {
                     throw new NonexistentEntityException("The equivalenciaMateria with id " + id + " no longer exists.");
                 }
@@ -128,7 +105,7 @@ public class EquivalenciaMateriaJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(EquivalenciaMateriaPK id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -136,13 +113,13 @@ public class EquivalenciaMateriaJpaController implements Serializable {
             EquivalenciaMateria equivalenciaMateria;
             try {
                 equivalenciaMateria = em.getReference(EquivalenciaMateria.class, id);
-                equivalenciaMateria.getMateriaCodigoMateria();
+                equivalenciaMateria.getEquivalenciaMateriaPK();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The equivalenciaMateria with id " + id + " no longer exists.", enfe);
             }
             Materia materia = equivalenciaMateria.getMateria();
             if (materia != null) {
-                materia.setEquivalenciaMateria(null);
+                materia.getEquivalenciaMateriaList().remove(equivalenciaMateria);
                 materia = em.merge(materia);
             }
             em.remove(equivalenciaMateria);
@@ -178,7 +155,7 @@ public class EquivalenciaMateriaJpaController implements Serializable {
         }
     }
 
-    public EquivalenciaMateria findEquivalenciaMateria(Integer id) {
+    public EquivalenciaMateria findEquivalenciaMateria(EquivalenciaMateriaPK id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(EquivalenciaMateria.class, id);

@@ -14,11 +14,11 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import dto.Pensum;
-import dto.EquivalenciaMateria;
 import dto.Microcurriculo;
 import dto.Materia;
 import java.util.ArrayList;
 import java.util.List;
+import dto.EquivalenciaMateria;
 import dto.MateriaPeriodo;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -45,6 +45,9 @@ public class MateriaJpaController implements Serializable {
         if (materia.getMateriaList1() == null) {
             materia.setMateriaList1(new ArrayList<Materia>());
         }
+        if (materia.getEquivalenciaMateriaList() == null) {
+            materia.setEquivalenciaMateriaList(new ArrayList<EquivalenciaMateria>());
+        }
         if (materia.getMateriaPeriodoList() == null) {
             materia.setMateriaPeriodoList(new ArrayList<MateriaPeriodo>());
         }
@@ -56,11 +59,6 @@ public class MateriaJpaController implements Serializable {
             if (pensum != null) {
                 pensum = em.getReference(pensum.getClass(), pensum.getPensumPK());
                 materia.setPensum(pensum);
-            }
-            EquivalenciaMateria equivalenciaMateria = materia.getEquivalenciaMateria();
-            if (equivalenciaMateria != null) {
-                equivalenciaMateria = em.getReference(equivalenciaMateria.getClass(), equivalenciaMateria.getMateriaCodigoMateria());
-                materia.setEquivalenciaMateria(equivalenciaMateria);
             }
             Microcurriculo microcurriculo = materia.getMicrocurriculo();
             if (microcurriculo != null) {
@@ -79,6 +77,12 @@ public class MateriaJpaController implements Serializable {
                 attachedMateriaList1.add(materiaList1MateriaToAttach);
             }
             materia.setMateriaList1(attachedMateriaList1);
+            List<EquivalenciaMateria> attachedEquivalenciaMateriaList = new ArrayList<EquivalenciaMateria>();
+            for (EquivalenciaMateria equivalenciaMateriaListEquivalenciaMateriaToAttach : materia.getEquivalenciaMateriaList()) {
+                equivalenciaMateriaListEquivalenciaMateriaToAttach = em.getReference(equivalenciaMateriaListEquivalenciaMateriaToAttach.getClass(), equivalenciaMateriaListEquivalenciaMateriaToAttach.getEquivalenciaMateriaPK());
+                attachedEquivalenciaMateriaList.add(equivalenciaMateriaListEquivalenciaMateriaToAttach);
+            }
+            materia.setEquivalenciaMateriaList(attachedEquivalenciaMateriaList);
             List<MateriaPeriodo> attachedMateriaPeriodoList = new ArrayList<MateriaPeriodo>();
             for (MateriaPeriodo materiaPeriodoListMateriaPeriodoToAttach : materia.getMateriaPeriodoList()) {
                 materiaPeriodoListMateriaPeriodoToAttach = em.getReference(materiaPeriodoListMateriaPeriodoToAttach.getClass(), materiaPeriodoListMateriaPeriodoToAttach.getMateriaPeriodoPK());
@@ -89,15 +93,6 @@ public class MateriaJpaController implements Serializable {
             if (pensum != null) {
                 pensum.getMateriaList().add(materia);
                 pensum = em.merge(pensum);
-            }
-            if (equivalenciaMateria != null) {
-                Materia oldMateriaOfEquivalenciaMateria = equivalenciaMateria.getMateria();
-                if (oldMateriaOfEquivalenciaMateria != null) {
-                    oldMateriaOfEquivalenciaMateria.setEquivalenciaMateria(null);
-                    oldMateriaOfEquivalenciaMateria = em.merge(oldMateriaOfEquivalenciaMateria);
-                }
-                equivalenciaMateria.setMateria(materia);
-                equivalenciaMateria = em.merge(equivalenciaMateria);
             }
             if (microcurriculo != null) {
                 Materia oldMateriaOfMicrocurriculo = microcurriculo.getMateria();
@@ -115,6 +110,15 @@ public class MateriaJpaController implements Serializable {
             for (Materia materiaList1Materia : materia.getMateriaList1()) {
                 materiaList1Materia.getMateriaList().add(materia);
                 materiaList1Materia = em.merge(materiaList1Materia);
+            }
+            for (EquivalenciaMateria equivalenciaMateriaListEquivalenciaMateria : materia.getEquivalenciaMateriaList()) {
+                Materia oldMateriaOfEquivalenciaMateriaListEquivalenciaMateria = equivalenciaMateriaListEquivalenciaMateria.getMateria();
+                equivalenciaMateriaListEquivalenciaMateria.setMateria(materia);
+                equivalenciaMateriaListEquivalenciaMateria = em.merge(equivalenciaMateriaListEquivalenciaMateria);
+                if (oldMateriaOfEquivalenciaMateriaListEquivalenciaMateria != null) {
+                    oldMateriaOfEquivalenciaMateriaListEquivalenciaMateria.getEquivalenciaMateriaList().remove(equivalenciaMateriaListEquivalenciaMateria);
+                    oldMateriaOfEquivalenciaMateriaListEquivalenciaMateria = em.merge(oldMateriaOfEquivalenciaMateriaListEquivalenciaMateria);
+                }
             }
             for (MateriaPeriodo materiaPeriodoListMateriaPeriodo : materia.getMateriaPeriodoList()) {
                 Materia oldMateriaOfMateriaPeriodoListMateriaPeriodo = materiaPeriodoListMateriaPeriodo.getMateria();
@@ -146,28 +150,30 @@ public class MateriaJpaController implements Serializable {
             Materia persistentMateria = em.find(Materia.class, materia.getCodigoMateria());
             Pensum pensumOld = persistentMateria.getPensum();
             Pensum pensumNew = materia.getPensum();
-            EquivalenciaMateria equivalenciaMateriaOld = persistentMateria.getEquivalenciaMateria();
-            EquivalenciaMateria equivalenciaMateriaNew = materia.getEquivalenciaMateria();
             Microcurriculo microcurriculoOld = persistentMateria.getMicrocurriculo();
             Microcurriculo microcurriculoNew = materia.getMicrocurriculo();
             List<Materia> materiaListOld = persistentMateria.getMateriaList();
             List<Materia> materiaListNew = materia.getMateriaList();
             List<Materia> materiaList1Old = persistentMateria.getMateriaList1();
             List<Materia> materiaList1New = materia.getMateriaList1();
+            List<EquivalenciaMateria> equivalenciaMateriaListOld = persistentMateria.getEquivalenciaMateriaList();
+            List<EquivalenciaMateria> equivalenciaMateriaListNew = materia.getEquivalenciaMateriaList();
             List<MateriaPeriodo> materiaPeriodoListOld = persistentMateria.getMateriaPeriodoList();
             List<MateriaPeriodo> materiaPeriodoListNew = materia.getMateriaPeriodoList();
             List<String> illegalOrphanMessages = null;
-            if (equivalenciaMateriaOld != null && !equivalenciaMateriaOld.equals(equivalenciaMateriaNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain EquivalenciaMateria " + equivalenciaMateriaOld + " since its materia field is not nullable.");
-            }
             if (microcurriculoOld != null && !microcurriculoOld.equals(microcurriculoNew)) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("You must retain Microcurriculo " + microcurriculoOld + " since its materia field is not nullable.");
+            }
+            for (EquivalenciaMateria equivalenciaMateriaListOldEquivalenciaMateria : equivalenciaMateriaListOld) {
+                if (!equivalenciaMateriaListNew.contains(equivalenciaMateriaListOldEquivalenciaMateria)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain EquivalenciaMateria " + equivalenciaMateriaListOldEquivalenciaMateria + " since its materia field is not nullable.");
+                }
             }
             for (MateriaPeriodo materiaPeriodoListOldMateriaPeriodo : materiaPeriodoListOld) {
                 if (!materiaPeriodoListNew.contains(materiaPeriodoListOldMateriaPeriodo)) {
@@ -183,10 +189,6 @@ public class MateriaJpaController implements Serializable {
             if (pensumNew != null) {
                 pensumNew = em.getReference(pensumNew.getClass(), pensumNew.getPensumPK());
                 materia.setPensum(pensumNew);
-            }
-            if (equivalenciaMateriaNew != null) {
-                equivalenciaMateriaNew = em.getReference(equivalenciaMateriaNew.getClass(), equivalenciaMateriaNew.getMateriaCodigoMateria());
-                materia.setEquivalenciaMateria(equivalenciaMateriaNew);
             }
             if (microcurriculoNew != null) {
                 microcurriculoNew = em.getReference(microcurriculoNew.getClass(), microcurriculoNew.getCodigoMateria());
@@ -206,6 +208,13 @@ public class MateriaJpaController implements Serializable {
             }
             materiaList1New = attachedMateriaList1New;
             materia.setMateriaList1(materiaList1New);
+            List<EquivalenciaMateria> attachedEquivalenciaMateriaListNew = new ArrayList<EquivalenciaMateria>();
+            for (EquivalenciaMateria equivalenciaMateriaListNewEquivalenciaMateriaToAttach : equivalenciaMateriaListNew) {
+                equivalenciaMateriaListNewEquivalenciaMateriaToAttach = em.getReference(equivalenciaMateriaListNewEquivalenciaMateriaToAttach.getClass(), equivalenciaMateriaListNewEquivalenciaMateriaToAttach.getEquivalenciaMateriaPK());
+                attachedEquivalenciaMateriaListNew.add(equivalenciaMateriaListNewEquivalenciaMateriaToAttach);
+            }
+            equivalenciaMateriaListNew = attachedEquivalenciaMateriaListNew;
+            materia.setEquivalenciaMateriaList(equivalenciaMateriaListNew);
             List<MateriaPeriodo> attachedMateriaPeriodoListNew = new ArrayList<MateriaPeriodo>();
             for (MateriaPeriodo materiaPeriodoListNewMateriaPeriodoToAttach : materiaPeriodoListNew) {
                 materiaPeriodoListNewMateriaPeriodoToAttach = em.getReference(materiaPeriodoListNewMateriaPeriodoToAttach.getClass(), materiaPeriodoListNewMateriaPeriodoToAttach.getMateriaPeriodoPK());
@@ -221,15 +230,6 @@ public class MateriaJpaController implements Serializable {
             if (pensumNew != null && !pensumNew.equals(pensumOld)) {
                 pensumNew.getMateriaList().add(materia);
                 pensumNew = em.merge(pensumNew);
-            }
-            if (equivalenciaMateriaNew != null && !equivalenciaMateriaNew.equals(equivalenciaMateriaOld)) {
-                Materia oldMateriaOfEquivalenciaMateria = equivalenciaMateriaNew.getMateria();
-                if (oldMateriaOfEquivalenciaMateria != null) {
-                    oldMateriaOfEquivalenciaMateria.setEquivalenciaMateria(null);
-                    oldMateriaOfEquivalenciaMateria = em.merge(oldMateriaOfEquivalenciaMateria);
-                }
-                equivalenciaMateriaNew.setMateria(materia);
-                equivalenciaMateriaNew = em.merge(equivalenciaMateriaNew);
             }
             if (microcurriculoNew != null && !microcurriculoNew.equals(microcurriculoOld)) {
                 Materia oldMateriaOfMicrocurriculo = microcurriculoNew.getMateria();
@@ -262,6 +262,17 @@ public class MateriaJpaController implements Serializable {
                 if (!materiaList1Old.contains(materiaList1NewMateria)) {
                     materiaList1NewMateria.getMateriaList().add(materia);
                     materiaList1NewMateria = em.merge(materiaList1NewMateria);
+                }
+            }
+            for (EquivalenciaMateria equivalenciaMateriaListNewEquivalenciaMateria : equivalenciaMateriaListNew) {
+                if (!equivalenciaMateriaListOld.contains(equivalenciaMateriaListNewEquivalenciaMateria)) {
+                    Materia oldMateriaOfEquivalenciaMateriaListNewEquivalenciaMateria = equivalenciaMateriaListNewEquivalenciaMateria.getMateria();
+                    equivalenciaMateriaListNewEquivalenciaMateria.setMateria(materia);
+                    equivalenciaMateriaListNewEquivalenciaMateria = em.merge(equivalenciaMateriaListNewEquivalenciaMateria);
+                    if (oldMateriaOfEquivalenciaMateriaListNewEquivalenciaMateria != null && !oldMateriaOfEquivalenciaMateriaListNewEquivalenciaMateria.equals(materia)) {
+                        oldMateriaOfEquivalenciaMateriaListNewEquivalenciaMateria.getEquivalenciaMateriaList().remove(equivalenciaMateriaListNewEquivalenciaMateria);
+                        oldMateriaOfEquivalenciaMateriaListNewEquivalenciaMateria = em.merge(oldMateriaOfEquivalenciaMateriaListNewEquivalenciaMateria);
+                    }
                 }
             }
             for (MateriaPeriodo materiaPeriodoListNewMateriaPeriodo : materiaPeriodoListNew) {
@@ -305,19 +316,19 @@ public class MateriaJpaController implements Serializable {
                 throw new NonexistentEntityException("The materia with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            EquivalenciaMateria equivalenciaMateriaOrphanCheck = materia.getEquivalenciaMateria();
-            if (equivalenciaMateriaOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Materia (" + materia + ") cannot be destroyed since the EquivalenciaMateria " + equivalenciaMateriaOrphanCheck + " in its equivalenciaMateria field has a non-nullable materia field.");
-            }
             Microcurriculo microcurriculoOrphanCheck = materia.getMicrocurriculo();
             if (microcurriculoOrphanCheck != null) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Materia (" + materia + ") cannot be destroyed since the Microcurriculo " + microcurriculoOrphanCheck + " in its microcurriculo field has a non-nullable materia field.");
+            }
+            List<EquivalenciaMateria> equivalenciaMateriaListOrphanCheck = materia.getEquivalenciaMateriaList();
+            for (EquivalenciaMateria equivalenciaMateriaListOrphanCheckEquivalenciaMateria : equivalenciaMateriaListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Materia (" + materia + ") cannot be destroyed since the EquivalenciaMateria " + equivalenciaMateriaListOrphanCheckEquivalenciaMateria + " in its equivalenciaMateriaList field has a non-nullable materia field.");
             }
             List<MateriaPeriodo> materiaPeriodoListOrphanCheck = materia.getMateriaPeriodoList();
             for (MateriaPeriodo materiaPeriodoListOrphanCheckMateriaPeriodo : materiaPeriodoListOrphanCheck) {

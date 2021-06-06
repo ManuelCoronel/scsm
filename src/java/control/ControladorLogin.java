@@ -102,7 +102,15 @@ public class ControladorLogin extends HttpServlet {
         
        
     }
-   
+//    public static boolean cargarPrograma(){
+//    
+//    }
+    
+//    public static boolean cargarDepartamento(){
+//    
+//    
+//    }
+//   
     /**
      * Returns a short description of the servlet.
      *

@@ -81,8 +81,8 @@ public class Materia implements Serializable {
         @JoinColumn(name = "pensum_programa_codigo", referencedColumnName = "programa_codigo")})
     @ManyToOne(optional = false)
     private Pensum pensum;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "materia")
-    private EquivalenciaMateria equivalenciaMateria;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
+    private List<EquivalenciaMateria> equivalenciaMateriaList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "materia")
     private Microcurriculo microcurriculo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
@@ -195,12 +195,13 @@ public class Materia implements Serializable {
         this.pensum = pensum;
     }
 
-    public EquivalenciaMateria getEquivalenciaMateria() {
-        return equivalenciaMateria;
+    @XmlTransient
+    public List<EquivalenciaMateria> getEquivalenciaMateriaList() {
+        return equivalenciaMateriaList;
     }
 
-    public void setEquivalenciaMateria(EquivalenciaMateria equivalenciaMateria) {
-        this.equivalenciaMateria = equivalenciaMateria;
+    public void setEquivalenciaMateriaList(List<EquivalenciaMateria> equivalenciaMateriaList) {
+        this.equivalenciaMateriaList = equivalenciaMateriaList;
     }
 
     public Microcurriculo getMicrocurriculo() {
