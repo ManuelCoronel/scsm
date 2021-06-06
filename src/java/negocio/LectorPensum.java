@@ -220,13 +220,4 @@ public class LectorPensum extends PDFTextStripper{
     private Integer campoValido(String text){
         return text.isEmpty() ? 0 : Integer.parseInt(text);
     }
-    
-    public static void main(String[] args) throws IOException {
-        LectorPensum l = new LectorPensum();
-        l.parsePDFDocument("docs\\PENSUM 115-03 (164c).pdf");
-        List<Materia> m = l.getMaterias();
-        for(Materia mt: m){
-            System.out.println(mt.toString());
-        }
-    }
 }
