@@ -12,7 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import dto.SeccionMicrocurriculo;
+import dto.Seccion;
 import dto.TipoSeccion;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,27 +35,27 @@ public class TipoSeccionJpaController implements Serializable {
     }
 
     public void create(TipoSeccion tipoSeccion) {
-        if (tipoSeccion.getSeccionMicrocurriculoList() == null) {
-            tipoSeccion.setSeccionMicrocurriculoList(new ArrayList<SeccionMicrocurriculo>());
+        if (tipoSeccion.getSeccionList() == null) {
+            tipoSeccion.setSeccionList(new ArrayList<Seccion>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<SeccionMicrocurriculo> attachedSeccionMicrocurriculoList = new ArrayList<SeccionMicrocurriculo>();
-            for (SeccionMicrocurriculo seccionMicrocurriculoListSeccionMicrocurriculoToAttach : tipoSeccion.getSeccionMicrocurriculoList()) {
-                seccionMicrocurriculoListSeccionMicrocurriculoToAttach = em.getReference(seccionMicrocurriculoListSeccionMicrocurriculoToAttach.getClass(), seccionMicrocurriculoListSeccionMicrocurriculoToAttach.getSeccionMicrocurriculoPK());
-                attachedSeccionMicrocurriculoList.add(seccionMicrocurriculoListSeccionMicrocurriculoToAttach);
+            List<Seccion> attachedSeccionList = new ArrayList<Seccion>();
+            for (Seccion seccionListSeccionToAttach : tipoSeccion.getSeccionList()) {
+                seccionListSeccionToAttach = em.getReference(seccionListSeccionToAttach.getClass(), seccionListSeccionToAttach.getId());
+                attachedSeccionList.add(seccionListSeccionToAttach);
             }
-            tipoSeccion.setSeccionMicrocurriculoList(attachedSeccionMicrocurriculoList);
+            tipoSeccion.setSeccionList(attachedSeccionList);
             em.persist(tipoSeccion);
-            for (SeccionMicrocurriculo seccionMicrocurriculoListSeccionMicrocurriculo : tipoSeccion.getSeccionMicrocurriculoList()) {
-                TipoSeccion oldTipoSeccionIdOfSeccionMicrocurriculoListSeccionMicrocurriculo = seccionMicrocurriculoListSeccionMicrocurriculo.getTipoSeccionId();
-                seccionMicrocurriculoListSeccionMicrocurriculo.setTipoSeccionId(tipoSeccion);
-                seccionMicrocurriculoListSeccionMicrocurriculo = em.merge(seccionMicrocurriculoListSeccionMicrocurriculo);
-                if (oldTipoSeccionIdOfSeccionMicrocurriculoListSeccionMicrocurriculo != null) {
-                    oldTipoSeccionIdOfSeccionMicrocurriculoListSeccionMicrocurriculo.getSeccionMicrocurriculoList().remove(seccionMicrocurriculoListSeccionMicrocurriculo);
-                    oldTipoSeccionIdOfSeccionMicrocurriculoListSeccionMicrocurriculo = em.merge(oldTipoSeccionIdOfSeccionMicrocurriculoListSeccionMicrocurriculo);
+            for (Seccion seccionListSeccion : tipoSeccion.getSeccionList()) {
+                TipoSeccion oldTipoSeccionIdOfSeccionListSeccion = seccionListSeccion.getTipoSeccionId();
+                seccionListSeccion.setTipoSeccionId(tipoSeccion);
+                seccionListSeccion = em.merge(seccionListSeccion);
+                if (oldTipoSeccionIdOfSeccionListSeccion != null) {
+                    oldTipoSeccionIdOfSeccionListSeccion.getSeccionList().remove(seccionListSeccion);
+                    oldTipoSeccionIdOfSeccionListSeccion = em.merge(oldTipoSeccionIdOfSeccionListSeccion);
                 }
             }
             em.getTransaction().commit();
@@ -72,36 +72,36 @@ public class TipoSeccionJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             TipoSeccion persistentTipoSeccion = em.find(TipoSeccion.class, tipoSeccion.getId());
-            List<SeccionMicrocurriculo> seccionMicrocurriculoListOld = persistentTipoSeccion.getSeccionMicrocurriculoList();
-            List<SeccionMicrocurriculo> seccionMicrocurriculoListNew = tipoSeccion.getSeccionMicrocurriculoList();
+            List<Seccion> seccionListOld = persistentTipoSeccion.getSeccionList();
+            List<Seccion> seccionListNew = tipoSeccion.getSeccionList();
             List<String> illegalOrphanMessages = null;
-            for (SeccionMicrocurriculo seccionMicrocurriculoListOldSeccionMicrocurriculo : seccionMicrocurriculoListOld) {
-                if (!seccionMicrocurriculoListNew.contains(seccionMicrocurriculoListOldSeccionMicrocurriculo)) {
+            for (Seccion seccionListOldSeccion : seccionListOld) {
+                if (!seccionListNew.contains(seccionListOldSeccion)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain SeccionMicrocurriculo " + seccionMicrocurriculoListOldSeccionMicrocurriculo + " since its tipoSeccionId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Seccion " + seccionListOldSeccion + " since its tipoSeccionId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<SeccionMicrocurriculo> attachedSeccionMicrocurriculoListNew = new ArrayList<SeccionMicrocurriculo>();
-            for (SeccionMicrocurriculo seccionMicrocurriculoListNewSeccionMicrocurriculoToAttach : seccionMicrocurriculoListNew) {
-                seccionMicrocurriculoListNewSeccionMicrocurriculoToAttach = em.getReference(seccionMicrocurriculoListNewSeccionMicrocurriculoToAttach.getClass(), seccionMicrocurriculoListNewSeccionMicrocurriculoToAttach.getSeccionMicrocurriculoPK());
-                attachedSeccionMicrocurriculoListNew.add(seccionMicrocurriculoListNewSeccionMicrocurriculoToAttach);
+            List<Seccion> attachedSeccionListNew = new ArrayList<Seccion>();
+            for (Seccion seccionListNewSeccionToAttach : seccionListNew) {
+                seccionListNewSeccionToAttach = em.getReference(seccionListNewSeccionToAttach.getClass(), seccionListNewSeccionToAttach.getId());
+                attachedSeccionListNew.add(seccionListNewSeccionToAttach);
             }
-            seccionMicrocurriculoListNew = attachedSeccionMicrocurriculoListNew;
-            tipoSeccion.setSeccionMicrocurriculoList(seccionMicrocurriculoListNew);
+            seccionListNew = attachedSeccionListNew;
+            tipoSeccion.setSeccionList(seccionListNew);
             tipoSeccion = em.merge(tipoSeccion);
-            for (SeccionMicrocurriculo seccionMicrocurriculoListNewSeccionMicrocurriculo : seccionMicrocurriculoListNew) {
-                if (!seccionMicrocurriculoListOld.contains(seccionMicrocurriculoListNewSeccionMicrocurriculo)) {
-                    TipoSeccion oldTipoSeccionIdOfSeccionMicrocurriculoListNewSeccionMicrocurriculo = seccionMicrocurriculoListNewSeccionMicrocurriculo.getTipoSeccionId();
-                    seccionMicrocurriculoListNewSeccionMicrocurriculo.setTipoSeccionId(tipoSeccion);
-                    seccionMicrocurriculoListNewSeccionMicrocurriculo = em.merge(seccionMicrocurriculoListNewSeccionMicrocurriculo);
-                    if (oldTipoSeccionIdOfSeccionMicrocurriculoListNewSeccionMicrocurriculo != null && !oldTipoSeccionIdOfSeccionMicrocurriculoListNewSeccionMicrocurriculo.equals(tipoSeccion)) {
-                        oldTipoSeccionIdOfSeccionMicrocurriculoListNewSeccionMicrocurriculo.getSeccionMicrocurriculoList().remove(seccionMicrocurriculoListNewSeccionMicrocurriculo);
-                        oldTipoSeccionIdOfSeccionMicrocurriculoListNewSeccionMicrocurriculo = em.merge(oldTipoSeccionIdOfSeccionMicrocurriculoListNewSeccionMicrocurriculo);
+            for (Seccion seccionListNewSeccion : seccionListNew) {
+                if (!seccionListOld.contains(seccionListNewSeccion)) {
+                    TipoSeccion oldTipoSeccionIdOfSeccionListNewSeccion = seccionListNewSeccion.getTipoSeccionId();
+                    seccionListNewSeccion.setTipoSeccionId(tipoSeccion);
+                    seccionListNewSeccion = em.merge(seccionListNewSeccion);
+                    if (oldTipoSeccionIdOfSeccionListNewSeccion != null && !oldTipoSeccionIdOfSeccionListNewSeccion.equals(tipoSeccion)) {
+                        oldTipoSeccionIdOfSeccionListNewSeccion.getSeccionList().remove(seccionListNewSeccion);
+                        oldTipoSeccionIdOfSeccionListNewSeccion = em.merge(oldTipoSeccionIdOfSeccionListNewSeccion);
                     }
                 }
             }
@@ -135,12 +135,12 @@ public class TipoSeccionJpaController implements Serializable {
                 throw new NonexistentEntityException("The tipoSeccion with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<SeccionMicrocurriculo> seccionMicrocurriculoListOrphanCheck = tipoSeccion.getSeccionMicrocurriculoList();
-            for (SeccionMicrocurriculo seccionMicrocurriculoListOrphanCheckSeccionMicrocurriculo : seccionMicrocurriculoListOrphanCheck) {
+            List<Seccion> seccionListOrphanCheck = tipoSeccion.getSeccionList();
+            for (Seccion seccionListOrphanCheckSeccion : seccionListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This TipoSeccion (" + tipoSeccion + ") cannot be destroyed since the SeccionMicrocurriculo " + seccionMicrocurriculoListOrphanCheckSeccionMicrocurriculo + " in its seccionMicrocurriculoList field has a non-nullable tipoSeccionId field.");
+                illegalOrphanMessages.add("This TipoSeccion (" + tipoSeccion + ") cannot be destroyed since the Seccion " + seccionListOrphanCheckSeccion + " in its seccionList field has a non-nullable tipoSeccionId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

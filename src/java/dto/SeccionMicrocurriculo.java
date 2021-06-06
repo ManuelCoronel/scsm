@@ -47,9 +47,6 @@ public class SeccionMicrocurriculo implements Serializable {
     @JoinColumn(name = "seccion_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Seccion seccionId;
-    @JoinColumn(name = "tipo_seccion_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private TipoSeccion tipoSeccionId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculo")
     private List<Contenido> contenidoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculo")
@@ -105,14 +102,6 @@ public class SeccionMicrocurriculo implements Serializable {
 
     public void setSeccionId(Seccion seccionId) {
         this.seccionId = seccionId;
-    }
-
-    public TipoSeccion getTipoSeccionId() {
-        return tipoSeccionId;
-    }
-
-    public void setTipoSeccionId(TipoSeccion tipoSeccionId) {
-        this.tipoSeccionId = tipoSeccionId;
     }
 
     @XmlTransient
