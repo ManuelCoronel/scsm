@@ -5,25 +5,19 @@
  */
 package control;
 
-import dto.Materia;
 import java.io.IOException;
-import java.io.File;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import negocio.LectorPensum;
+import negocio.AdministrarPensum;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
-
 /**
  *
  * @author dunke
@@ -60,35 +54,24 @@ public class ControladorPensum extends HttpServlet {
 
     private void registrar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
+            Integer id_programa = 0;
+            InputStream pensumFile = null;
             List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             for (FileItem item : items) {
                 if (item.isFormField()) {
-                    // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
-                    String fieldName = item.getFieldName();
-                    String fieldValue = item.getString();
-                    // ... (do your job here)
-                } else {
-                    // Process form file field (input type="file").
-                    String fieldName = item.getFieldName();
-                    String fileName = FilenameUtils.getName(item.getName());
-                    File folder = new File(request.getServletContext().getRealPath("/"));
-                    folder = new File(folder.getParentFile().getParentFile().getAbsolutePath()+"/temp");
-
-                    InputStream fileContent = item.getInputStream();
-                    File file = File.createTempFile(fileName, ".pdf", folder);
-                    
-                    Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    
-                    LectorPensum l = new LectorPensum();
-                    l.parsePDFDocument(file.getPath());
-                    List<Materia> m = l.getMaterias();
-                    for(Materia mt: m){
-                        System.out.println(mt.toString());
+                    switch(item.getFieldName()){
+                        case "programa": id_programa = Integer.parseInt(item.getString());
                     }
+                } else {
+                    pensumFile = item.getInputStream();
                 }
             }
+            AdministrarPensum ap = new AdministrarPensum(request.getServletContext().getRealPath("/"));
+            ap.registrar(id_programa, pensumFile);
         } catch (FileUploadException e) {
             throw new ServletException("Cannot parse multipart request.", e);
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -103,9 +86,9 @@ public class ControladorPensum extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        switch (request.getParameter("action")) {
+        switch (request.getParameter("accion")) {
             case "registrar":
-                this.registrar(request, response);
+                    this.registrar(request, response);
         }
     }
 

@@ -15,9 +15,8 @@
     </head>
     <body>
         <h2>Cargar pensum</h2>
-        <form action="../ControladorPensum?action=registrar" method="POST" enctype="multipart/form-data">
-            <select name="programa" id="pro_option">
-            </select>
+        <form action="../ControladorPensum?accion=registrar" method="POST" enctype="multipart/form-data">
+            <input type="text" name="programa">
             <input type="file" name="pensum">
             <input type="submit">
         </form>
