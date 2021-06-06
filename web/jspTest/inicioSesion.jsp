@@ -14,11 +14,10 @@
     <body>
         <form action="../ControladorLogin" method="POST">
             <input type="number" name="codigo" placeholder="Codigo">
-            <input type="number" name="codigo" placeholder="Documento">
-            <input type="text" name="codigo" placeholder="Contraseña">
-            <input type="radio" name="Tipo" value="Director">
-            <input type="radio"  name="Tipo" value="Docente">
-           <input type="submit" name="accion" value="Registrar">
+            <input type="text" name="codigo" placeholder="Contrasena">
+            <input type="radio" name="rol" value="1">
+            <input type="radio"  name="rol" value="2">
+           <input type="submit" name="accion" value="iniciarSesion">
       
         </form>
     </body>

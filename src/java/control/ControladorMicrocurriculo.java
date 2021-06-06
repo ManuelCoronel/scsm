@@ -47,6 +47,12 @@ public class ControladorMicrocurriculo extends HttpServlet {
             out.println("</html>");
         }
     }
+    
+    public static void cargarMicrocurriculo(){
+    
+    
+    }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import negocio.Login;
 
 /**
  *
@@ -37,7 +38,7 @@ public class ControladorLogin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ControladorLogin</title>");            
+            out.println("<title>Servlet ControladorLogin</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ControladorLogin at " + request.getContextPath() + "</h1>");
@@ -72,9 +73,36 @@ public class ControladorLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
+        String accion = request.getParameter("accion");
+
+        if (accion.equalsIgnoreCase("iniciarSesion")) {
+            verificarUsuario(request, response);
+        }
+
+    }
+    
+   
+
+    public static void verificarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int codigo = Integer.parseInt(request.getParameter("codigo"));
+ 
+        String contrasena = request.getParameter("contrasena");
+        int rol = Integer.parseInt(request.getParameter("rol"));
+        Login login = new Login();
+        boolean valido = login.validarUsuario(codigo,contrasena, rol);
+
+        if (valido) {
+            dto.Docente docente = login.obtenerDocente(codigo);
+            request.setAttribute("sesion", docente);
+             response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
+        }else{
+              response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
+        }
+        
+       
+    }
+   
     /**
      * Returns a short description of the servlet.
      *
