@@ -5,6 +5,8 @@
  */
 package negocio;
 
+import dto.Materia;
+import dto.Pensum;
 import java.util.ArrayList;
 import util.Conexion;
 
@@ -22,7 +24,15 @@ public class Microcurriculo {
         Conexion con = Conexion.getConexion();
         dao.ProgramaJpaController daoPrograma = new dao.ProgramaJpaController(con.getBd());
         dto.Programa programa = daoPrograma.findPrograma(idPrograma);
-       
+       ArrayList<dto.Pensum> pensums =  (ArrayList<dto.Pensum>)programa.getPensumList();
+       ArrayList<dto.Microcurriculo> microcurriculos = new ArrayList<>();
+        for (Pensum pensum : pensums) {
+       ArrayList<dto.Materia> materias =(ArrayList<dto.Materia>) pensum.getMateriaList();
+            for (Materia materia : materias) {
+                microcurriculos.add(materia.getMicrocurriculoList().get(0));
+            }
+               
+        }
         
     return null;
     }
