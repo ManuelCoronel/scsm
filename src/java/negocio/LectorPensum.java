@@ -136,7 +136,7 @@ public class LectorPensum extends PDFTextStripper{
         for (int i = 1; i < COL_NAMES.length; i++) {
             if (textP.getX() < this.encaPos.get(COL_NAMES[i])[1].getEndX() && textP.getX() > this.encaPos.get(COL_NAMES[i - 1])[1].getEndX()) {
                 if (i == 6 || i == 10) {
-                    if(text.split("-").length == 2){
+                    if(i == 6 || text.split("-").length == 2){
                         ((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).add(text);
                     }else if(i == 10){
                         String ac = ((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).get(((ArrayList) this.materias.get(this.materias.size() - 1).get(COL_NAMES[i])).size()-1).toString()+" "+text;
@@ -175,9 +175,10 @@ public class LectorPensum extends PDFTextStripper{
     //    0         1       2     3      4      5       6      7      8     9      10
     //{"codigo", "nombre", "ht", "hp", "hti", "cr", "prereq", "si", "rc", "te", "equis"}
     public List<Materia> getMaterias() {
-        List<Materia> materias = new ArrayList<>();
+        List<Materia> materias_rs = new ArrayList<>();
         for (HashMap<String, Object> h : this.materias) {
-            Integer semestre = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", "").substring(3, 5));
+            Integer prob = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", "").substring(3, 5));
+            Integer semestre = prob < 20 ? prob : prob/10;
             Integer codigo = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", ""));
             String nombre = h.get(COL_NAMES[1]).toString();
             
@@ -205,10 +206,10 @@ public class LectorPensum extends PDFTextStripper{
             m.setMateriaList(prerreq);
             m.setMateriaList1(equis);
             m.setCr(cre);
-            materias.add(m);
+            materias_rs.add(m);
         }
         
-        return materias;
+        return materias_rs;
     }
     
     /**

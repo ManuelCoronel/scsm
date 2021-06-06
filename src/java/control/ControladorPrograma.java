@@ -74,7 +74,6 @@ public class ControladorPrograma extends HttpServlet {
         ProgramaJpaController p = new ProgramaJpaController(Conexion.getConexion().getBd());
         List<Programa> programas = p.findProgramaEntities();
         for(Programa programa: programas){
-            System.out.println(programa.getCodigo());
             pw.println("<option value"+programa.getCodigo()+">"+programa.getCodigo()+"</option>");
         }
     }
