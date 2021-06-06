@@ -56,7 +56,7 @@ public class PensumJpaController implements Serializable {
             }
             List<Materia> attachedMateriaList = new ArrayList<Materia>();
             for (Materia materiaListMateriaToAttach : pensum.getMateriaList()) {
-                materiaListMateriaToAttach = em.getReference(materiaListMateriaToAttach.getClass(), materiaListMateriaToAttach.getCodigoMateria());
+                materiaListMateriaToAttach = em.getReference(materiaListMateriaToAttach.getClass(), materiaListMateriaToAttach.getMateriaPK());
                 attachedMateriaList.add(materiaListMateriaToAttach);
             }
             pensum.setMateriaList(attachedMateriaList);
@@ -116,7 +116,7 @@ public class PensumJpaController implements Serializable {
             }
             List<Materia> attachedMateriaListNew = new ArrayList<Materia>();
             for (Materia materiaListNewMateriaToAttach : materiaListNew) {
-                materiaListNewMateriaToAttach = em.getReference(materiaListNewMateriaToAttach.getClass(), materiaListNewMateriaToAttach.getCodigoMateria());
+                materiaListNewMateriaToAttach = em.getReference(materiaListNewMateriaToAttach.getClass(), materiaListNewMateriaToAttach.getMateriaPK());
                 attachedMateriaListNew.add(materiaListNewMateriaToAttach);
             }
             materiaListNew = attachedMateriaListNew;

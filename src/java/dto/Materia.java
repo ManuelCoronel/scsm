@@ -10,12 +10,10 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,10 +32,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Materia.findAll", query = "SELECT m FROM Materia m"),
-    @NamedQuery(name = "Materia.findByCodigoMateria", query = "SELECT m FROM Materia m WHERE m.codigoMateria = :codigoMateria"),
+    @NamedQuery(name = "Materia.findByCodigoMateria", query = "SELECT m FROM Materia m WHERE m.materiaPK.codigoMateria = :codigoMateria"),
     @NamedQuery(name = "Materia.findByNombre", query = "SELECT m FROM Materia m WHERE m.nombre = :nombre"),
     @NamedQuery(name = "Materia.findByCreditos", query = "SELECT m FROM Materia m WHERE m.creditos = :creditos"),
     @NamedQuery(name = "Materia.findBySemestre", query = "SELECT m FROM Materia m WHERE m.semestre = :semestre"),
+    @NamedQuery(name = "Materia.findByPensumCodigo", query = "SELECT m FROM Materia m WHERE m.materiaPK.pensumCodigo = :pensumCodigo"),
     @NamedQuery(name = "Materia.findByHt", query = "SELECT m FROM Materia m WHERE m.ht = :ht"),
     @NamedQuery(name = "Materia.findByHp", query = "SELECT m FROM Materia m WHERE m.hp = :hp"),
     @NamedQuery(name = "Materia.findByHti", query = "SELECT m FROM Materia m WHERE m.hti = :hti"),
@@ -45,10 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Materia implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @Column(name = "codigo_materia")
-    private Integer codigoMateria;
+    @EmbeddedId
+    protected MateriaPK materiaPK;
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
@@ -69,34 +66,31 @@ public class Materia implements Serializable {
     private int hti;
     @Column(name = "cr")
     private Integer cr;
-    @JoinTable(name = "prerrequisito_materia", joinColumns = {
-        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia")}, inverseJoinColumns = {
-        @JoinColumn(name = "materia_codigo_prerrequisito", referencedColumnName = "codigo_materia")})
-    @ManyToMany
-    private List<Materia> materiaList;
-    @ManyToMany(mappedBy = "materiaList")
-    private List<Materia> materiaList1;
-    @JoinColumns({
-        @JoinColumn(name = "pensum_codigo", referencedColumnName = "codigo"),
-        @JoinColumn(name = "pensum_programa_codigo", referencedColumnName = "programa_codigo")})
-    @ManyToOne(optional = false)
-    private Pensum pensum;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materiaCodigoMateria")
+    private List<PrerrequisitoMateria> prerrequisitoMateriaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materiaCodigoPrerrequisito")
+    private List<PrerrequisitoMateria> prerrequisitoMateriaList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
     private List<EquivalenciaMateria> equivalenciaMateriaList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "materia")
     private Microcurriculo microcurriculo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
     private List<MateriaPeriodo> materiaPeriodoList;
+    @JoinColumns({
+        @JoinColumn(name = "pensum_codigo", referencedColumnName = "codigo", insertable = false, updatable = false),
+        @JoinColumn(name = "pensum_programa_codigo", referencedColumnName = "programa_codigo")})
+    @ManyToOne(optional = false)
+    private Pensum pensum;
 
     public Materia() {
     }
 
-    public Materia(Integer codigoMateria) {
-        this.codigoMateria = codigoMateria;
+    public Materia(MateriaPK materiaPK) {
+        this.materiaPK = materiaPK;
     }
 
-    public Materia(Integer codigoMateria, String nombre, int creditos, int semestre, int ht, int hp, int hti) {
-        this.codigoMateria = codigoMateria;
+    public Materia(MateriaPK materiaPK, String nombre, int creditos, int semestre, int ht, int hp, int hti) {
+        this.materiaPK = materiaPK;
         this.nombre = nombre;
         this.creditos = creditos;
         this.semestre = semestre;
@@ -105,12 +99,16 @@ public class Materia implements Serializable {
         this.hti = hti;
     }
 
-    public Integer getCodigoMateria() {
-        return codigoMateria;
+    public Materia(int codigoMateria, int pensumCodigo) {
+        this.materiaPK = new MateriaPK(codigoMateria, pensumCodigo);
     }
 
-    public void setCodigoMateria(Integer codigoMateria) {
-        this.codigoMateria = codigoMateria;
+    public MateriaPK getMateriaPK() {
+        return materiaPK;
+    }
+
+    public void setMateriaPK(MateriaPK materiaPK) {
+        this.materiaPK = materiaPK;
     }
 
     public String getNombre() {
@@ -170,29 +168,21 @@ public class Materia implements Serializable {
     }
 
     @XmlTransient
-    public List<Materia> getMateriaList() {
-        return materiaList;
+    public List<PrerrequisitoMateria> getPrerrequisitoMateriaList() {
+        return prerrequisitoMateriaList;
     }
 
-    public void setMateriaList(List<Materia> materiaList) {
-        this.materiaList = materiaList;
+    public void setPrerrequisitoMateriaList(List<PrerrequisitoMateria> prerrequisitoMateriaList) {
+        this.prerrequisitoMateriaList = prerrequisitoMateriaList;
     }
 
     @XmlTransient
-    public List<Materia> getMateriaList1() {
-        return materiaList1;
+    public List<PrerrequisitoMateria> getPrerrequisitoMateriaList1() {
+        return prerrequisitoMateriaList1;
     }
 
-    public void setMateriaList1(List<Materia> materiaList1) {
-        this.materiaList1 = materiaList1;
-    }
-
-    public Pensum getPensum() {
-        return pensum;
-    }
-
-    public void setPensum(Pensum pensum) {
-        this.pensum = pensum;
+    public void setPrerrequisitoMateriaList1(List<PrerrequisitoMateria> prerrequisitoMateriaList1) {
+        this.prerrequisitoMateriaList1 = prerrequisitoMateriaList1;
     }
 
     @XmlTransient
@@ -221,10 +211,18 @@ public class Materia implements Serializable {
         this.materiaPeriodoList = materiaPeriodoList;
     }
 
+    public Pensum getPensum() {
+        return pensum;
+    }
+
+    public void setPensum(Pensum pensum) {
+        this.pensum = pensum;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (codigoMateria != null ? codigoMateria.hashCode() : 0);
+        hash += (materiaPK != null ? materiaPK.hashCode() : 0);
         return hash;
     }
 
@@ -235,7 +233,7 @@ public class Materia implements Serializable {
             return false;
         }
         Materia other = (Materia) object;
-        if ((this.codigoMateria == null && other.codigoMateria != null) || (this.codigoMateria != null && !this.codigoMateria.equals(other.codigoMateria))) {
+        if ((this.materiaPK == null && other.materiaPK != null) || (this.materiaPK != null && !this.materiaPK.equals(other.materiaPK))) {
             return false;
         }
         return true;
@@ -243,7 +241,7 @@ public class Materia implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.Materia[ codigoMateria=" + codigoMateria + " ]";
+        return "dto.Materia[ materiaPK=" + materiaPK + " ]";
     }
     
 }

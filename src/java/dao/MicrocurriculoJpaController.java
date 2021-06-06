@@ -67,7 +67,7 @@ public class MicrocurriculoJpaController implements Serializable {
             }
             Materia materia = microcurriculo.getMateria();
             if (materia != null) {
-                materia = em.getReference(materia.getClass(), materia.getCodigoMateria());
+                materia = em.getReference(materia.getClass(), materia.getMateriaPK());
                 microcurriculo.setMateria(materia);
             }
             TipoAsignatura tipoAsignaturaId = microcurriculo.getTipoAsignaturaId();
@@ -156,7 +156,7 @@ public class MicrocurriculoJpaController implements Serializable {
                 microcurriculo.setAreaDeFormacionId(areaDeFormacionIdNew);
             }
             if (materiaNew != null) {
-                materiaNew = em.getReference(materiaNew.getClass(), materiaNew.getCodigoMateria());
+                materiaNew = em.getReference(materiaNew.getClass(), materiaNew.getMateriaPK());
                 microcurriculo.setMateria(materiaNew);
             }
             if (tipoAsignaturaIdNew != null) {

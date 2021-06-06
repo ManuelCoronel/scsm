@@ -44,14 +44,14 @@ public class MateriaPeriodoJpaController implements Serializable {
         if (materiaPeriodo.getMateriaPeriodoGrupoList() == null) {
             materiaPeriodo.setMateriaPeriodoGrupoList(new ArrayList<MateriaPeriodoGrupo>());
         }
-        materiaPeriodo.getMateriaPeriodoPK().setMateriaCodigoMateria(materiaPeriodo.getMateria().getCodigoMateria());
+        materiaPeriodo.getMateriaPeriodoPK().setMateriaCodigoMateria(materiaPeriodo.getMateria().getMateriaPK().getCodigoMateria());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Materia materia = materiaPeriodo.getMateria();
             if (materia != null) {
-                materia = em.getReference(materia.getClass(), materia.getCodigoMateria());
+                materia = em.getReference(materia.getClass(), materia.getMateriaPK());
                 materiaPeriodo.setMateria(materia);
             }
             List<MateriaPeriodoGrupo> attachedMateriaPeriodoGrupoList = new ArrayList<MateriaPeriodoGrupo>();
@@ -88,7 +88,7 @@ public class MateriaPeriodoJpaController implements Serializable {
     }
 
     public void edit(MateriaPeriodo materiaPeriodo) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        materiaPeriodo.getMateriaPeriodoPK().setMateriaCodigoMateria(materiaPeriodo.getMateria().getCodigoMateria());
+        materiaPeriodo.getMateriaPeriodoPK().setMateriaCodigoMateria(materiaPeriodo.getMateria().getMateriaPK().getCodigoMateria());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -111,7 +111,7 @@ public class MateriaPeriodoJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             if (materiaNew != null) {
-                materiaNew = em.getReference(materiaNew.getClass(), materiaNew.getCodigoMateria());
+                materiaNew = em.getReference(materiaNew.getClass(), materiaNew.getMateriaPK());
                 materiaPeriodo.setMateria(materiaNew);
             }
             List<MateriaPeriodoGrupo> attachedMateriaPeriodoGrupoListNew = new ArrayList<MateriaPeriodoGrupo>();

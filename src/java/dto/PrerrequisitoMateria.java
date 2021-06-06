@@ -6,9 +6,7 @@
 package dto;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,22 +16,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Manuel
  */
 @Entity
-@Table(name = "cambio")
+@Table(name = "prerrequisito_materia")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Cambio.findAll", query = "SELECT c FROM Cambio c"),
-    @NamedQuery(name = "Cambio.findById", query = "SELECT c FROM Cambio c WHERE c.id = :id")})
-public class Cambio implements Serializable {
+    @NamedQuery(name = "PrerrequisitoMateria.findAll", query = "SELECT p FROM PrerrequisitoMateria p"),
+    @NamedQuery(name = "PrerrequisitoMateria.findById", query = "SELECT p FROM PrerrequisitoMateria p WHERE p.id = :id")})
+public class PrerrequisitoMateria implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,16 +37,17 @@ public class Cambio implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cambioId")
-    private List<SeccionCambio> seccionCambioList;
-    @JoinColumn(name = "estado_id", referencedColumnName = "id")
+    @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia")
     @ManyToOne(optional = false)
-    private Estado estadoId;
+    private Materia materiaCodigoMateria;
+    @JoinColumn(name = "materia_codigo_prerrequisito", referencedColumnName = "codigo_materia")
+    @ManyToOne(optional = false)
+    private Materia materiaCodigoPrerrequisito;
 
-    public Cambio() {
+    public PrerrequisitoMateria() {
     }
 
-    public Cambio(Integer id) {
+    public PrerrequisitoMateria(Integer id) {
         this.id = id;
     }
 
@@ -62,21 +59,20 @@ public class Cambio implements Serializable {
         this.id = id;
     }
 
-    @XmlTransient
-    public List<SeccionCambio> getSeccionCambioList() {
-        return seccionCambioList;
+    public Materia getMateriaCodigoMateria() {
+        return materiaCodigoMateria;
     }
 
-    public void setSeccionCambioList(List<SeccionCambio> seccionCambioList) {
-        this.seccionCambioList = seccionCambioList;
+    public void setMateriaCodigoMateria(Materia materiaCodigoMateria) {
+        this.materiaCodigoMateria = materiaCodigoMateria;
     }
 
-    public Estado getEstadoId() {
-        return estadoId;
+    public Materia getMateriaCodigoPrerrequisito() {
+        return materiaCodigoPrerrequisito;
     }
 
-    public void setEstadoId(Estado estadoId) {
-        this.estadoId = estadoId;
+    public void setMateriaCodigoPrerrequisito(Materia materiaCodigoPrerrequisito) {
+        this.materiaCodigoPrerrequisito = materiaCodigoPrerrequisito;
     }
 
     @Override
@@ -89,10 +85,10 @@ public class Cambio implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Cambio)) {
+        if (!(object instanceof PrerrequisitoMateria)) {
             return false;
         }
-        Cambio other = (Cambio) object;
+        PrerrequisitoMateria other = (PrerrequisitoMateria) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -101,7 +97,7 @@ public class Cambio implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.Cambio[ id=" + id + " ]";
+        return "dto.PrerrequisitoMateria[ id=" + id + " ]";
     }
     
 }

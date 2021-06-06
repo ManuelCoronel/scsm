@@ -38,14 +38,14 @@ public class EquivalenciaMateriaJpaController implements Serializable {
         if (equivalenciaMateria.getEquivalenciaMateriaPK() == null) {
             equivalenciaMateria.setEquivalenciaMateriaPK(new EquivalenciaMateriaPK());
         }
-        equivalenciaMateria.getEquivalenciaMateriaPK().setMateriaCodigoMateria(equivalenciaMateria.getMateria().getCodigoMateria());
+        equivalenciaMateria.getEquivalenciaMateriaPK().setMateriaCodigoMateria(equivalenciaMateria.getMateria().getMateriaPK().getCodigoMateria());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Materia materia = equivalenciaMateria.getMateria();
             if (materia != null) {
-                materia = em.getReference(materia.getClass(), materia.getCodigoMateria());
+                materia = em.getReference(materia.getClass(), materia.getMateriaPK());
                 equivalenciaMateria.setMateria(materia);
             }
             em.persist(equivalenciaMateria);
@@ -67,7 +67,7 @@ public class EquivalenciaMateriaJpaController implements Serializable {
     }
 
     public void edit(EquivalenciaMateria equivalenciaMateria) throws NonexistentEntityException, Exception {
-        equivalenciaMateria.getEquivalenciaMateriaPK().setMateriaCodigoMateria(equivalenciaMateria.getMateria().getCodigoMateria());
+        equivalenciaMateria.getEquivalenciaMateriaPK().setMateriaCodigoMateria(equivalenciaMateria.getMateria().getMateriaPK().getCodigoMateria());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -76,7 +76,7 @@ public class EquivalenciaMateriaJpaController implements Serializable {
             Materia materiaOld = persistentEquivalenciaMateria.getMateria();
             Materia materiaNew = equivalenciaMateria.getMateria();
             if (materiaNew != null) {
-                materiaNew = em.getReference(materiaNew.getClass(), materiaNew.getCodigoMateria());
+                materiaNew = em.getReference(materiaNew.getClass(), materiaNew.getMateriaPK());
                 equivalenciaMateria.setMateria(materiaNew);
             }
             equivalenciaMateria = em.merge(equivalenciaMateria);

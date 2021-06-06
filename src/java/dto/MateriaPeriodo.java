@@ -36,11 +36,11 @@ public class MateriaPeriodo implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected MateriaPeriodoPK materiaPeriodoPK;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materiaPeriodo")
-    private List<MateriaPeriodoGrupo> materiaPeriodoGrupoList;
     @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Materia materia;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materiaPeriodo")
+    private List<MateriaPeriodoGrupo> materiaPeriodoGrupoList;
 
     public MateriaPeriodo() {
     }
@@ -61,6 +61,14 @@ public class MateriaPeriodo implements Serializable {
         this.materiaPeriodoPK = materiaPeriodoPK;
     }
 
+    public Materia getMateria() {
+        return materia;
+    }
+
+    public void setMateria(Materia materia) {
+        this.materia = materia;
+    }
+
     @XmlTransient
     public List<MateriaPeriodoGrupo> getMateriaPeriodoGrupoList() {
         return materiaPeriodoGrupoList;
@@ -68,14 +76,6 @@ public class MateriaPeriodo implements Serializable {
 
     public void setMateriaPeriodoGrupoList(List<MateriaPeriodoGrupo> materiaPeriodoGrupoList) {
         this.materiaPeriodoGrupoList = materiaPeriodoGrupoList;
-    }
-
-    public Materia getMateria() {
-        return materia;
-    }
-
-    public void setMateria(Materia materia) {
-        this.materia = materia;
     }
 
     @Override
