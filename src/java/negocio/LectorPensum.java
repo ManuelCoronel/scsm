@@ -159,8 +159,8 @@ public class LectorPensum extends PDFTextStripper {
     public List<Materia> getMaterias() {
         List<Materia> materias_rs = new ArrayList<>();
         for (HashMap<String, Object> h : this.materias) {
-            Integer prob = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", "").substring(3, 5));
-            Integer semestre = prob < 20 ? prob : prob / 10;
+            Integer prob = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", "").substring(4, 5));
+            Integer semestre = prob==0 ? 10 : prob;
             Integer codigo = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", ""));
             String nombre = h.get(COL_NAMES[1]).toString();
 
