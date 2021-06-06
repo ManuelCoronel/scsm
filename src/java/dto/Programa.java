@@ -34,10 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Programa.findByNombrePrograma", query = "SELECT p FROM Programa p WHERE p.nombrePrograma = :nombrePrograma")})
 public class Programa implements Serializable {
 
-    @Basic(optional = false)
-    @Column(name = "director_programa")
-    private int directorPrograma;
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -46,6 +42,9 @@ public class Programa implements Serializable {
     @Basic(optional = false)
     @Column(name = "nombre_programa")
     private String nombrePrograma;
+    @JoinColumn(name = "director_programa", referencedColumnName = "codigo_docente")
+    @ManyToOne(optional = false)
+    private Docente directorPrograma;
     @JoinColumn(name = "departamento_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Departamento departamentoId;
@@ -78,6 +77,14 @@ public class Programa implements Serializable {
 
     public void setNombrePrograma(String nombrePrograma) {
         this.nombrePrograma = nombrePrograma;
+    }
+
+    public Docente getDirectorPrograma() {
+        return directorPrograma;
+    }
+
+    public void setDirectorPrograma(Docente directorPrograma) {
+        this.directorPrograma = directorPrograma;
     }
 
     public Departamento getDepartamentoId() {
@@ -120,14 +127,6 @@ public class Programa implements Serializable {
     @Override
     public String toString() {
         return "dto.Programa[ codigo=" + codigo + " ]";
-    }
-
-    public int getDirectorPrograma() {
-        return directorPrograma;
-    }
-
-    public void setDirectorPrograma(int directorPrograma) {
-        this.directorPrograma = directorPrograma;
     }
     
 }

@@ -50,6 +50,8 @@ public class Docente implements Serializable {
     @Basic(optional = false)
     @Column(name = "estado")
     private short estado;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "directorPrograma")
+    private List<Programa> programaList;
     @JoinColumn(name = "departamento_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Departamento departamentoId;
@@ -102,6 +104,15 @@ public class Docente implements Serializable {
 
     public void setEstado(short estado) {
         this.estado = estado;
+    }
+
+    @XmlTransient
+    public List<Programa> getProgramaList() {
+        return programaList;
+    }
+
+    public void setProgramaList(List<Programa> programaList) {
+        this.programaList = programaList;
     }
 
     public Departamento getDepartamentoId() {

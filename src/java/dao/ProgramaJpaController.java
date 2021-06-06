@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import dto.Docente;
 import dto.Departamento;
 import dto.Pensum;
 import dto.Programa;
@@ -44,6 +45,11 @@ public class ProgramaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Docente directorPrograma = programa.getDirectorPrograma();
+            if (directorPrograma != null) {
+                directorPrograma = em.getReference(directorPrograma.getClass(), directorPrograma.getCodigoDocente());
+                programa.setDirectorPrograma(directorPrograma);
+            }
             Departamento departamentoId = programa.getDepartamentoId();
             if (departamentoId != null) {
                 departamentoId = em.getReference(departamentoId.getClass(), departamentoId.getId());
@@ -56,6 +62,10 @@ public class ProgramaJpaController implements Serializable {
             }
             programa.setPensumList(attachedPensumList);
             em.persist(programa);
+            if (directorPrograma != null) {
+                directorPrograma.getProgramaList().add(programa);
+                directorPrograma = em.merge(directorPrograma);
+            }
             if (departamentoId != null) {
                 departamentoId.getProgramaList().add(programa);
                 departamentoId = em.merge(departamentoId);
@@ -88,6 +98,8 @@ public class ProgramaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Programa persistentPrograma = em.find(Programa.class, programa.getCodigo());
+            Docente directorProgramaOld = persistentPrograma.getDirectorPrograma();
+            Docente directorProgramaNew = programa.getDirectorPrograma();
             Departamento departamentoIdOld = persistentPrograma.getDepartamentoId();
             Departamento departamentoIdNew = programa.getDepartamentoId();
             List<Pensum> pensumListOld = persistentPrograma.getPensumList();
@@ -104,6 +116,10 @@ public class ProgramaJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
+            if (directorProgramaNew != null) {
+                directorProgramaNew = em.getReference(directorProgramaNew.getClass(), directorProgramaNew.getCodigoDocente());
+                programa.setDirectorPrograma(directorProgramaNew);
+            }
             if (departamentoIdNew != null) {
                 departamentoIdNew = em.getReference(departamentoIdNew.getClass(), departamentoIdNew.getId());
                 programa.setDepartamentoId(departamentoIdNew);
@@ -116,6 +132,14 @@ public class ProgramaJpaController implements Serializable {
             pensumListNew = attachedPensumListNew;
             programa.setPensumList(pensumListNew);
             programa = em.merge(programa);
+            if (directorProgramaOld != null && !directorProgramaOld.equals(directorProgramaNew)) {
+                directorProgramaOld.getProgramaList().remove(programa);
+                directorProgramaOld = em.merge(directorProgramaOld);
+            }
+            if (directorProgramaNew != null && !directorProgramaNew.equals(directorProgramaOld)) {
+                directorProgramaNew.getProgramaList().add(programa);
+                directorProgramaNew = em.merge(directorProgramaNew);
+            }
             if (departamentoIdOld != null && !departamentoIdOld.equals(departamentoIdNew)) {
                 departamentoIdOld.getProgramaList().remove(programa);
                 departamentoIdOld = em.merge(departamentoIdOld);
@@ -174,6 +198,11 @@ public class ProgramaJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Docente directorPrograma = programa.getDirectorPrograma();
+            if (directorPrograma != null) {
+                directorPrograma.getProgramaList().remove(programa);
+                directorPrograma = em.merge(directorPrograma);
             }
             Departamento departamentoId = programa.getDepartamentoId();
             if (departamentoId != null) {

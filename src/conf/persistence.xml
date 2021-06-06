@@ -26,6 +26,7 @@
     <class>dto.TipoSeccion</class>
     <class>dto.TablaMicrocurriculoInfo</class>
     <class>dto.Departamento</class>
+    <class>dto.Programa_1</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://ingsistemasufps.co:3306/scsm_bd?zeroDateTimeBehavior=convertToNull"/>
