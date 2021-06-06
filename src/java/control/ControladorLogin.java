@@ -7,20 +7,18 @@ package control;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import negocio.registrarMicrocurriculo;
 
 /**
  *
  * @author Manuel
  */
-@WebServlet(name = "ControladorMicrocurriculo", urlPatterns = {"/ControladorMicrocurriculo"})
-public class ControladorMicrocurriculo extends HttpServlet {
+@WebServlet(name = "ControladorLogin", urlPatterns = {"/ControladorLogin"})
+public class ControladorLogin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +37,10 @@ public class ControladorMicrocurriculo extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ControladorMicrocurriculo</title>");
+            out.println("<title>Servlet ControladorLogin</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ControladorMicrocurriculo at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ControladorLogin at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,7 +58,7 @@ public class ControladorMicrocurriculo extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /**
@@ -74,15 +72,7 @@ public class ControladorMicrocurriculo extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String accion = request.getParameter("accion");
-        System.out.println(accion);
-        if (accion.equalsIgnoreCase("Registrar")) {
-
-            String[] contenidos = request.getParameterValues("contenido");
-            System.out.println(Arrays.toString(contenidos));
-          
-        }
+        processRequest(request, response);
     }
 
     /**

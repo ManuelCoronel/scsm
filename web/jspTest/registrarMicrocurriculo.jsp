@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>Registrar Microcurriculo</h1>
-        <form action="../ControladorMicrocurriculo?accion=registrar" method="POST" >
+        <form action="../ControladorMicrocurriculo" method="POST" >
             
              <table border="1">
             <thead>
@@ -26,11 +26,11 @@
             <tbody>
                 <tr>
                     <td><input  name="contenido" value=""></td>
-                    <td></td>
-                    <td></td>
+                  <td><input  name="actividadesPresenciales " value=""></td>
+                    <td><input  name="trabajoIndependiente" value=""></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td>  <input  name="contenido" value=""></td>
                     <td></td>
                     <td></td>
                 </tr>

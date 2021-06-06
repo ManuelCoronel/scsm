@@ -25,12 +25,12 @@ public class registrarMicrocurriculo {
    }
    
    public String[] formatearContenidos(String unidad){
-       System.out.println("TEXTO=");
+      
        System.out.println(unidad);
-       String[] text = unidad.split("d");
+       String[] text = unidad.split("-");
        
-       System.out.println("Formateo");
-       System.out.println(text.length);
+       System.out.println("Formateo :");
+      
        for (String string : text) {
            System.out.println(string); 
        }
