@@ -35,12 +35,13 @@ public class ControladorMicrocurriculo extends HttpServlet {
     
     }
     
-public static void listar(HttpServletRequest request, HttpServletResponse response){
+public static void listar(HttpServletRequest request, HttpServletResponse response) throws IOException{
 
 negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
 dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
 ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodosMicrocurriculos(usuario.getDocente().getProgramaList().get(0).getCodigo());
-
+request.getSession().setAttribute("microcurriculos", microcurriculos);
+response.sendRedirect("jspTest/listarMcricurriculos.jsp");
 }
  
     @Override
@@ -48,7 +49,7 @@ ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodos
             throws ServletException, IOException {
 
             String accion = request.getParameter("accion");
-            if (accion.equalsIgnoreCase("listar")){
+            if (accion.equalsIgnoreCase("listarTodos")){
                 listar(request, response);
             
             

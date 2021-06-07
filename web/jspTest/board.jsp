@@ -12,7 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1> <a href="../ControladorMicrocurriculo?accion=listarTodosº"><button type="button">Consultar Microcurriculo</button></a>
+        <h1>Hello World!</h1> <a href="../ControladorMicrocurriculo?accion=listarTodos"><button type="button">Consultar Microcurriculo</button></a>
         
        
     </body>
