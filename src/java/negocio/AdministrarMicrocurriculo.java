@@ -6,7 +6,7 @@
 package negocio;
 
 import dao.ContenidoJpaController;
-import dao.EncabezadoTablaJpaController;
+
 import dao.MicrocurriculoJpaController;
 import dao.SeccionJpaController;
 import dao.SeccionMicrocurriculoJpaController;
@@ -16,8 +16,6 @@ import dao.TipoSeccionJpaController;
 import dao.exceptions.NonexistentEntityException;
 import dto.AreaFormacion;
 import dto.Contenido;
-import dto.EncabezadoTabla;
-import dto.EncabezadoTablaPK;
 import dto.Materia;
 import dto.Microcurriculo;
 import dto.Pensum;
