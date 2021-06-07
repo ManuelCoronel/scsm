@@ -52,12 +52,14 @@
                         <td>Tipo Asignatura</td>
                         <td>
                             <%
-                            for (Object tipos : tiposAsignatura) {
+                            for (dto.TipoAsignatura tipos : tiposAsignatura) {
                                     
                                
                             %>
-                            
-                            
+                            <div>
+                            <%=tipos.getTipo() %>
+                              <input type="radio" name="tipoAsignatura" value=<%=tipos.getId() %>
+                                     </div>
                             <%}%>
                         </td>
                     </tr>
