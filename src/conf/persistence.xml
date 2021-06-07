@@ -30,10 +30,10 @@
     <class>dto.PrerrequisitoMateria</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://ingsistemasufps.co:3306/scsm_bd?zeroDateTimeBehavior=convertToNull"/>
-      <property name="javax.persistence.jdbc.user" value="scsm_admin"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://madarme.co:3306/estudiante_31?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="estudiante_31"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="CSMSoftware2021"/>
+      <property name="javax.persistence.jdbc.password" value="pCPstUBGOM"/>
     </properties>
   </persistence-unit>
 </persistence>

@@ -6,6 +6,7 @@
 package negocio;
 
 import dao.ContenidoJpaController;
+
 import dao.MicrocurriculoJpaController;
 import dao.SeccionJpaController;
 import dao.SeccionMicrocurriculoJpaController;
@@ -47,10 +48,11 @@ public class AdministrarMicrocurriculo {
         return microcurriculos;
     }
 
-    public dto.Microcurriculo obtenerMicrocurriculo(int idMicrocurriculo) {
+    public dto.Microcurriculo obtenerMicrocurriculo(int idMicrocurriculo, int codigoMateria, int codigoPensum) {
         Conexion con = Conexion.getConexion();
         dao.MicrocurriculoJpaController daoMicrocurriculo = new dao.MicrocurriculoJpaController(con.getBd());
-        return daoMicrocurriculo.findMicrocurriculo(idMicrocurriculo);
+       dto.MicrocurriculoPK microcurriculoPK = new dto.MicrocurriculoPK(idMicrocurriculo, codigoMateria, codigoPensum);
+        return daoMicrocurriculo.findMicrocurriculo(microcurriculoPK);
     }
 
     public ArrayList<dto.Microcurriculo> obtenerTodosMicrocurriculos(int idPrograma) {
