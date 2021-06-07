@@ -169,8 +169,10 @@ public class LectorPensum extends PDFTextStripper {
             Integer hti = campoValido(h.get(COL_NAMES[4]).toString().replaceAll("\\s+", ""));
             Integer creditos = campoValido(h.get(COL_NAMES[5]).toString().replaceAll("\\s+", ""));
             Integer cre = campoValido(h.get(COL_NAMES[8]).toString().replaceAll("\\s+", ""));
+            Boolean type = h.get(COL_NAMES[9].toLowerCase().replaceAll("\\s+", "")).equals("X");
 
             Materia m = new Materia(new MateriaPK(codigo, 0), nombre, creditos, semestre, ht, hp, hti);
+            m.setType(type);
 
             List<PrerrequisitoMateria> prerreq = this.formatPrerreq(m, ((ArrayList<String>) h.get(COL_NAMES[6])));
 

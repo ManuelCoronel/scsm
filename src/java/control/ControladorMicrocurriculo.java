@@ -5,10 +5,13 @@
  */
 package control;
 
+import dto.Materia;
+import dto.Pensum;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,6 +56,8 @@ response.sendRedirect("jspTest/listarMcricurriculos.jsp");
                 listar(request, response);
             
             
+            } else if(accion.equals("registrar")){
+                this.registrar(request, response);
             }
     }
 
@@ -70,11 +75,16 @@ response.sendRedirect("jspTest/listarMcricurriculos.jsp");
           
         }
     }
-
+    
+    private void registrar(HttpServletRequest request, HttpServletResponse response) {
+        List<Materia> materias = ((Pensum)request.getAttribute("pensum")).getMateriaList();
+        for(Materia m: materias){
+            
+        }
+    }
 
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

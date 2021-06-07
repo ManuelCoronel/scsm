@@ -57,6 +57,8 @@ public class AdministrarPensum {
 
         p.setMateriaList(l.getMaterias());
         new MateriaJpaAlternativo(MyConnection.getConnection()).create(p);
+        
+        return p;
     }
 
     private String cargarPensum(InputStream pensumeFile, Integer id_programa) throws IOException {

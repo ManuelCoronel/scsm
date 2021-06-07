@@ -67,7 +67,9 @@ public class ControladorPensum extends HttpServlet {
                 }
             }
             AdministrarPensum ap = new AdministrarPensum(request.getServletContext().getRealPath("/"));
-            ap.registrar(id_programa, pensumFile);
+            
+            request.setAttribute("pensum", ap.registrar(id_programa, pensumFile));
+            response.sendRedirect("ControladorMicrocurriculo?accion=regitrar");
         } catch (FileUploadException e) {
             throw new ServletException("Cannot parse multipart request.", e);
         } catch (Exception e){

@@ -39,16 +39,20 @@ public class Microcurriculo implements Serializable {
     @Basic(optional = false)
     @Column(name = "codigo_materia")
     private Integer codigoMateria;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "microcurriculo")
     private List<SeccionMicrocurriculo> seccionMicrocurriculoList;
+    
     @JoinColumn(name = "area_de_formacion_id", referencedColumnName = "id")
     @ManyToOne
     private AreaFormacion areaDeFormacionId;
+    
     @JoinColumns({
         @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia"),
         @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
     @ManyToOne(optional = false)
     private Materia materia;
+    
     @JoinColumn(name = "tipo_asignatura_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TipoAsignatura tipoAsignaturaId;

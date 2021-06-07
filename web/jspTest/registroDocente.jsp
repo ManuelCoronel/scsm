@@ -33,16 +33,12 @@
                 </tr>
                 <tr>
                     <td>
-                        <select name="optionFacultad" id="optionFacultad" onchange ="searchFacultad()">
-                            <option value="value1">Value 1</option>
-                            <option value="value2" selected>Facultad</option>
+                        <select name="optionFacultad" id="optionFacultad" onchange ="searchDepartamento()">
+ 
                         </select>
                     </td>
                     <td>
-                        <select name="select">
-                            
-                            <option value="value1">Value 1</option>
-                            
+                        <select name="optionDepartamento" id="optionDepartamento">
                         </select>
                     </td>
                 </tr>
