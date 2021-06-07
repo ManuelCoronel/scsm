@@ -36,7 +36,7 @@ public class AdministrarPensum {
     }
     
 
-    public void registrar(Integer id_programa, InputStream pensumFile) throws IOException, Exception {
+    public Pensum registrar(Integer id_programa, InputStream pensumFile) throws IOException, Exception {
         LectorPensum l = new LectorPensum();
         l.parsePDFDocument(cargarPensum(pensumFile, id_programa));
 
