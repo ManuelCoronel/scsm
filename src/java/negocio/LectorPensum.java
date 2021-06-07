@@ -10,6 +10,7 @@ import dto.EquivalenciaMateria;
 import dto.Materia;
 import dto.MateriaPK;
 import dto.PrerrequisitoMateria;
+import dto.TipoAsignatura;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -158,8 +159,9 @@ public class LectorPensum extends PDFTextStripper {
 
     //    0         1       2     3      4      5       6      7      8     9      10
     //{"codigo", "nombre", "ht", "hp", "hti", "cr", "prereq", "si", "rc", "te", "equis"}
-    public List<Materia> getMaterias(Integer codigo_programa) {
+    public List<Materia> getMaterias(Integer codigo_pensum) {
         TipoAsignaturaJpaController tjpa = new TipoAsignaturaJpaController(Conexion.getConexion().getBd());
+        List<TipoAsignatura> ts = tjpa.findTipoAsignaturaEntities();
         List<Materia> materias_rs = new ArrayList<>();
         for (HashMap<String, Object> h : this.materias) {
             Integer prob = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", "").substring(4, 5));
@@ -174,10 +176,10 @@ public class LectorPensum extends PDFTextStripper {
             Integer cre = campoValido(h.get(COL_NAMES[8]).toString().replaceAll("\\s+", ""));
             Boolean type = h.get(COL_NAMES[9].toLowerCase().replaceAll("\\s+", "")).equals("x");
 
-            Materia m = new Materia(new MateriaPK(codigo, codigo_programa), nombre, creditos, semestre, ht, hp, hti);
-            m.setTipoAsignaturaId(tjpa.findTipoAsignatura(type ? 2 : 1));
+            Materia m = new Materia(new MateriaPK(codigo, codigo_pensum), nombre, creditos, semestre, ht, hp, hti);
+            m.setTipoAsignaturaId(ts.get(type ? 0 : 1));
 
-            List<PrerrequisitoMateria> prerreq = this.formatPrerreq(m, ((ArrayList<String>) h.get(COL_NAMES[6])));
+            List<PrerrequisitoMateria> prerreq = this.formatPrerreq(m, codigo_pensum, ((ArrayList<String>) h.get(COL_NAMES[6])));
 
             List<EquivalenciaMateria> equis = this.formatEquis(m, ((ArrayList<String>) h.get(COL_NAMES[10])));
 
@@ -212,12 +214,12 @@ public class LectorPensum extends PDFTextStripper {
         return equis;
     }
 
-    private List<PrerrequisitoMateria> formatPrerreq(Materia parent, ArrayList<String> listPrerreq) {
+    private List<PrerrequisitoMateria> formatPrerreq(Materia parent, Integer codigo_pensum, ArrayList<String> listPrerreq) {
         List<PrerrequisitoMateria> prerreqForm = new ArrayList<>();
         for (String s : listPrerreq) {
             PrerrequisitoMateria pr = new PrerrequisitoMateria();
             pr.setMateria(parent);
-            pr.setMateria1(new Materia(Integer.parseInt(s), 0));
+            pr.setMateria1(new Materia(Integer.parseInt(s), codigo_pensum));
             prerreqForm.add(pr);
         }
         return prerreqForm;

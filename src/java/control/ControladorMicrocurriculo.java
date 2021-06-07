@@ -66,7 +66,6 @@ public class ControladorMicrocurriculo extends HttpServlet {
         }
         if (accion.equals("registrar")) {
             try{
-                System.out.println("registrando");
                 this.registrar(request, response);
             }catch(Exception e){
                 e.printStackTrace();
