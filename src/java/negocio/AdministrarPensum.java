@@ -55,7 +55,7 @@ public class AdministrarPensum {
         p.setPrograma(prjpa.findPrograma(id_programa));
         pjpa.create(p);
 
-        p.setMateriaList(l.getMaterias());
+        p.setMateriaList(l.getMaterias(count));
         new MateriaJpaAlternativo(MyConnection.getConnection()).create(p);
         
         return p;

@@ -6,6 +6,7 @@
 package negocio;
 
 import dao.ContenidoJpaController;
+import dao.EncabezadoTablaJpaController;
 import dao.MicrocurriculoJpaController;
 import dao.SeccionJpaController;
 import dao.SeccionMicrocurriculoJpaController;
@@ -24,9 +25,13 @@ import dto.Seccion;
 import dto.SeccionMicrocurriculo;
 import dto.TablaMicrocurriculo;
 import dto.TipoSeccion;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import util.Conexion;
+import util.MyConnection;
 
 /**
  *
@@ -55,7 +60,12 @@ public class AdministrarMicrocurriculo {
 
         return microcurriculos;
     }
-
+    
+       public dto.Microcurriculo obtenerMicrocurriculo(){
+           return null;
+       }
+       
+       
     public ArrayList<dto.Microcurriculo> obtenerTodosMicrocurriculos(int idPrograma) {
 
         Conexion con = Conexion.getConexion();
@@ -66,7 +76,15 @@ public class AdministrarMicrocurriculo {
         for (Pensum pensum : pensums) {
             List<dto.Materia> materias = pensum.getMateriaList();
             for (Materia materia : materias) {
-                microcurriculos.add(materia.getMicrocurriculoList().get(0));
+                
+                try{
+                  microcurriculos.add(materia.getMicrocurriculoList().get(0));
+                }
+                catch(Exception e){
+                    System.out.println(e.getMessage());
+                }
+                
+            
             }
         }
 
@@ -77,20 +95,25 @@ public class AdministrarMicrocurriculo {
         System.out.println("Se fue");
         List<Materia> materias = pensum.getMateriaList();
         MicrocurriculoJpaController mjpa = new MicrocurriculoJpaController(Conexion.getConexion().getBd());
-        TipoAsignaturaJpaController tjpa = new TipoAsignaturaJpaController(Conexion.getConexion().getBd());
         for (Materia m : materias) {
             Microcurriculo micro = new Microcurriculo();
             micro.setAreaDeFormacionId(new AreaFormacion(1));
             micro.setMateria(m);
-            micro.setTipoAsignaturaId(tjpa.findTipoAsignatura(m.getTyper() ? 2 : 1));
             micro.setSeccionMicrocurriculoList(null);
 
             mjpa.create(micro);
-            micro = mjpa.findMicrocurriculo(mjpa.getMicrocurriculoCount());
-
+            Connection con = MyConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT id FROM microcurriculo WHERE materia_codigo_materia=? AND materia_pensum_codigo=?");
+            ps.setInt(1, m.getMateriaPK().getCodigoMateria());
+            ps.setInt(2, m.getMateriaPK().getPensumCodigo());
+            ResultSet rs = ps.executeQuery();
+            rs.next();//Siempre lo encontrara
+            micro.setId(rs.getInt("id"));
+            con.close();
+            
             getDefaultSecciones(micro);
-            mjpa.edit(micro);
         }
+        System.out.println("fin vida hpta");
     }
 
     private void getDefaultSecciones(Microcurriculo micro) throws NonexistentEntityException, Exception {
@@ -100,12 +123,14 @@ public class AdministrarMicrocurriculo {
         SeccionMicrocurriculoJpaController sjpa = new SeccionMicrocurriculoJpaController(Conexion.getConexion().getBd());
         ContenidoJpaController cjpa = new ContenidoJpaController(Conexion.getConexion().getBd());
         TablaMicrocurriculoJpaController tmjpa = new TablaMicrocurriculoJpaController(Conexion.getConexion().getBd());
+        EncabezadoTablaJpaController etjpa = new EncabezadoTablaJpaController(Conexion.getConexion().getBd());
         List<Seccion> secciones = tjpa.findSeccionEntities();
         for (Seccion t : secciones) {
             SeccionMicrocurriculo s = new SeccionMicrocurriculo();
             s.setMicrocurriculoId(micro);
             short a = 0;
             s.setEditable(a);
+            s.setMicrocurriculoId(micro);
             if (t.getTipoSeccionId().getId() == 1) {
                 s.setSeccionId(t);
                 sjpa.create(s);
@@ -124,9 +149,9 @@ public class AdministrarMicrocurriculo {
                 tmjpa.create(tm);
                 List<EncabezadoTabla> encabezados = new ArrayList<>();
                 if (t.getId() == 1) {
-                    getEncabezados(tm, encabezados, 0);
+                    getEncabezados(etjpa, tm, encabezados, 0);
                 } else {
-                    getEncabezados(tm, encabezados, 1);
+                    getEncabezados(etjpa, tm, encabezados, 1);
                 }
                 tm.setEncabezadoTablaList(encabezados);
                 tmjpa.edit(tm);
@@ -136,10 +161,13 @@ public class AdministrarMicrocurriculo {
         micro.setSeccionMicrocurriculoList(seccionesDefault);
     }
 
-    private void getEncabezados(TablaMicrocurriculo tm, List<EncabezadoTabla> encabezados, int columnas) {
+    private void getEncabezados(EncabezadoTablaJpaController etjpa, TablaMicrocurriculo tm, List<EncabezadoTabla> encabezados, int columnas) throws Exception {
         int i = 0;
-        for (String enca : COLUMNAS[0]) {
-            encabezados.add(new EncabezadoTabla(new EncabezadoTablaPK(i++, tm.getId()), enca));
+        for (String enca : COLUMNAS[columnas]) {
+            EncabezadoTabla et = new EncabezadoTabla(new EncabezadoTablaPK(i++, tm.getId()), enca);
+            et.setTablaMicrocurriculo(tm);
+            etjpa.create(et);
+            encabezados.add(et);
         }
     }
 }

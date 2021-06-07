@@ -55,7 +55,7 @@ public class ControladorLogin extends HttpServlet {
         System.out.println(valido);
         if (valido) {
             cargarInformacion(request, response, codigo, login, rol);
-            response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
+            response.sendRedirect("jspTest/board.jsp");
         } else {
          
         }

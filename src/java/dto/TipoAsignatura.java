@@ -44,7 +44,7 @@ public class TipoAsignatura implements Serializable {
     @Column(name = "tipo")
     private String tipo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoAsignaturaId")
-    private List<Microcurriculo> microcurriculoList;
+    private List<Materia> materiaList;
 
     public TipoAsignatura() {
     }
@@ -75,12 +75,12 @@ public class TipoAsignatura implements Serializable {
     }
 
     @XmlTransient
-    public List<Microcurriculo> getMicrocurriculoList() {
-        return microcurriculoList;
+    public List<Materia> getMateriaList() {
+        return materiaList;
     }
 
-    public void setMicrocurriculoList(List<Microcurriculo> microcurriculoList) {
-        this.microcurriculoList = microcurriculoList;
+    public void setMateriaList(List<Materia> materiaList) {
+        this.materiaList = materiaList;
     }
 
     @Override

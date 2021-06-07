@@ -5,27 +5,16 @@
  */
 package control;
 
-import dao.MicrocurriculoJpaController;
-import dao.TipoAsignaturaJpaController;
-import dto.AreaFormacion;
-import dto.Materia;
-import dto.Microcurriculo;
 import dto.Pensum;
-import dto.TipoAsignatura;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import negocio.AdministrarMicrocurriculo;
-import negocio.registrarMicrocurriculo;
-import util.Conexion;
-
 /**
  *
  * @author Manuel
@@ -44,6 +33,20 @@ public class ControladorMicrocurriculo extends HttpServlet {
     }
 
     public static void listar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
+        dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
+        ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodosMicrocurriculos(usuario.getDocente().getProgramaList().get(0).getCodigo());
+        request.getSession().setAttribute("microcurriculos", microcurriculos);
+        System.out.println(microcurriculos.toArray());
+        response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
+    }
+    
+    public void editar(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    
+    int id = Integer.parseInt(request.getParameter("idMicrocurriculo"));
+    
+    
         negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
         dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
         ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodosMicrocurriculos(usuario.getDocente().getProgramaList().get(0).getCodigo());
@@ -58,14 +61,17 @@ public class ControladorMicrocurriculo extends HttpServlet {
         String accion = request.getParameter("accion");
         if (accion.equalsIgnoreCase("listarTodos")) {
             listar(request, response);
-
-        } else if (accion.equals("registrar")) {
+        }
+        if (accion.equals("registrar")) {
             try{
                 System.out.println("registrando");
                 this.registrar(request, response);
             }catch(Exception e){
                 e.printStackTrace();
             }
+        }
+        if (accion.equalsIgnoreCase("editar")) {
+            editar(request, response);
         }
     }
 
@@ -76,10 +82,8 @@ public class ControladorMicrocurriculo extends HttpServlet {
         String accion = request.getParameter("accion");
         System.out.println(accion);
         if (accion.equalsIgnoreCase("Registrar")) {
-
             String[] contenidos = request.getParameterValues("contenido");
             System.out.println(Arrays.toString(contenidos));
-
         }
     }
 
