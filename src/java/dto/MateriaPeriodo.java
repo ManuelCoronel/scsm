@@ -28,22 +28,22 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "materia_periodo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MateriaPeriodo.findAll", query = "SELECT m FROM MateriaPeriodo m"),
-    @NamedQuery(name = "MateriaPeriodo.findByMateriaCodigoMateria", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.materiaCodigoMateria = :materiaCodigoMateria"),
-    @NamedQuery(name = "MateriaPeriodo.findByAnio", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.anio = :anio"),
-    @NamedQuery(name = "MateriaPeriodo.findBySemestreAnio", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.semestreAnio = :semestreAnio")})
+    @NamedQuery(name = "MateriaPeriodo.findAll", query = "SELECT m FROM MateriaPeriodo m")
+    , @NamedQuery(name = "MateriaPeriodo.findByMateriaCodigoMateria", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.materiaCodigoMateria = :materiaCodigoMateria")
+    , @NamedQuery(name = "MateriaPeriodo.findByAnio", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.anio = :anio")
+    , @NamedQuery(name = "MateriaPeriodo.findBySemestreAnio", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.semestreAnio = :semestreAnio")})
 public class MateriaPeriodo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected MateriaPeriodoPK materiaPeriodoPK;
-    @JoinColumns({
-        @JoinColumn(name = "materia_codigo_materia1", referencedColumnName = "codigo_materia"),
-        @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
-    @ManyToOne(optional = false)
-    private Materia materia;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materiaPeriodo")
     private List<MateriaPeriodoGrupo> materiaPeriodoGrupoList;
+    @JoinColumns({
+        @JoinColumn(name = "materia_codigo_materia1", referencedColumnName = "codigo_materia")
+        , @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
+    @ManyToOne(optional = false)
+    private Materia materia;
 
     public MateriaPeriodo() {
     }
@@ -64,14 +64,6 @@ public class MateriaPeriodo implements Serializable {
         this.materiaPeriodoPK = materiaPeriodoPK;
     }
 
-    public Materia getMateria() {
-        return materia;
-    }
-
-    public void setMateria(Materia materia) {
-        this.materia = materia;
-    }
-
     @XmlTransient
     public List<MateriaPeriodoGrupo> getMateriaPeriodoGrupoList() {
         return materiaPeriodoGrupoList;
@@ -79,6 +71,14 @@ public class MateriaPeriodo implements Serializable {
 
     public void setMateriaPeriodoGrupoList(List<MateriaPeriodoGrupo> materiaPeriodoGrupoList) {
         this.materiaPeriodoGrupoList = materiaPeriodoGrupoList;
+    }
+
+    public Materia getMateria() {
+        return materia;
+    }
+
+    public void setMateria(Materia materia) {
+        this.materia = materia;
     }
 
     @Override

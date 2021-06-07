@@ -24,9 +24,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "materia_periodo_grupo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MateriaPeriodoGrupo.findAll", query = "SELECT m FROM MateriaPeriodoGrupo m"),
-    @NamedQuery(name = "MateriaPeriodoGrupo.findByGrupo", query = "SELECT m FROM MateriaPeriodoGrupo m WHERE m.materiaPeriodoGrupoPK.grupo = :grupo"),
-    @NamedQuery(name = "MateriaPeriodoGrupo.findByDocenteCodigo", query = "SELECT m FROM MateriaPeriodoGrupo m WHERE m.materiaPeriodoGrupoPK.docenteCodigo = :docenteCodigo")})
+    @NamedQuery(name = "MateriaPeriodoGrupo.findAll", query = "SELECT m FROM MateriaPeriodoGrupo m")
+    , @NamedQuery(name = "MateriaPeriodoGrupo.findByGrupo", query = "SELECT m FROM MateriaPeriodoGrupo m WHERE m.materiaPeriodoGrupoPK.grupo = :grupo")
+    , @NamedQuery(name = "MateriaPeriodoGrupo.findByDocenteCodigo", query = "SELECT m FROM MateriaPeriodoGrupo m WHERE m.materiaPeriodoGrupoPK.docenteCodigo = :docenteCodigo")})
 public class MateriaPeriodoGrupo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,9 +36,9 @@ public class MateriaPeriodoGrupo implements Serializable {
     @ManyToOne(optional = false)
     private Docente docente;
     @JoinColumns({
-        @JoinColumn(name = "materia_periodo_materia_codigo_materia", referencedColumnName = "materia_codigo_materia"),
-        @JoinColumn(name = "materia_periodo_anio", referencedColumnName = "anio"),
-        @JoinColumn(name = "materia_periodo_semestre_anio", referencedColumnName = "semestre_anio")})
+        @JoinColumn(name = "materia_periodo_materia_codigo_materia", referencedColumnName = "materia_codigo_materia")
+        , @JoinColumn(name = "materia_periodo_anio", referencedColumnName = "anio")
+        , @JoinColumn(name = "materia_periodo_semestre_anio", referencedColumnName = "semestre_anio")})
     @ManyToOne(optional = false)
     private MateriaPeriodo materiaPeriodo;
 

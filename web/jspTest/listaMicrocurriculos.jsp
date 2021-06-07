@@ -37,7 +37,7 @@
                     <td><%=elem.getMateria().getNombre() %></td>
                     <td><%=elem.getMateria().getCreditos()%></td>
                     <td><%=elem.getMateria().getSemestre() %></td>
-                    <td> <a href="../ControladorMicrocurriculo?accion=Editar&idMicrocurriculo=<%=elem.getId()%>"><button type="button">Editar </button></a>   </td>
+                    <td> <a href="../ControladorMicrocurriculo?accion=Editar&idMicrocurriculo=<%=elem.getMicrocurriculoPK().getId()%>&materia=<%=elem.getMateria().getMateriaPK().getCodigoMateria()%>"><button type="button">Editar </button></a>   </td>
                 </tr>
                 <%
                 }

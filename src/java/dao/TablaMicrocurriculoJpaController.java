@@ -13,11 +13,10 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import dto.SeccionMicrocurriculo;
+import dto.TablaMicrocurriculo;
 import dto.TablaMicrocurriculoInfo;
 import java.util.ArrayList;
 import java.util.List;
-import dto.EncabezadoTabla;
-import dto.TablaMicrocurriculo;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -40,9 +39,6 @@ public class TablaMicrocurriculoJpaController implements Serializable {
         if (tablaMicrocurriculo.getTablaMicrocurriculoInfoList() == null) {
             tablaMicrocurriculo.setTablaMicrocurriculoInfoList(new ArrayList<TablaMicrocurriculoInfo>());
         }
-        if (tablaMicrocurriculo.getEncabezadoTablaList() == null) {
-            tablaMicrocurriculo.setEncabezadoTablaList(new ArrayList<EncabezadoTabla>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -58,12 +54,6 @@ public class TablaMicrocurriculoJpaController implements Serializable {
                 attachedTablaMicrocurriculoInfoList.add(tablaMicrocurriculoInfoListTablaMicrocurriculoInfoToAttach);
             }
             tablaMicrocurriculo.setTablaMicrocurriculoInfoList(attachedTablaMicrocurriculoInfoList);
-            List<EncabezadoTabla> attachedEncabezadoTablaList = new ArrayList<EncabezadoTabla>();
-            for (EncabezadoTabla encabezadoTablaListEncabezadoTablaToAttach : tablaMicrocurriculo.getEncabezadoTablaList()) {
-                encabezadoTablaListEncabezadoTablaToAttach = em.getReference(encabezadoTablaListEncabezadoTablaToAttach.getClass(), encabezadoTablaListEncabezadoTablaToAttach.getEncabezadoTablaPK());
-                attachedEncabezadoTablaList.add(encabezadoTablaListEncabezadoTablaToAttach);
-            }
-            tablaMicrocurriculo.setEncabezadoTablaList(attachedEncabezadoTablaList);
             em.persist(tablaMicrocurriculo);
             if (seccionMicrocurriculoId != null) {
                 seccionMicrocurriculoId.getTablaMicrocurriculoList().add(tablaMicrocurriculo);
@@ -76,15 +66,6 @@ public class TablaMicrocurriculoJpaController implements Serializable {
                 if (oldTablaMicrocurriculoOfTablaMicrocurriculoInfoListTablaMicrocurriculoInfo != null) {
                     oldTablaMicrocurriculoOfTablaMicrocurriculoInfoListTablaMicrocurriculoInfo.getTablaMicrocurriculoInfoList().remove(tablaMicrocurriculoInfoListTablaMicrocurriculoInfo);
                     oldTablaMicrocurriculoOfTablaMicrocurriculoInfoListTablaMicrocurriculoInfo = em.merge(oldTablaMicrocurriculoOfTablaMicrocurriculoInfoListTablaMicrocurriculoInfo);
-                }
-            }
-            for (EncabezadoTabla encabezadoTablaListEncabezadoTabla : tablaMicrocurriculo.getEncabezadoTablaList()) {
-                TablaMicrocurriculo oldTablaMicrocurriculoOfEncabezadoTablaListEncabezadoTabla = encabezadoTablaListEncabezadoTabla.getTablaMicrocurriculo();
-                encabezadoTablaListEncabezadoTabla.setTablaMicrocurriculo(tablaMicrocurriculo);
-                encabezadoTablaListEncabezadoTabla = em.merge(encabezadoTablaListEncabezadoTabla);
-                if (oldTablaMicrocurriculoOfEncabezadoTablaListEncabezadoTabla != null) {
-                    oldTablaMicrocurriculoOfEncabezadoTablaListEncabezadoTabla.getEncabezadoTablaList().remove(encabezadoTablaListEncabezadoTabla);
-                    oldTablaMicrocurriculoOfEncabezadoTablaListEncabezadoTabla = em.merge(oldTablaMicrocurriculoOfEncabezadoTablaListEncabezadoTabla);
                 }
             }
             em.getTransaction().commit();
@@ -105,8 +86,6 @@ public class TablaMicrocurriculoJpaController implements Serializable {
             SeccionMicrocurriculo seccionMicrocurriculoIdNew = tablaMicrocurriculo.getSeccionMicrocurriculoId();
             List<TablaMicrocurriculoInfo> tablaMicrocurriculoInfoListOld = persistentTablaMicrocurriculo.getTablaMicrocurriculoInfoList();
             List<TablaMicrocurriculoInfo> tablaMicrocurriculoInfoListNew = tablaMicrocurriculo.getTablaMicrocurriculoInfoList();
-            List<EncabezadoTabla> encabezadoTablaListOld = persistentTablaMicrocurriculo.getEncabezadoTablaList();
-            List<EncabezadoTabla> encabezadoTablaListNew = tablaMicrocurriculo.getEncabezadoTablaList();
             List<String> illegalOrphanMessages = null;
             for (TablaMicrocurriculoInfo tablaMicrocurriculoInfoListOldTablaMicrocurriculoInfo : tablaMicrocurriculoInfoListOld) {
                 if (!tablaMicrocurriculoInfoListNew.contains(tablaMicrocurriculoInfoListOldTablaMicrocurriculoInfo)) {
@@ -114,14 +93,6 @@ public class TablaMicrocurriculoJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain TablaMicrocurriculoInfo " + tablaMicrocurriculoInfoListOldTablaMicrocurriculoInfo + " since its tablaMicrocurriculo field is not nullable.");
-                }
-            }
-            for (EncabezadoTabla encabezadoTablaListOldEncabezadoTabla : encabezadoTablaListOld) {
-                if (!encabezadoTablaListNew.contains(encabezadoTablaListOldEncabezadoTabla)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain EncabezadoTabla " + encabezadoTablaListOldEncabezadoTabla + " since its tablaMicrocurriculo field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -138,13 +109,6 @@ public class TablaMicrocurriculoJpaController implements Serializable {
             }
             tablaMicrocurriculoInfoListNew = attachedTablaMicrocurriculoInfoListNew;
             tablaMicrocurriculo.setTablaMicrocurriculoInfoList(tablaMicrocurriculoInfoListNew);
-            List<EncabezadoTabla> attachedEncabezadoTablaListNew = new ArrayList<EncabezadoTabla>();
-            for (EncabezadoTabla encabezadoTablaListNewEncabezadoTablaToAttach : encabezadoTablaListNew) {
-                encabezadoTablaListNewEncabezadoTablaToAttach = em.getReference(encabezadoTablaListNewEncabezadoTablaToAttach.getClass(), encabezadoTablaListNewEncabezadoTablaToAttach.getEncabezadoTablaPK());
-                attachedEncabezadoTablaListNew.add(encabezadoTablaListNewEncabezadoTablaToAttach);
-            }
-            encabezadoTablaListNew = attachedEncabezadoTablaListNew;
-            tablaMicrocurriculo.setEncabezadoTablaList(encabezadoTablaListNew);
             tablaMicrocurriculo = em.merge(tablaMicrocurriculo);
             if (seccionMicrocurriculoIdOld != null && !seccionMicrocurriculoIdOld.equals(seccionMicrocurriculoIdNew)) {
                 seccionMicrocurriculoIdOld.getTablaMicrocurriculoList().remove(tablaMicrocurriculo);
@@ -162,17 +126,6 @@ public class TablaMicrocurriculoJpaController implements Serializable {
                     if (oldTablaMicrocurriculoOfTablaMicrocurriculoInfoListNewTablaMicrocurriculoInfo != null && !oldTablaMicrocurriculoOfTablaMicrocurriculoInfoListNewTablaMicrocurriculoInfo.equals(tablaMicrocurriculo)) {
                         oldTablaMicrocurriculoOfTablaMicrocurriculoInfoListNewTablaMicrocurriculoInfo.getTablaMicrocurriculoInfoList().remove(tablaMicrocurriculoInfoListNewTablaMicrocurriculoInfo);
                         oldTablaMicrocurriculoOfTablaMicrocurriculoInfoListNewTablaMicrocurriculoInfo = em.merge(oldTablaMicrocurriculoOfTablaMicrocurriculoInfoListNewTablaMicrocurriculoInfo);
-                    }
-                }
-            }
-            for (EncabezadoTabla encabezadoTablaListNewEncabezadoTabla : encabezadoTablaListNew) {
-                if (!encabezadoTablaListOld.contains(encabezadoTablaListNewEncabezadoTabla)) {
-                    TablaMicrocurriculo oldTablaMicrocurriculoOfEncabezadoTablaListNewEncabezadoTabla = encabezadoTablaListNewEncabezadoTabla.getTablaMicrocurriculo();
-                    encabezadoTablaListNewEncabezadoTabla.setTablaMicrocurriculo(tablaMicrocurriculo);
-                    encabezadoTablaListNewEncabezadoTabla = em.merge(encabezadoTablaListNewEncabezadoTabla);
-                    if (oldTablaMicrocurriculoOfEncabezadoTablaListNewEncabezadoTabla != null && !oldTablaMicrocurriculoOfEncabezadoTablaListNewEncabezadoTabla.equals(tablaMicrocurriculo)) {
-                        oldTablaMicrocurriculoOfEncabezadoTablaListNewEncabezadoTabla.getEncabezadoTablaList().remove(encabezadoTablaListNewEncabezadoTabla);
-                        oldTablaMicrocurriculoOfEncabezadoTablaListNewEncabezadoTabla = em.merge(oldTablaMicrocurriculoOfEncabezadoTablaListNewEncabezadoTabla);
                     }
                 }
             }
@@ -212,13 +165,6 @@ public class TablaMicrocurriculoJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This TablaMicrocurriculo (" + tablaMicrocurriculo + ") cannot be destroyed since the TablaMicrocurriculoInfo " + tablaMicrocurriculoInfoListOrphanCheckTablaMicrocurriculoInfo + " in its tablaMicrocurriculoInfoList field has a non-nullable tablaMicrocurriculo field.");
-            }
-            List<EncabezadoTabla> encabezadoTablaListOrphanCheck = tablaMicrocurriculo.getEncabezadoTablaList();
-            for (EncabezadoTabla encabezadoTablaListOrphanCheckEncabezadoTabla : encabezadoTablaListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This TablaMicrocurriculo (" + tablaMicrocurriculo + ") cannot be destroyed since the EncabezadoTabla " + encabezadoTablaListOrphanCheckEncabezadoTabla + " in its encabezadoTablaList field has a non-nullable tablaMicrocurriculo field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

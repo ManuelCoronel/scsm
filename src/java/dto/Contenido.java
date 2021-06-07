@@ -31,10 +31,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "contenido")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Contenido.findAll", query = "SELECT c FROM Contenido c"),
-    @NamedQuery(name = "Contenido.findById", query = "SELECT c FROM Contenido c WHERE c.id = :id"),
-    @NamedQuery(name = "Contenido.findByTexto", query = "SELECT c FROM Contenido c WHERE c.texto = :texto"),
-    @NamedQuery(name = "Contenido.findByCantidadItemsLista", query = "SELECT c FROM Contenido c WHERE c.cantidadItemsLista = :cantidadItemsLista")})
+    @NamedQuery(name = "Contenido.findAll", query = "SELECT c FROM Contenido c")
+    , @NamedQuery(name = "Contenido.findById", query = "SELECT c FROM Contenido c WHERE c.id = :id")
+    , @NamedQuery(name = "Contenido.findByTexto", query = "SELECT c FROM Contenido c WHERE c.texto = :texto")
+    , @NamedQuery(name = "Contenido.findByCantidadItemsLista", query = "SELECT c FROM Contenido c WHERE c.cantidadItemsLista = :cantidadItemsLista")})
 public class Contenido implements Serializable {
 
     private static final long serialVersionUID = 1L;

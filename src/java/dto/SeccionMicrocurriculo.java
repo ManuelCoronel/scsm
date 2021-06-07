@@ -32,9 +32,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "seccion_microcurriculo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SeccionMicrocurriculo.findAll", query = "SELECT s FROM SeccionMicrocurriculo s"),
-    @NamedQuery(name = "SeccionMicrocurriculo.findById", query = "SELECT s FROM SeccionMicrocurriculo s WHERE s.id = :id"),
-    @NamedQuery(name = "SeccionMicrocurriculo.findByEditable", query = "SELECT s FROM SeccionMicrocurriculo s WHERE s.editable = :editable")})
+    @NamedQuery(name = "SeccionMicrocurriculo.findAll", query = "SELECT s FROM SeccionMicrocurriculo s")
+    , @NamedQuery(name = "SeccionMicrocurriculo.findById", query = "SELECT s FROM SeccionMicrocurriculo s WHERE s.id = :id")
+    , @NamedQuery(name = "SeccionMicrocurriculo.findByEditable", query = "SELECT s FROM SeccionMicrocurriculo s WHERE s.editable = :editable")})
 public class SeccionMicrocurriculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,9 +47,9 @@ public class SeccionMicrocurriculo implements Serializable {
     @Column(name = "editable")
     private short editable;
     @JoinColumns({
-        @JoinColumn(name = "microcurriculo_id", referencedColumnName = "id"),
-        @JoinColumn(name = "microcurriculo_materia_pensum_codigo", referencedColumnName = "materia_pensum_codigo"),
-        @JoinColumn(name = "microcurriculo_materia_codigo_materia", referencedColumnName = "materia_codigo_materia")})
+        @JoinColumn(name = "microcurriculo_id", referencedColumnName = "id")
+        , @JoinColumn(name = "microcurriculo_materia_pensum_codigo", referencedColumnName = "materia_pensum_codigo")
+        , @JoinColumn(name = "microcurriculo_materia_codigo_materia", referencedColumnName = "materia_codigo_materia")})
     @ManyToOne(optional = false)
     private Microcurriculo microcurriculo;
     @JoinColumn(name = "seccion_id", referencedColumnName = "id")

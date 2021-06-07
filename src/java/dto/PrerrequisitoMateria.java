@@ -28,8 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "prerrequisito_materia")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PrerrequisitoMateria.findAll", query = "SELECT p FROM PrerrequisitoMateria p"),
-    @NamedQuery(name = "PrerrequisitoMateria.findById", query = "SELECT p FROM PrerrequisitoMateria p WHERE p.id = :id")})
+    @NamedQuery(name = "PrerrequisitoMateria.findAll", query = "SELECT p FROM PrerrequisitoMateria p")
+    , @NamedQuery(name = "PrerrequisitoMateria.findById", query = "SELECT p FROM PrerrequisitoMateria p WHERE p.id = :id")})
 public class PrerrequisitoMateria implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,13 +39,13 @@ public class PrerrequisitoMateria implements Serializable {
     @Column(name = "id")
     private Integer id;
     @JoinColumns({
-        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia"),
-        @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
+        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia")
+        , @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
     @ManyToOne(optional = false)
     private Materia materia;
     @JoinColumns({
-        @JoinColumn(name = "materia_codigo_prerrequisito", referencedColumnName = "codigo_materia"),
-        @JoinColumn(name = "materia_pensum_prerrequisito", referencedColumnName = "pensum_codigo")})
+        @JoinColumn(name = "materia_codigo_prerrequisito", referencedColumnName = "codigo_materia")
+        , @JoinColumn(name = "materia_pensum_prerrequisito", referencedColumnName = "pensum_codigo")})
     @ManyToOne(optional = false)
     private Materia materia1;
 

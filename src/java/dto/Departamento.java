@@ -31,9 +31,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "departamento")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Departamento.findAll", query = "SELECT d FROM Departamento d"),
-    @NamedQuery(name = "Departamento.findById", query = "SELECT d FROM Departamento d WHERE d.id = :id"),
-    @NamedQuery(name = "Departamento.findByNombreDepartamento", query = "SELECT d FROM Departamento d WHERE d.nombreDepartamento = :nombreDepartamento")})
+    @NamedQuery(name = "Departamento.findAll", query = "SELECT d FROM Departamento d")
+    , @NamedQuery(name = "Departamento.findById", query = "SELECT d FROM Departamento d WHERE d.id = :id")
+    , @NamedQuery(name = "Departamento.findByNombreDepartamento", query = "SELECT d FROM Departamento d WHERE d.nombreDepartamento = :nombreDepartamento")})
 public class Departamento implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,9 +46,9 @@ public class Departamento implements Serializable {
     @Column(name = "nombre_departamento")
     private String nombreDepartamento;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamentoId")
-    private List<Programa> programaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamentoId")
     private List<Docente> docenteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamentoId")
+    private List<Programa> programaList;
     @JoinColumn(name = "facultad_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Facultad facultadId;
@@ -82,21 +82,21 @@ public class Departamento implements Serializable {
     }
 
     @XmlTransient
-    public List<Programa> getProgramaList() {
-        return programaList;
-    }
-
-    public void setProgramaList(List<Programa> programaList) {
-        this.programaList = programaList;
-    }
-
-    @XmlTransient
     public List<Docente> getDocenteList() {
         return docenteList;
     }
 
     public void setDocenteList(List<Docente> docenteList) {
         this.docenteList = docenteList;
+    }
+
+    @XmlTransient
+    public List<Programa> getProgramaList() {
+        return programaList;
+    }
+
+    public void setProgramaList(List<Programa> programaList) {
+        this.programaList = programaList;
     }
 
     public Facultad getFacultadId() {

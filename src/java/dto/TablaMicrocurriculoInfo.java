@@ -23,10 +23,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "tabla_microcurriculo_info")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TablaMicrocurriculoInfo.findAll", query = "SELECT t FROM TablaMicrocurriculoInfo t"),
-    @NamedQuery(name = "TablaMicrocurriculoInfo.findByIdFila", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.idFila = :idFila"),
-    @NamedQuery(name = "TablaMicrocurriculoInfo.findByIdColumna", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.idColumna = :idColumna"),
-    @NamedQuery(name = "TablaMicrocurriculoInfo.findByTablaMicrocurriculoId", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.tablaMicrocurriculoId = :tablaMicrocurriculoId")})
+    @NamedQuery(name = "TablaMicrocurriculoInfo.findAll", query = "SELECT t FROM TablaMicrocurriculoInfo t")
+    , @NamedQuery(name = "TablaMicrocurriculoInfo.findByIdFila", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.idFila = :idFila")
+    , @NamedQuery(name = "TablaMicrocurriculoInfo.findByIdColumna", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.idColumna = :idColumna")
+    , @NamedQuery(name = "TablaMicrocurriculoInfo.findByTablaMicrocurriculoId", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.tablaMicrocurriculoId = :tablaMicrocurriculoId")})
 public class TablaMicrocurriculoInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;

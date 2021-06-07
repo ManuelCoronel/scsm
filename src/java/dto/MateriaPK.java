@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package dto;
 
 import java.io.Serializable;
@@ -77,5 +76,5 @@ public class MateriaPK implements Serializable {
     public String toString() {
         return "dto.MateriaPK[ codigoMateria=" + codigoMateria + ", pensumCodigo=" + pensumCodigo + " ]";
     }
-
+    
 }

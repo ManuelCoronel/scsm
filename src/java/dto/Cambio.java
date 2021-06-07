@@ -31,8 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "cambio")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Cambio.findAll", query = "SELECT c FROM Cambio c"),
-    @NamedQuery(name = "Cambio.findById", query = "SELECT c FROM Cambio c WHERE c.id = :id")})
+    @NamedQuery(name = "Cambio.findAll", query = "SELECT c FROM Cambio c")
+    , @NamedQuery(name = "Cambio.findById", query = "SELECT c FROM Cambio c WHERE c.id = :id")})
 public class Cambio implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,11 +41,11 @@ public class Cambio implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cambioId")
-    private List<SeccionCambio> seccionCambioList;
     @JoinColumn(name = "estado_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Estado estadoId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cambioId")
+    private List<SeccionCambio> seccionCambioList;
 
     public Cambio() {
     }
@@ -62,6 +62,14 @@ public class Cambio implements Serializable {
         this.id = id;
     }
 
+    public Estado getEstadoId() {
+        return estadoId;
+    }
+
+    public void setEstadoId(Estado estadoId) {
+        this.estadoId = estadoId;
+    }
+
     @XmlTransient
     public List<SeccionCambio> getSeccionCambioList() {
         return seccionCambioList;
@@ -69,14 +77,6 @@ public class Cambio implements Serializable {
 
     public void setSeccionCambioList(List<SeccionCambio> seccionCambioList) {
         this.seccionCambioList = seccionCambioList;
-    }
-
-    public Estado getEstadoId() {
-        return estadoId;
-    }
-
-    public void setEstadoId(Estado estadoId) {
-        this.estadoId = estadoId;
     }
 
     @Override

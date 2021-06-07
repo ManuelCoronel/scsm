@@ -31,10 +31,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "tabla_microcurriculo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TablaMicrocurriculo.findAll", query = "SELECT t FROM TablaMicrocurriculo t"),
-    @NamedQuery(name = "TablaMicrocurriculo.findById", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.id = :id"),
-    @NamedQuery(name = "TablaMicrocurriculo.findByCantidadFilas", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.cantidadFilas = :cantidadFilas"),
-    @NamedQuery(name = "TablaMicrocurriculo.findBySeccionMicrocurriculoCodigoMateria", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.seccionMicrocurriculoCodigoMateria = :seccionMicrocurriculoCodigoMateria")})
+    @NamedQuery(name = "TablaMicrocurriculo.findAll", query = "SELECT t FROM TablaMicrocurriculo t")
+    , @NamedQuery(name = "TablaMicrocurriculo.findById", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.id = :id")
+    , @NamedQuery(name = "TablaMicrocurriculo.findByCantidadFilas", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.cantidadFilas = :cantidadFilas")
+    , @NamedQuery(name = "TablaMicrocurriculo.findBySeccionMicrocurriculoCodigoMateria", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.seccionMicrocurriculoCodigoMateria = :seccionMicrocurriculoCodigoMateria")})
 public class TablaMicrocurriculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,8 +51,6 @@ public class TablaMicrocurriculo implements Serializable {
     private int seccionMicrocurriculoCodigoMateria;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tablaMicrocurriculo")
     private List<TablaMicrocurriculoInfo> tablaMicrocurriculoInfoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tablaMicrocurriculo")
-    private List<EncabezadoTabla> encabezadoTablaList;
     @JoinColumn(name = "seccion_microcurriculo_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private SeccionMicrocurriculo seccionMicrocurriculoId;
@@ -101,15 +99,6 @@ public class TablaMicrocurriculo implements Serializable {
 
     public void setTablaMicrocurriculoInfoList(List<TablaMicrocurriculoInfo> tablaMicrocurriculoInfoList) {
         this.tablaMicrocurriculoInfoList = tablaMicrocurriculoInfoList;
-    }
-
-    @XmlTransient
-    public List<EncabezadoTabla> getEncabezadoTablaList() {
-        return encabezadoTablaList;
-    }
-
-    public void setEncabezadoTablaList(List<EncabezadoTabla> encabezadoTablaList) {
-        this.encabezadoTablaList = encabezadoTablaList;
     }
 
     public SeccionMicrocurriculo getSeccionMicrocurriculoId() {

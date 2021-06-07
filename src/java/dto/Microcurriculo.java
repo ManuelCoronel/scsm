@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "microcurriculo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Microcurriculo.findAll", query = "SELECT m FROM Microcurriculo m"),
-    @NamedQuery(name = "Microcurriculo.findById", query = "SELECT m FROM Microcurriculo m WHERE m.microcurriculoPK.id = :id"),
-    @NamedQuery(name = "Microcurriculo.findByMateriaCodigoMateria", query = "SELECT m FROM Microcurriculo m WHERE m.microcurriculoPK.materiaCodigoMateria = :materiaCodigoMateria"),
-    @NamedQuery(name = "Microcurriculo.findByMateriaPensumCodigo", query = "SELECT m FROM Microcurriculo m WHERE m.microcurriculoPK.materiaPensumCodigo = :materiaPensumCodigo")})
+    @NamedQuery(name = "Microcurriculo.findAll", query = "SELECT m FROM Microcurriculo m")
+    , @NamedQuery(name = "Microcurriculo.findById", query = "SELECT m FROM Microcurriculo m WHERE m.microcurriculoPK.id = :id")
+    , @NamedQuery(name = "Microcurriculo.findByMateriaCodigoMateria", query = "SELECT m FROM Microcurriculo m WHERE m.microcurriculoPK.materiaCodigoMateria = :materiaCodigoMateria")
+    , @NamedQuery(name = "Microcurriculo.findByMateriaPensumCodigo", query = "SELECT m FROM Microcurriculo m WHERE m.microcurriculoPK.materiaPensumCodigo = :materiaPensumCodigo")})
 public class Microcurriculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,8 +43,8 @@ public class Microcurriculo implements Serializable {
     @ManyToOne
     private AreaFormacion areaDeFormacionId;
     @JoinColumns({
-        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia", insertable = false, updatable = false),
-        @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo", insertable = false, updatable = false)})
+        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia", insertable = false, updatable = false)
+        , @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Materia materia;
 

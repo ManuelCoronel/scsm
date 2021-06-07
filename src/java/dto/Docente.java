@@ -29,11 +29,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "docente")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Docente.findAll", query = "SELECT d FROM Docente d"),
-    @NamedQuery(name = "Docente.findByCodigoDocente", query = "SELECT d FROM Docente d WHERE d.codigoDocente = :codigoDocente"),
-    @NamedQuery(name = "Docente.findByNombre", query = "SELECT d FROM Docente d WHERE d.nombre = :nombre"),
-    @NamedQuery(name = "Docente.findByApellido", query = "SELECT d FROM Docente d WHERE d.apellido = :apellido"),
-    @NamedQuery(name = "Docente.findByEstado", query = "SELECT d FROM Docente d WHERE d.estado = :estado")})
+    @NamedQuery(name = "Docente.findAll", query = "SELECT d FROM Docente d")
+    , @NamedQuery(name = "Docente.findByCodigoDocente", query = "SELECT d FROM Docente d WHERE d.codigoDocente = :codigoDocente")
+    , @NamedQuery(name = "Docente.findByNombre", query = "SELECT d FROM Docente d WHERE d.nombre = :nombre")
+    , @NamedQuery(name = "Docente.findByApellido", query = "SELECT d FROM Docente d WHERE d.apellido = :apellido")
+    , @NamedQuery(name = "Docente.findByEstado", query = "SELECT d FROM Docente d WHERE d.estado = :estado")})
 public class Docente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,11 +50,11 @@ public class Docente implements Serializable {
     @Basic(optional = false)
     @Column(name = "estado")
     private short estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "directorPrograma")
-    private List<Programa> programaList;
     @JoinColumn(name = "departamento_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Departamento departamentoId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "directorPrograma")
+    private List<Programa> programaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "docente")
     private List<MateriaPeriodoGrupo> materiaPeriodoGrupoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "docente")
@@ -106,6 +106,14 @@ public class Docente implements Serializable {
         this.estado = estado;
     }
 
+    public Departamento getDepartamentoId() {
+        return departamentoId;
+    }
+
+    public void setDepartamentoId(Departamento departamentoId) {
+        this.departamentoId = departamentoId;
+    }
+
     @XmlTransient
     public List<Programa> getProgramaList() {
         return programaList;
@@ -113,14 +121,6 @@ public class Docente implements Serializable {
 
     public void setProgramaList(List<Programa> programaList) {
         this.programaList = programaList;
-    }
-
-    public Departamento getDepartamentoId() {
-        return departamentoId;
-    }
-
-    public void setDepartamentoId(Departamento departamentoId) {
-        this.departamentoId = departamentoId;
     }
 
     @XmlTransient

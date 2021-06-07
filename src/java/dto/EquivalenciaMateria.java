@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "equivalencia_materia")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "EquivalenciaMateria.findAll", query = "SELECT e FROM EquivalenciaMateria e"),
-    @NamedQuery(name = "EquivalenciaMateria.findByEquivalenciaMateria", query = "SELECT e FROM EquivalenciaMateria e WHERE e.equivalenciaMateria = :equivalenciaMateria"),
-    @NamedQuery(name = "EquivalenciaMateria.findByNombre", query = "SELECT e FROM EquivalenciaMateria e WHERE e.nombre = :nombre"),
-    @NamedQuery(name = "EquivalenciaMateria.findById", query = "SELECT e FROM EquivalenciaMateria e WHERE e.id = :id")})
+    @NamedQuery(name = "EquivalenciaMateria.findAll", query = "SELECT e FROM EquivalenciaMateria e")
+    , @NamedQuery(name = "EquivalenciaMateria.findByEquivalenciaMateria", query = "SELECT e FROM EquivalenciaMateria e WHERE e.equivalenciaMateria = :equivalenciaMateria")
+    , @NamedQuery(name = "EquivalenciaMateria.findByNombre", query = "SELECT e FROM EquivalenciaMateria e WHERE e.nombre = :nombre")
+    , @NamedQuery(name = "EquivalenciaMateria.findById", query = "SELECT e FROM EquivalenciaMateria e WHERE e.id = :id")})
 public class EquivalenciaMateria implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,8 +46,8 @@ public class EquivalenciaMateria implements Serializable {
     @Column(name = "id")
     private Integer id;
     @JoinColumns({
-        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia"),
-        @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
+        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia")
+        , @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
     @ManyToOne(optional = false)
     private Materia materia;
 
