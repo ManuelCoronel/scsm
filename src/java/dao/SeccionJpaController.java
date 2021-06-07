@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import dto.TipoSeccion;
 import dto.SeccionMicrocurriculo;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,11 @@ public class SeccionJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            TipoSeccion tipoSeccionId = seccion.getTipoSeccionId();
+            if (tipoSeccionId != null) {
+                tipoSeccionId = em.getReference(tipoSeccionId.getClass(), tipoSeccionId.getId());
+                seccion.setTipoSeccionId(tipoSeccionId);
+            }
             List<SeccionMicrocurriculo> attachedSeccionMicrocurriculoList = new ArrayList<SeccionMicrocurriculo>();
             for (SeccionMicrocurriculo seccionMicrocurriculoListSeccionMicrocurriculoToAttach : seccion.getSeccionMicrocurriculoList()) {
                 seccionMicrocurriculoListSeccionMicrocurriculoToAttach = em.getReference(seccionMicrocurriculoListSeccionMicrocurriculoToAttach.getClass(), seccionMicrocurriculoListSeccionMicrocurriculoToAttach.getSeccionMicrocurriculoPK());
@@ -49,6 +55,10 @@ public class SeccionJpaController implements Serializable {
             }
             seccion.setSeccionMicrocurriculoList(attachedSeccionMicrocurriculoList);
             em.persist(seccion);
+            if (tipoSeccionId != null) {
+                tipoSeccionId.getSeccionList().add(seccion);
+                tipoSeccionId = em.merge(tipoSeccionId);
+            }
             for (SeccionMicrocurriculo seccionMicrocurriculoListSeccionMicrocurriculo : seccion.getSeccionMicrocurriculoList()) {
                 Seccion oldSeccionIdOfSeccionMicrocurriculoListSeccionMicrocurriculo = seccionMicrocurriculoListSeccionMicrocurriculo.getSeccionId();
                 seccionMicrocurriculoListSeccionMicrocurriculo.setSeccionId(seccion);
@@ -72,6 +82,8 @@ public class SeccionJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Seccion persistentSeccion = em.find(Seccion.class, seccion.getId());
+            TipoSeccion tipoSeccionIdOld = persistentSeccion.getTipoSeccionId();
+            TipoSeccion tipoSeccionIdNew = seccion.getTipoSeccionId();
             List<SeccionMicrocurriculo> seccionMicrocurriculoListOld = persistentSeccion.getSeccionMicrocurriculoList();
             List<SeccionMicrocurriculo> seccionMicrocurriculoListNew = seccion.getSeccionMicrocurriculoList();
             List<String> illegalOrphanMessages = null;
@@ -86,6 +98,10 @@ public class SeccionJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
+            if (tipoSeccionIdNew != null) {
+                tipoSeccionIdNew = em.getReference(tipoSeccionIdNew.getClass(), tipoSeccionIdNew.getId());
+                seccion.setTipoSeccionId(tipoSeccionIdNew);
+            }
             List<SeccionMicrocurriculo> attachedSeccionMicrocurriculoListNew = new ArrayList<SeccionMicrocurriculo>();
             for (SeccionMicrocurriculo seccionMicrocurriculoListNewSeccionMicrocurriculoToAttach : seccionMicrocurriculoListNew) {
                 seccionMicrocurriculoListNewSeccionMicrocurriculoToAttach = em.getReference(seccionMicrocurriculoListNewSeccionMicrocurriculoToAttach.getClass(), seccionMicrocurriculoListNewSeccionMicrocurriculoToAttach.getSeccionMicrocurriculoPK());
@@ -94,6 +110,14 @@ public class SeccionJpaController implements Serializable {
             seccionMicrocurriculoListNew = attachedSeccionMicrocurriculoListNew;
             seccion.setSeccionMicrocurriculoList(seccionMicrocurriculoListNew);
             seccion = em.merge(seccion);
+            if (tipoSeccionIdOld != null && !tipoSeccionIdOld.equals(tipoSeccionIdNew)) {
+                tipoSeccionIdOld.getSeccionList().remove(seccion);
+                tipoSeccionIdOld = em.merge(tipoSeccionIdOld);
+            }
+            if (tipoSeccionIdNew != null && !tipoSeccionIdNew.equals(tipoSeccionIdOld)) {
+                tipoSeccionIdNew.getSeccionList().add(seccion);
+                tipoSeccionIdNew = em.merge(tipoSeccionIdNew);
+            }
             for (SeccionMicrocurriculo seccionMicrocurriculoListNewSeccionMicrocurriculo : seccionMicrocurriculoListNew) {
                 if (!seccionMicrocurriculoListOld.contains(seccionMicrocurriculoListNewSeccionMicrocurriculo)) {
                     Seccion oldSeccionIdOfSeccionMicrocurriculoListNewSeccionMicrocurriculo = seccionMicrocurriculoListNewSeccionMicrocurriculo.getSeccionId();
@@ -144,6 +168,11 @@ public class SeccionJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            TipoSeccion tipoSeccionId = seccion.getTipoSeccionId();
+            if (tipoSeccionId != null) {
+                tipoSeccionId.getSeccionList().remove(seccion);
+                tipoSeccionId = em.merge(tipoSeccionId);
             }
             em.remove(seccion);
             em.getTransaction().commit();

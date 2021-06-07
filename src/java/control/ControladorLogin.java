@@ -64,7 +64,8 @@ public class ControladorLogin extends HttpServlet {
 
     public static void cargarInformacion(HttpServletRequest request, HttpServletResponse response, int codigo, Login login, int rol) {
         dto.Usuario usuario = login.obtenerUsuario(codigo, rol);
-        request.setAttribute("sesion", usuario);
+        request.getSession().setAttribute("usuario", usuario);
+       
         
         if (rol == 1) {
             System.out.println(usuario.getDocente().getProgramaList().get(0).getNombrePrograma());

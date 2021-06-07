@@ -32,7 +32,11 @@ public class AdministrarPensum {
         this.realPathServer = realPathServer;
     }
 
-    public Pensum registrar(Integer id_programa, InputStream pensumFile) throws IOException, Exception {
+    public AdministrarPensum() {
+    }
+    
+
+    public void registrar(Integer id_programa, InputStream pensumFile) throws IOException, Exception {
         LectorPensum l = new LectorPensum();
         l.parsePDFDocument(cargarPensum(pensumFile, id_programa));
 
@@ -68,7 +72,7 @@ public class AdministrarPensum {
         return file.getAbsolutePath();
     }
 
-    public dto.Pensum obtenerPensum(int idPrograma, int codigo, int programaCodigo) {
+    public dto.Pensum obtenerPensum( int codigo, int programaCodigo) {
         Conexion con = Conexion.getConexion();
         dao.PensumJpaController daoPensum = new dao.PensumJpaController(con.getBd());
         Pensum pensum= daoPensum.findPensum(new dto.PensumPK(codigo, programaCodigo));

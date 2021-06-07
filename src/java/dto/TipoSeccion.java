@@ -44,7 +44,7 @@ public class TipoSeccion implements Serializable {
     @Column(name = "tipo")
     private String tipo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoSeccionId")
-    private List<SeccionMicrocurriculo> seccionMicrocurriculoList;
+    private List<Seccion> seccionList;
 
     public TipoSeccion() {
     }
@@ -75,12 +75,12 @@ public class TipoSeccion implements Serializable {
     }
 
     @XmlTransient
-    public List<SeccionMicrocurriculo> getSeccionMicrocurriculoList() {
-        return seccionMicrocurriculoList;
+    public List<Seccion> getSeccionList() {
+        return seccionList;
     }
 
-    public void setSeccionMicrocurriculoList(List<SeccionMicrocurriculo> seccionMicrocurriculoList) {
-        this.seccionMicrocurriculoList = seccionMicrocurriculoList;
+    public void setSeccionList(List<Seccion> seccionList) {
+        this.seccionList = seccionList;
     }
 
     @Override
