@@ -27,7 +27,7 @@ public class MateriaJpaAlternativo {
     public void create(Pensum pensum) throws SQLException{
         PreparedStatement ps = this.connection.prepareStatement
         ("INSERT INTO materia(codigo_materia, nombre, creditos, semestre, pensum_codigo, "
-                           + "pensum_programa_codigo, ht, hp, hti, cr) VALUES (?,?,?,?,?,?,?,?,?,?)");
+                           + "pensum_programa_codigo, ht, hp, hti, cr, tipo_asignatura_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
         for(Materia m: pensum.getMateriaList()){
             ps.setInt(1, m.getMateriaPK().getCodigoMateria());
             ps.setString(2, m.getNombre());
@@ -39,6 +39,7 @@ public class MateriaJpaAlternativo {
             ps.setInt(8, m.getHp());
             ps.setInt(9, m.getHti());
             ps.setInt(10, m.getCr());
+            ps.setInt(11, m.getTipoAsignaturaId().getId());
             ps.execute();
         }
         

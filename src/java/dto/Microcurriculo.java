@@ -7,13 +7,9 @@ package dto;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -33,39 +29,42 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Microcurriculo.findAll", query = "SELECT m FROM Microcurriculo m"),
-    @NamedQuery(name = "Microcurriculo.findById", query = "SELECT m FROM Microcurriculo m WHERE m.id = :id")})
+    @NamedQuery(name = "Microcurriculo.findById", query = "SELECT m FROM Microcurriculo m WHERE m.microcurriculoPK.id = :id"),
+    @NamedQuery(name = "Microcurriculo.findByMateriaCodigoMateria", query = "SELECT m FROM Microcurriculo m WHERE m.microcurriculoPK.materiaCodigoMateria = :materiaCodigoMateria"),
+    @NamedQuery(name = "Microcurriculo.findByMateriaPensumCodigo", query = "SELECT m FROM Microcurriculo m WHERE m.microcurriculoPK.materiaPensumCodigo = :materiaPensumCodigo")})
 public class Microcurriculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "microcurriculoId")
+    @EmbeddedId
+    protected MicrocurriculoPK microcurriculoPK;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "microcurriculo")
     private List<SeccionMicrocurriculo> seccionMicrocurriculoList;
     @JoinColumn(name = "area_de_formacion_id", referencedColumnName = "id")
     @ManyToOne
     private AreaFormacion areaDeFormacionId;
     @JoinColumns({
-        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia"),
-        @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
+        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia", insertable = false, updatable = false),
+        @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Materia materia;
 
     public Microcurriculo() {
     }
 
-    public Microcurriculo(Integer id) {
-        this.id = id;
+    public Microcurriculo(MicrocurriculoPK microcurriculoPK) {
+        this.microcurriculoPK = microcurriculoPK;
     }
 
-    public Integer getId() {
-        return id;
+    public Microcurriculo(int id, int materiaCodigoMateria, int materiaPensumCodigo) {
+        this.microcurriculoPK = new MicrocurriculoPK(id, materiaCodigoMateria, materiaPensumCodigo);
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public MicrocurriculoPK getMicrocurriculoPK() {
+        return microcurriculoPK;
+    }
+
+    public void setMicrocurriculoPK(MicrocurriculoPK microcurriculoPK) {
+        this.microcurriculoPK = microcurriculoPK;
     }
 
     @XmlTransient
@@ -96,7 +95,7 @@ public class Microcurriculo implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (microcurriculoPK != null ? microcurriculoPK.hashCode() : 0);
         return hash;
     }
 
@@ -107,7 +106,7 @@ public class Microcurriculo implements Serializable {
             return false;
         }
         Microcurriculo other = (Microcurriculo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.microcurriculoPK == null && other.microcurriculoPK != null) || (this.microcurriculoPK != null && !this.microcurriculoPK.equals(other.microcurriculoPK))) {
             return false;
         }
         return true;
@@ -115,7 +114,7 @@ public class Microcurriculo implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.Microcurriculo[ id=" + id + " ]";
+        return "dto.Microcurriculo[ microcurriculoPK=" + microcurriculoPK + " ]";
     }
     
 }

@@ -43,7 +43,7 @@ public class AreaFormacionJpaController implements Serializable {
             em.getTransaction().begin();
             List<Microcurriculo> attachedMicrocurriculoList = new ArrayList<Microcurriculo>();
             for (Microcurriculo microcurriculoListMicrocurriculoToAttach : areaFormacion.getMicrocurriculoList()) {
-                microcurriculoListMicrocurriculoToAttach = em.getReference(microcurriculoListMicrocurriculoToAttach.getClass(), microcurriculoListMicrocurriculoToAttach.getId());
+                microcurriculoListMicrocurriculoToAttach = em.getReference(microcurriculoListMicrocurriculoToAttach.getClass(), microcurriculoListMicrocurriculoToAttach.getMicrocurriculoPK());
                 attachedMicrocurriculoList.add(microcurriculoListMicrocurriculoToAttach);
             }
             areaFormacion.setMicrocurriculoList(attachedMicrocurriculoList);
@@ -75,7 +75,7 @@ public class AreaFormacionJpaController implements Serializable {
             List<Microcurriculo> microcurriculoListNew = areaFormacion.getMicrocurriculoList();
             List<Microcurriculo> attachedMicrocurriculoListNew = new ArrayList<Microcurriculo>();
             for (Microcurriculo microcurriculoListNewMicrocurriculoToAttach : microcurriculoListNew) {
-                microcurriculoListNewMicrocurriculoToAttach = em.getReference(microcurriculoListNewMicrocurriculoToAttach.getClass(), microcurriculoListNewMicrocurriculoToAttach.getId());
+                microcurriculoListNewMicrocurriculoToAttach = em.getReference(microcurriculoListNewMicrocurriculoToAttach.getClass(), microcurriculoListNewMicrocurriculoToAttach.getMicrocurriculoPK());
                 attachedMicrocurriculoListNew.add(microcurriculoListNewMicrocurriculoToAttach);
             }
             microcurriculoListNew = attachedMicrocurriculoListNew;

@@ -5,20 +5,16 @@
  */
 package control;
 
-import dto.Materia;
 import dto.Pensum;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import negocio.registrarMicrocurriculo;
-
+import negocio.AdministrarMicrocurriculo;
 /**
  *
  * @author Manuel
@@ -66,12 +62,16 @@ public class ControladorMicrocurriculo extends HttpServlet {
             listar(request, response);
         }
         if (accion.equals("registrar")) {
-            this.registrar(request, response);
+            try{
+                System.out.println("registrando");
+                this.registrar(request, response);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
         if (accion.equalsIgnoreCase("editar")) {
             editar(request, response);
         }
-
     }
 
     @Override
@@ -81,18 +81,13 @@ public class ControladorMicrocurriculo extends HttpServlet {
         String accion = request.getParameter("accion");
         System.out.println(accion);
         if (accion.equalsIgnoreCase("Registrar")) {
-
             String[] contenidos = request.getParameterValues("contenido");
             System.out.println(Arrays.toString(contenidos));
-
         }
     }
 
-    private void registrar(HttpServletRequest request, HttpServletResponse response) {
-        List<Materia> materias = ((Pensum) request.getAttribute("pensum")).getMateriaList();
-        for (Materia m : materias) {
-
-        }
+    private void registrar(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        new AdministrarMicrocurriculo().registrarMicrocurriculos(((Pensum) request.getSession().getAttribute("pensum")));
     }
 
     @Override

@@ -55,7 +55,7 @@ public class AdministrarPensum {
         p.setPrograma(prjpa.findPrograma(id_programa));
         pjpa.create(p);
 
-        p.setMateriaList(l.getMaterias());
+        p.setMateriaList(l.getMaterias(count));
         new MateriaJpaAlternativo(MyConnection.getConnection()).create(p);
         
         return p;
@@ -64,7 +64,6 @@ public class AdministrarPensum {
     private String cargarPensum(InputStream pensumeFile, Integer id_programa) throws IOException {
         File folder = new File(this.realPathServer);
         folder = new File(folder.getParentFile().getParentFile().getAbsolutePath() + "/temp");
-        System.out.println(folder.getAbsolutePath() + "---" + folder.exists());
         InputStream fileContent = pensumeFile;
         File file = File.createTempFile("pensum-" + id_programa, ".pdf", folder);
 

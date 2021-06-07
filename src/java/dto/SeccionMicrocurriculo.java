@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -45,9 +46,12 @@ public class SeccionMicrocurriculo implements Serializable {
     @Basic(optional = false)
     @Column(name = "editable")
     private short editable;
-    @JoinColumn(name = "microcurriculo_id", referencedColumnName = "id")
+    @JoinColumns({
+        @JoinColumn(name = "microcurriculo_id", referencedColumnName = "id"),
+        @JoinColumn(name = "microcurriculo_materia_pensum_codigo", referencedColumnName = "materia_pensum_codigo"),
+        @JoinColumn(name = "microcurriculo_materia_codigo_materia", referencedColumnName = "materia_codigo_materia")})
     @ManyToOne(optional = false)
-    private Microcurriculo microcurriculoId;
+    private Microcurriculo microcurriculo;
     @JoinColumn(name = "seccion_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Seccion seccionId;
@@ -88,12 +92,12 @@ public class SeccionMicrocurriculo implements Serializable {
         this.editable = editable;
     }
 
-    public Microcurriculo getMicrocurriculoId() {
-        return microcurriculoId;
+    public Microcurriculo getMicrocurriculo() {
+        return microcurriculo;
     }
 
-    public void setMicrocurriculoId(Microcurriculo microcurriculoId) {
-        this.microcurriculoId = microcurriculoId;
+    public void setMicrocurriculo(Microcurriculo microcurriculo) {
+        this.microcurriculo = microcurriculo;
     }
 
     public Seccion getSeccionId() {
