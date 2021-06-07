@@ -32,7 +32,7 @@ public class AdministrarPensum {
         this.realPathServer = realPathServer;
     }
 
-    public void registrar(Integer id_programa, InputStream pensumFile) throws IOException, Exception {
+    public Pensum registrar(Integer id_programa, InputStream pensumFile) throws IOException, Exception {
         LectorPensum l = new LectorPensum();
         l.parsePDFDocument(cargarPensum(pensumFile, id_programa));
 
@@ -53,6 +53,8 @@ public class AdministrarPensum {
 
         p.setMateriaList(l.getMaterias());
         new MateriaJpaAlternativo(MyConnection.getConnection()).create(p);
+        
+        return p;
     }
 
     private String cargarPensum(InputStream pensumeFile, Integer id_programa) throws IOException {

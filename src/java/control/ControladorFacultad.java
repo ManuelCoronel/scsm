@@ -90,10 +90,10 @@ public class ControladorFacultad extends HttpServlet {
         PrintWriter pw = response.getWriter();
         FacultadJpaController p = new FacultadJpaController(Conexion.getConexion().getBd());
         List<Facultad> facultades = p.findFacultadEntities();
-        System.out.println(facultades.toString());
         for (Facultad facultad : facultades) {
-            pw.println("<option value" + facultad.getId() + ">" + facultad.getNombre() + "</option>");
+            pw.println("<option value=" + facultad.getId() + ">" + facultad.getNombre() + "</option>");
         }
+        pw.flush();
         
     }
 

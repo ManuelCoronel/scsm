@@ -5,13 +5,17 @@
  */
 package control;
 
+import dao.DepartamentoJpaController;
+import dto.Departamento;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import util.Conexion;
 
 /**
  *
@@ -58,9 +62,21 @@ public class ControladorDepartamento extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
+    private void listarDepartamento(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter pw = new PrintWriter(response.getOutputStream());
+        Integer id = Integer.parseInt(request.getParameter("query"));
+        DepartamentoJpaController djpa = new DepartamentoJpaController(Conexion.getConexion().getBd());
+        List<Departamento> depar = djpa.findDepartamentoEntities();
+        for(Departamento d: depar){
+            if(d.getFacultadId().getId().equals(id)){
+                pw.println("<option value="+d.getId()+">"+d.getNombreDepartamento()+"</option>");
+            }
+        }
+        pw.flush();
+    }
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -72,7 +88,11 @@ public class ControladorDepartamento extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        switch (request.getParameter("accion")) {
+            case "listar":
+                listarDepartamento(request, response);
+                break;
+        }
     }
 
     /**
@@ -84,5 +104,4 @@ public class ControladorDepartamento extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
