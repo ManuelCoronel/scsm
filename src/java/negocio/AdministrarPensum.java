@@ -5,9 +5,14 @@
  */
 package negocio;
 
+import dao.EquivalenciaMateriaJpaController;
+import dao.MateriaJpaController;
 import dao_alternativo.MateriaJpaAlternativo;
 import dao.PensumJpaController;
+import dao.PrerrequisitoMateriaJpaController;
 import dao.ProgramaJpaController;
+import dto.EquivalenciaMateria;
+import dto.Materia;
 import dto.Pensum;
 import dto.PensumPK;
 import java.io.File;
@@ -17,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManagerFactory;
 import util.Conexion;
 import util.MyConnection;
 
@@ -41,8 +47,9 @@ public class AdministrarPensum {
         l.parsePDFDocument(cargarPensum(pensumFile, id_programa));
 
         int count = 1;
-        ProgramaJpaController prjpa = new ProgramaJpaController(Conexion.getConexion().getBd());
-        PensumJpaController pjpa = new PensumJpaController(Conexion.getConexion().getBd());
+        EntityManagerFactory em = Conexion.getConexion().getBd();
+        ProgramaJpaController prjpa = new ProgramaJpaController(em);
+        PensumJpaController pjpa = new PensumJpaController(em);
         List<Pensum> lp = pjpa.findPensumEntities();
 
         for (Pensum p : lp) {
@@ -55,7 +62,14 @@ public class AdministrarPensum {
         p.setPrograma(prjpa.findPrograma(id_programa));
         pjpa.create(p);
 
-        p.setMateriaList(l.getMaterias(count));
+        MateriaJpaController mjpa = new MateriaJpaController(em);
+        EquivalenciaMateriaJpaController ejpa = new EquivalenciaMateriaJpaController(em);
+        PrerrequisitoMateriaJpaController prejpa = new PrerrequisitoMateriaJpaController(em);
+        List<Materia> materias = l.getMaterias(count);
+        for(Materia m: materias){
+        }
+        
+//        p.setMateriaList(l.getMaterias(count));
         new MateriaJpaAlternativo(MyConnection.getConnection()).create(p);
         
         return p;

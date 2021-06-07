@@ -90,15 +90,14 @@ public class AdministrarMicrocurriculo {
             Microcurriculo micro = new Microcurriculo(id++, m.getMateriaPK().getCodigoMateria(), m.getMateriaPK().getPensumCodigo());
             micro.setAreaDeFormacionId(new AreaFormacion(1));
             micro.setMateria(m);
-            micro.setSeccionMicrocurriculoList(null);
 
             mjpa.create(micro);
             
-            getDefaultSecciones(micro, secciones, tjpa, sjpa, cjpa, tmjpa);
+            getDefaultSecciones(micro, secciones, sjpa, cjpa, tmjpa);
         }
     }
 
-    private void getDefaultSecciones(Microcurriculo micro, List<Seccion> secciones,SeccionJpaController tjpa, SeccionMicrocurriculoJpaController sjpa, ContenidoJpaController cjpa, TablaMicrocurriculoJpaController tmjpa) throws NonexistentEntityException, Exception {
+    private void getDefaultSecciones(Microcurriculo micro, List<Seccion> secciones, SeccionMicrocurriculoJpaController sjpa, ContenidoJpaController cjpa, TablaMicrocurriculoJpaController tmjpa) throws NonexistentEntityException, Exception {
         List<SeccionMicrocurriculo> seccionesDefault = new ArrayList<>();
         
         for (Seccion t : secciones) {

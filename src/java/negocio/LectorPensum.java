@@ -10,6 +10,7 @@ import dto.EquivalenciaMateria;
 import dto.Materia;
 import dto.MateriaPK;
 import dto.PrerrequisitoMateria;
+import dto.TipoAsignatura;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -160,6 +161,10 @@ public class LectorPensum extends PDFTextStripper {
     //{"codigo", "nombre", "ht", "hp", "hti", "cr", "prereq", "si", "rc", "te", "equis"}
     public List<Materia> getMaterias(Integer codigo_programa) {
         TipoAsignaturaJpaController tjpa = new TipoAsignaturaJpaController(Conexion.getConexion().getBd());
+        List<TipoAsignatura> ts = tjpa.findTipoAsignaturaEntities();
+        TipoAsignatura tsr[] = new TipoAsignatura[2];
+        tsr[ts.get(0).getId()==1 ? 0 : 1] = ts.get(0);
+        tsr[ts.get(1).getId()==1 ? 0 : 1] = ts.get(1);
         List<Materia> materias_rs = new ArrayList<>();
         for (HashMap<String, Object> h : this.materias) {
             Integer prob = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", "").substring(4, 5));
@@ -175,7 +180,7 @@ public class LectorPensum extends PDFTextStripper {
             Boolean type = h.get(COL_NAMES[9].toLowerCase().replaceAll("\\s+", "")).equals("x");
 
             Materia m = new Materia(new MateriaPK(codigo, codigo_programa), nombre, creditos, semestre, ht, hp, hti);
-            m.setTipoAsignaturaId(tjpa.findTipoAsignatura(type ? 2 : 1));
+            m.setTipoAsignaturaId(tjpa.findTipoAsignatura(type ? ts.get(1) : ts.get(0)));
 
             List<PrerrequisitoMateria> prerreq = this.formatPrerreq(m, ((ArrayList<String>) h.get(COL_NAMES[6])));
 
