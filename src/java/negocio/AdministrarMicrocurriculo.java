@@ -34,6 +34,11 @@ public class AdministrarMicrocurriculo {
         return microcurriculos;
     }
     
+       public dto.Microcurriculo obtenerMicrocurriculo(){
+       
+       }
+       
+       
     public ArrayList<dto.Microcurriculo> obtenerTodosMicrocurriculos(int idPrograma) {
         
         Conexion con = Conexion.getConexion();
@@ -44,7 +49,15 @@ public class AdministrarMicrocurriculo {
         for (Pensum pensum : pensums) {
             List<dto.Materia> materias =  pensum.getMateriaList();
             for (Materia materia : materias) {
-                microcurriculos.add(materia.getMicrocurriculoList().get(0));
+                
+                try{
+                  microcurriculos.add(materia.getMicrocurriculoList().get(0));
+                }
+                catch(Exception e){
+                    System.out.println(e.getMessage());
+                }
+                
+            
             }
         }
         

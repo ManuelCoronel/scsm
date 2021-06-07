@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import dto.Pensum;
+import dto.TipoAsignatura;
 import dto.PrerrequisitoMateria;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,11 @@ public class MateriaJpaController implements Serializable {
                 pensum = em.getReference(pensum.getClass(), pensum.getPensumPK());
                 materia.setPensum(pensum);
             }
+            TipoAsignatura tipoAsignaturaId = materia.getTipoAsignaturaId();
+            if (tipoAsignaturaId != null) {
+                tipoAsignaturaId = em.getReference(tipoAsignaturaId.getClass(), tipoAsignaturaId.getId());
+                materia.setTipoAsignaturaId(tipoAsignaturaId);
+            }
             List<PrerrequisitoMateria> attachedPrerrequisitoMateriaList = new ArrayList<PrerrequisitoMateria>();
             for (PrerrequisitoMateria prerrequisitoMateriaListPrerrequisitoMateriaToAttach : materia.getPrerrequisitoMateriaList()) {
                 prerrequisitoMateriaListPrerrequisitoMateriaToAttach = em.getReference(prerrequisitoMateriaListPrerrequisitoMateriaToAttach.getClass(), prerrequisitoMateriaListPrerrequisitoMateriaToAttach.getId());
@@ -103,6 +109,10 @@ public class MateriaJpaController implements Serializable {
             if (pensum != null) {
                 pensum.getMateriaList().add(materia);
                 pensum = em.merge(pensum);
+            }
+            if (tipoAsignaturaId != null) {
+                tipoAsignaturaId.getMateriaList().add(materia);
+                tipoAsignaturaId = em.merge(tipoAsignaturaId);
             }
             for (PrerrequisitoMateria prerrequisitoMateriaListPrerrequisitoMateria : materia.getPrerrequisitoMateriaList()) {
                 Materia oldMateriaOfPrerrequisitoMateriaListPrerrequisitoMateria = prerrequisitoMateriaListPrerrequisitoMateria.getMateria();
@@ -171,6 +181,8 @@ public class MateriaJpaController implements Serializable {
             Materia persistentMateria = em.find(Materia.class, materia.getMateriaPK());
             Pensum pensumOld = persistentMateria.getPensum();
             Pensum pensumNew = materia.getPensum();
+            TipoAsignatura tipoAsignaturaIdOld = persistentMateria.getTipoAsignaturaId();
+            TipoAsignatura tipoAsignaturaIdNew = materia.getTipoAsignaturaId();
             List<PrerrequisitoMateria> prerrequisitoMateriaListOld = persistentMateria.getPrerrequisitoMateriaList();
             List<PrerrequisitoMateria> prerrequisitoMateriaListNew = materia.getPrerrequisitoMateriaList();
             List<PrerrequisitoMateria> prerrequisitoMateriaList1Old = persistentMateria.getPrerrequisitoMateriaList1();
@@ -229,6 +241,10 @@ public class MateriaJpaController implements Serializable {
                 pensumNew = em.getReference(pensumNew.getClass(), pensumNew.getPensumPK());
                 materia.setPensum(pensumNew);
             }
+            if (tipoAsignaturaIdNew != null) {
+                tipoAsignaturaIdNew = em.getReference(tipoAsignaturaIdNew.getClass(), tipoAsignaturaIdNew.getId());
+                materia.setTipoAsignaturaId(tipoAsignaturaIdNew);
+            }
             List<PrerrequisitoMateria> attachedPrerrequisitoMateriaListNew = new ArrayList<PrerrequisitoMateria>();
             for (PrerrequisitoMateria prerrequisitoMateriaListNewPrerrequisitoMateriaToAttach : prerrequisitoMateriaListNew) {
                 prerrequisitoMateriaListNewPrerrequisitoMateriaToAttach = em.getReference(prerrequisitoMateriaListNewPrerrequisitoMateriaToAttach.getClass(), prerrequisitoMateriaListNewPrerrequisitoMateriaToAttach.getId());
@@ -272,6 +288,14 @@ public class MateriaJpaController implements Serializable {
             if (pensumNew != null && !pensumNew.equals(pensumOld)) {
                 pensumNew.getMateriaList().add(materia);
                 pensumNew = em.merge(pensumNew);
+            }
+            if (tipoAsignaturaIdOld != null && !tipoAsignaturaIdOld.equals(tipoAsignaturaIdNew)) {
+                tipoAsignaturaIdOld.getMateriaList().remove(materia);
+                tipoAsignaturaIdOld = em.merge(tipoAsignaturaIdOld);
+            }
+            if (tipoAsignaturaIdNew != null && !tipoAsignaturaIdNew.equals(tipoAsignaturaIdOld)) {
+                tipoAsignaturaIdNew.getMateriaList().add(materia);
+                tipoAsignaturaIdNew = em.merge(tipoAsignaturaIdNew);
             }
             for (PrerrequisitoMateria prerrequisitoMateriaListNewPrerrequisitoMateria : prerrequisitoMateriaListNew) {
                 if (!prerrequisitoMateriaListOld.contains(prerrequisitoMateriaListNewPrerrequisitoMateria)) {
@@ -400,6 +424,11 @@ public class MateriaJpaController implements Serializable {
             if (pensum != null) {
                 pensum.getMateriaList().remove(materia);
                 pensum = em.merge(pensum);
+            }
+            TipoAsignatura tipoAsignaturaId = materia.getTipoAsignaturaId();
+            if (tipoAsignaturaId != null) {
+                tipoAsignaturaId.getMateriaList().remove(materia);
+                tipoAsignaturaId = em.merge(tipoAsignaturaId);
             }
             em.remove(materia);
             em.getTransaction().commit();

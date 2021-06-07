@@ -4,6 +4,7 @@
     Author     : Manuel
 --%>
 
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,6 +13,37 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Pensum</th>
+                    <th>Codigo Materia</th>
+                    <th>Nombre Materia</th>
+                    <th>Creditos</th>
+                    <th>Semestre</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+              List<dto.Microcurriculo> microcurriculos = (List<dto.Microcurriculo>)request.getSession().getAttribute("microcurriculos");
+                for (dto.Microcurriculo elem : microcurriculos) {
+                        
+                    
+                %>
+                <tr>
+                    <td><%=elem.getMateria().getPensum().getPensumPK().getProgramaCodigo() %> - <%=elem.getMateria().getPensum().getPensumPK().getCodigo() %></td>
+                    <td><%=elem.getMateria().getMateriaPK().getCodigoMateria() %></td>
+                    <td><%=elem.getMateria().getNombre() %></td>
+                    <td><%=elem.getMateria().getCreditos()%></td>
+                    <td><%=elem.getMateria().getSemestre() %></td>
+                    <td> <a href="../ControladorMicrocurriculo?accion=Editar&idMicrocurriculo=<%=elem.getId()%>"><button type="button">Editar </button></a>   </td>
+                </tr>
+                <%
+                }
+                %>
+            </tbody>
+        </table>
+
     </body>
 </html>

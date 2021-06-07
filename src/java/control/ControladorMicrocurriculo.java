@@ -26,41 +26,49 @@ import negocio.registrarMicrocurriculo;
 @WebServlet(name = "ControladorMicrocurriculo", urlPatterns = {"/ControladorMicrocurriculo"})
 public class ControladorMicrocurriculo extends HttpServlet {
 
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-  
-    }
-    
-    public static void cargarMicrocurriculo(){
-    
-    
-    }
-    
-public static void listar(HttpServletRequest request, HttpServletResponse response) throws IOException{
 
-negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
-dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
-ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodosMicrocurriculos(usuario.getDocente().getProgramaList().get(0).getCodigo());
-request.getSession().setAttribute("microcurriculos", microcurriculos);
-response.sendRedirect("jspTest/listarMcricurriculos.jsp");
-}
- 
+    }
+
+    public static void cargarMicrocurriculo() {
+
+    }
+
+    public static void listar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
+        dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
+        ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodosMicrocurriculos(usuario.getDocente().getProgramaList().get(0).getCodigo());
+        request.getSession().setAttribute("microcurriculos", microcurriculos);
+        System.out.println(microcurriculos.toArray());
+        response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
+    }
+    
+    public void editar(HttpServletRequest request, HttpServletResponse response){
+    
+    int id = Integer.parseInt(request.getParameter("idMicrocurriculo"));
+    
+    
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-            String accion = request.getParameter("accion");
-            if (accion.equalsIgnoreCase("listarTodos")){
-                listar(request, response);
-            
-            
-            } else if(accion.equals("registrar")){
-                this.registrar(request, response);
-            }
-    }
+        String accion = request.getParameter("accion");
+        if (accion.equalsIgnoreCase("listarTodos")) {
+            listar(request, response);
+        }
+        if (accion.equals("registrar")) {
+            this.registrar(request, response);
+        }
+        if (accion.equalsIgnoreCase("editar")) {
+            editar(request, response);
+        }
 
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -72,14 +80,14 @@ response.sendRedirect("jspTest/listarMcricurriculos.jsp");
 
             String[] contenidos = request.getParameterValues("contenido");
             System.out.println(Arrays.toString(contenidos));
-          
+
         }
     }
-    
+
     private void registrar(HttpServletRequest request, HttpServletResponse response) {
-        List<Materia> materias = ((Pensum)request.getAttribute("pensum")).getMateriaList();
-        for(Materia m: materias){
-            
+        List<Materia> materias = ((Pensum) request.getAttribute("pensum")).getMateriaList();
+        for (Materia m : materias) {
+
         }
     }
 

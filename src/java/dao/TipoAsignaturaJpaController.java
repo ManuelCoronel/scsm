@@ -12,7 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import dto.Microcurriculo;
+import dto.Materia;
 import dto.TipoAsignatura;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,27 +35,27 @@ public class TipoAsignaturaJpaController implements Serializable {
     }
 
     public void create(TipoAsignatura tipoAsignatura) {
-        if (tipoAsignatura.getMicrocurriculoList() == null) {
-            tipoAsignatura.setMicrocurriculoList(new ArrayList<Microcurriculo>());
+        if (tipoAsignatura.getMateriaList() == null) {
+            tipoAsignatura.setMateriaList(new ArrayList<Materia>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Microcurriculo> attachedMicrocurriculoList = new ArrayList<Microcurriculo>();
-            for (Microcurriculo microcurriculoListMicrocurriculoToAttach : tipoAsignatura.getMicrocurriculoList()) {
-                microcurriculoListMicrocurriculoToAttach = em.getReference(microcurriculoListMicrocurriculoToAttach.getClass(), microcurriculoListMicrocurriculoToAttach.getId());
-                attachedMicrocurriculoList.add(microcurriculoListMicrocurriculoToAttach);
+            List<Materia> attachedMateriaList = new ArrayList<Materia>();
+            for (Materia materiaListMateriaToAttach : tipoAsignatura.getMateriaList()) {
+                materiaListMateriaToAttach = em.getReference(materiaListMateriaToAttach.getClass(), materiaListMateriaToAttach.getMateriaPK());
+                attachedMateriaList.add(materiaListMateriaToAttach);
             }
-            tipoAsignatura.setMicrocurriculoList(attachedMicrocurriculoList);
+            tipoAsignatura.setMateriaList(attachedMateriaList);
             em.persist(tipoAsignatura);
-            for (Microcurriculo microcurriculoListMicrocurriculo : tipoAsignatura.getMicrocurriculoList()) {
-                TipoAsignatura oldTipoAsignaturaIdOfMicrocurriculoListMicrocurriculo = microcurriculoListMicrocurriculo.getTipoAsignaturaId();
-                microcurriculoListMicrocurriculo.setTipoAsignaturaId(tipoAsignatura);
-                microcurriculoListMicrocurriculo = em.merge(microcurriculoListMicrocurriculo);
-                if (oldTipoAsignaturaIdOfMicrocurriculoListMicrocurriculo != null) {
-                    oldTipoAsignaturaIdOfMicrocurriculoListMicrocurriculo.getMicrocurriculoList().remove(microcurriculoListMicrocurriculo);
-                    oldTipoAsignaturaIdOfMicrocurriculoListMicrocurriculo = em.merge(oldTipoAsignaturaIdOfMicrocurriculoListMicrocurriculo);
+            for (Materia materiaListMateria : tipoAsignatura.getMateriaList()) {
+                TipoAsignatura oldTipoAsignaturaIdOfMateriaListMateria = materiaListMateria.getTipoAsignaturaId();
+                materiaListMateria.setTipoAsignaturaId(tipoAsignatura);
+                materiaListMateria = em.merge(materiaListMateria);
+                if (oldTipoAsignaturaIdOfMateriaListMateria != null) {
+                    oldTipoAsignaturaIdOfMateriaListMateria.getMateriaList().remove(materiaListMateria);
+                    oldTipoAsignaturaIdOfMateriaListMateria = em.merge(oldTipoAsignaturaIdOfMateriaListMateria);
                 }
             }
             em.getTransaction().commit();
@@ -72,36 +72,36 @@ public class TipoAsignaturaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             TipoAsignatura persistentTipoAsignatura = em.find(TipoAsignatura.class, tipoAsignatura.getId());
-            List<Microcurriculo> microcurriculoListOld = persistentTipoAsignatura.getMicrocurriculoList();
-            List<Microcurriculo> microcurriculoListNew = tipoAsignatura.getMicrocurriculoList();
+            List<Materia> materiaListOld = persistentTipoAsignatura.getMateriaList();
+            List<Materia> materiaListNew = tipoAsignatura.getMateriaList();
             List<String> illegalOrphanMessages = null;
-            for (Microcurriculo microcurriculoListOldMicrocurriculo : microcurriculoListOld) {
-                if (!microcurriculoListNew.contains(microcurriculoListOldMicrocurriculo)) {
+            for (Materia materiaListOldMateria : materiaListOld) {
+                if (!materiaListNew.contains(materiaListOldMateria)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Microcurriculo " + microcurriculoListOldMicrocurriculo + " since its tipoAsignaturaId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Materia " + materiaListOldMateria + " since its tipoAsignaturaId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Microcurriculo> attachedMicrocurriculoListNew = new ArrayList<Microcurriculo>();
-            for (Microcurriculo microcurriculoListNewMicrocurriculoToAttach : microcurriculoListNew) {
-                microcurriculoListNewMicrocurriculoToAttach = em.getReference(microcurriculoListNewMicrocurriculoToAttach.getClass(), microcurriculoListNewMicrocurriculoToAttach.getId());
-                attachedMicrocurriculoListNew.add(microcurriculoListNewMicrocurriculoToAttach);
+            List<Materia> attachedMateriaListNew = new ArrayList<Materia>();
+            for (Materia materiaListNewMateriaToAttach : materiaListNew) {
+                materiaListNewMateriaToAttach = em.getReference(materiaListNewMateriaToAttach.getClass(), materiaListNewMateriaToAttach.getMateriaPK());
+                attachedMateriaListNew.add(materiaListNewMateriaToAttach);
             }
-            microcurriculoListNew = attachedMicrocurriculoListNew;
-            tipoAsignatura.setMicrocurriculoList(microcurriculoListNew);
+            materiaListNew = attachedMateriaListNew;
+            tipoAsignatura.setMateriaList(materiaListNew);
             tipoAsignatura = em.merge(tipoAsignatura);
-            for (Microcurriculo microcurriculoListNewMicrocurriculo : microcurriculoListNew) {
-                if (!microcurriculoListOld.contains(microcurriculoListNewMicrocurriculo)) {
-                    TipoAsignatura oldTipoAsignaturaIdOfMicrocurriculoListNewMicrocurriculo = microcurriculoListNewMicrocurriculo.getTipoAsignaturaId();
-                    microcurriculoListNewMicrocurriculo.setTipoAsignaturaId(tipoAsignatura);
-                    microcurriculoListNewMicrocurriculo = em.merge(microcurriculoListNewMicrocurriculo);
-                    if (oldTipoAsignaturaIdOfMicrocurriculoListNewMicrocurriculo != null && !oldTipoAsignaturaIdOfMicrocurriculoListNewMicrocurriculo.equals(tipoAsignatura)) {
-                        oldTipoAsignaturaIdOfMicrocurriculoListNewMicrocurriculo.getMicrocurriculoList().remove(microcurriculoListNewMicrocurriculo);
-                        oldTipoAsignaturaIdOfMicrocurriculoListNewMicrocurriculo = em.merge(oldTipoAsignaturaIdOfMicrocurriculoListNewMicrocurriculo);
+            for (Materia materiaListNewMateria : materiaListNew) {
+                if (!materiaListOld.contains(materiaListNewMateria)) {
+                    TipoAsignatura oldTipoAsignaturaIdOfMateriaListNewMateria = materiaListNewMateria.getTipoAsignaturaId();
+                    materiaListNewMateria.setTipoAsignaturaId(tipoAsignatura);
+                    materiaListNewMateria = em.merge(materiaListNewMateria);
+                    if (oldTipoAsignaturaIdOfMateriaListNewMateria != null && !oldTipoAsignaturaIdOfMateriaListNewMateria.equals(tipoAsignatura)) {
+                        oldTipoAsignaturaIdOfMateriaListNewMateria.getMateriaList().remove(materiaListNewMateria);
+                        oldTipoAsignaturaIdOfMateriaListNewMateria = em.merge(oldTipoAsignaturaIdOfMateriaListNewMateria);
                     }
                 }
             }
@@ -135,12 +135,12 @@ public class TipoAsignaturaJpaController implements Serializable {
                 throw new NonexistentEntityException("The tipoAsignatura with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Microcurriculo> microcurriculoListOrphanCheck = tipoAsignatura.getMicrocurriculoList();
-            for (Microcurriculo microcurriculoListOrphanCheckMicrocurriculo : microcurriculoListOrphanCheck) {
+            List<Materia> materiaListOrphanCheck = tipoAsignatura.getMateriaList();
+            for (Materia materiaListOrphanCheckMateria : materiaListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This TipoAsignatura (" + tipoAsignatura + ") cannot be destroyed since the Microcurriculo " + microcurriculoListOrphanCheckMicrocurriculo + " in its microcurriculoList field has a non-nullable tipoAsignaturaId field.");
+                illegalOrphanMessages.add("This TipoAsignatura (" + tipoAsignatura + ") cannot be destroyed since the Materia " + materiaListOrphanCheckMateria + " in its materiaList field has a non-nullable tipoAsignaturaId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

@@ -80,6 +80,9 @@ public class Materia implements Serializable {
         @JoinColumn(name = "pensum_programa_codigo", referencedColumnName = "programa_codigo")})
     @ManyToOne(optional = false)
     private Pensum pensum;
+    @JoinColumn(name = "tipo_asignatura_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private TipoAsignatura tipoAsignaturaId;
 
     public Materia() {
     }
@@ -217,6 +220,14 @@ public class Materia implements Serializable {
 
     public void setPensum(Pensum pensum) {
         this.pensum = pensum;
+    }
+
+    public TipoAsignatura getTipoAsignaturaId() {
+        return tipoAsignaturaId;
+    }
+
+    public void setTipoAsignaturaId(TipoAsignatura tipoAsignaturaId) {
+        this.tipoAsignaturaId = tipoAsignaturaId;
     }
 
     @Override

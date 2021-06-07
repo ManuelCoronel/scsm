@@ -52,9 +52,6 @@ public class Microcurriculo implements Serializable {
         @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
     @ManyToOne(optional = false)
     private Materia materia;
-    @JoinColumn(name = "tipo_asignatura_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private TipoAsignatura tipoAsignaturaId;
 
     public Microcurriculo() {
     }
@@ -94,14 +91,6 @@ public class Microcurriculo implements Serializable {
 
     public void setMateria(Materia materia) {
         this.materia = materia;
-    }
-
-    public TipoAsignatura getTipoAsignaturaId() {
-        return tipoAsignaturaId;
-    }
-
-    public void setTipoAsignaturaId(TipoAsignatura tipoAsignaturaId) {
-        this.tipoAsignaturaId = tipoAsignaturaId;
     }
 
     @Override
