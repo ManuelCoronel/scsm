@@ -10,8 +10,10 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -30,54 +32,52 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "SeccionMicrocurriculo.findAll", query = "SELECT s FROM SeccionMicrocurriculo s"),
-    @NamedQuery(name = "SeccionMicrocurriculo.findById", query = "SELECT s FROM SeccionMicrocurriculo s WHERE s.seccionMicrocurriculoPK.id = :id"),
-    @NamedQuery(name = "SeccionMicrocurriculo.findByCodigoMateria", query = "SELECT s FROM SeccionMicrocurriculo s WHERE s.seccionMicrocurriculoPK.codigoMateria = :codigoMateria"),
+    @NamedQuery(name = "SeccionMicrocurriculo.findById", query = "SELECT s FROM SeccionMicrocurriculo s WHERE s.id = :id"),
     @NamedQuery(name = "SeccionMicrocurriculo.findByEditable", query = "SELECT s FROM SeccionMicrocurriculo s WHERE s.editable = :editable")})
 public class SeccionMicrocurriculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected SeccionMicrocurriculoPK seccionMicrocurriculoPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
     @Basic(optional = false)
     @Column(name = "editable")
     private short editable;
-    @JoinColumn(name = "codigo_materia", referencedColumnName = "codigo_materia", insertable = false, updatable = false)
+    @JoinColumn(name = "microcurriculo_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Microcurriculo microcurriculo;
+    private Microcurriculo microcurriculoId;
     @JoinColumn(name = "seccion_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Seccion seccionId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculoId")
     private List<Contenido> contenidoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculoIdNuevo")
     private List<SeccionCambio> seccionCambioList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculo1")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculoIdAntigua")
     private List<SeccionCambio> seccionCambioList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculoId")
     private List<TablaMicrocurriculo> tablaMicrocurriculoList;
 
     public SeccionMicrocurriculo() {
     }
 
-    public SeccionMicrocurriculo(SeccionMicrocurriculoPK seccionMicrocurriculoPK) {
-        this.seccionMicrocurriculoPK = seccionMicrocurriculoPK;
+    public SeccionMicrocurriculo(Integer id) {
+        this.id = id;
     }
 
-    public SeccionMicrocurriculo(SeccionMicrocurriculoPK seccionMicrocurriculoPK, short editable) {
-        this.seccionMicrocurriculoPK = seccionMicrocurriculoPK;
+    public SeccionMicrocurriculo(Integer id, short editable) {
+        this.id = id;
         this.editable = editable;
     }
 
-    public SeccionMicrocurriculo(int id, int codigoMateria) {
-        this.seccionMicrocurriculoPK = new SeccionMicrocurriculoPK(id, codigoMateria);
+    public Integer getId() {
+        return id;
     }
 
-    public SeccionMicrocurriculoPK getSeccionMicrocurriculoPK() {
-        return seccionMicrocurriculoPK;
-    }
-
-    public void setSeccionMicrocurriculoPK(SeccionMicrocurriculoPK seccionMicrocurriculoPK) {
-        this.seccionMicrocurriculoPK = seccionMicrocurriculoPK;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public short getEditable() {
@@ -88,12 +88,12 @@ public class SeccionMicrocurriculo implements Serializable {
         this.editable = editable;
     }
 
-    public Microcurriculo getMicrocurriculo() {
-        return microcurriculo;
+    public Microcurriculo getMicrocurriculoId() {
+        return microcurriculoId;
     }
 
-    public void setMicrocurriculo(Microcurriculo microcurriculo) {
-        this.microcurriculo = microcurriculo;
+    public void setMicrocurriculoId(Microcurriculo microcurriculoId) {
+        this.microcurriculoId = microcurriculoId;
     }
 
     public Seccion getSeccionId() {
@@ -143,7 +143,7 @@ public class SeccionMicrocurriculo implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (seccionMicrocurriculoPK != null ? seccionMicrocurriculoPK.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -154,7 +154,7 @@ public class SeccionMicrocurriculo implements Serializable {
             return false;
         }
         SeccionMicrocurriculo other = (SeccionMicrocurriculo) object;
-        if ((this.seccionMicrocurriculoPK == null && other.seccionMicrocurriculoPK != null) || (this.seccionMicrocurriculoPK != null && !this.seccionMicrocurriculoPK.equals(other.seccionMicrocurriculoPK))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -162,7 +162,7 @@ public class SeccionMicrocurriculo implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.SeccionMicrocurriculo[ seccionMicrocurriculoPK=" + seccionMicrocurriculoPK + " ]";
+        return "dto.SeccionMicrocurriculo[ id=" + id + " ]";
     }
     
 }

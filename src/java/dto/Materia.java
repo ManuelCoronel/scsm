@@ -81,14 +81,11 @@ public class Materia implements Serializable {
     @ManyToOne(optional = false)
     private Pensum pensum;
 
-    private Boolean type;
-    
     public Materia() {
     }
 
     public Materia(MateriaPK materiaPK) {
         this.materiaPK = materiaPK;
-        this.type = false;
     }
 
     public Materia(MateriaPK materiaPK, String nombre, int creditos, int semestre, int ht, int hp, int hti) {
@@ -99,7 +96,6 @@ public class Materia implements Serializable {
         this.ht = ht;
         this.hp = hp;
         this.hti = hti;
-        this.type = false;
     }
 
     public Materia(int codigoMateria, int pensumCodigo) {
@@ -168,14 +164,6 @@ public class Materia implements Serializable {
 
     public void setCr(Integer cr) {
         this.cr = cr;
-    }
-
-    public Boolean getType() {
-        return type;
-    }
-
-    public void setType(Boolean type) {
-        this.type = type;
     }
 
     @XmlTransient

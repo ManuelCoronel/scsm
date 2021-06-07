@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
@@ -31,28 +33,25 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Microcurriculo.findAll", query = "SELECT m FROM Microcurriculo m"),
-    @NamedQuery(name = "Microcurriculo.findByCodigoMateria", query = "SELECT m FROM Microcurriculo m WHERE m.codigoMateria = :codigoMateria")})
+    @NamedQuery(name = "Microcurriculo.findById", query = "SELECT m FROM Microcurriculo m WHERE m.id = :id")})
 public class Microcurriculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "codigo_materia")
-    private Integer codigoMateria;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "microcurriculo")
+    @Column(name = "id")
+    private Integer id;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "microcurriculoId")
     private List<SeccionMicrocurriculo> seccionMicrocurriculoList;
-    
     @JoinColumn(name = "area_de_formacion_id", referencedColumnName = "id")
     @ManyToOne
     private AreaFormacion areaDeFormacionId;
-    
     @JoinColumns({
         @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia"),
         @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
     @ManyToOne(optional = false)
     private Materia materia;
-    
     @JoinColumn(name = "tipo_asignatura_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TipoAsignatura tipoAsignaturaId;
@@ -60,16 +59,16 @@ public class Microcurriculo implements Serializable {
     public Microcurriculo() {
     }
 
-    public Microcurriculo(Integer codigoMateria) {
-        this.codigoMateria = codigoMateria;
+    public Microcurriculo(Integer id) {
+        this.id = id;
     }
 
-    public Integer getCodigoMateria() {
-        return codigoMateria;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCodigoMateria(Integer codigoMateria) {
-        this.codigoMateria = codigoMateria;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @XmlTransient
@@ -108,7 +107,7 @@ public class Microcurriculo implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (codigoMateria != null ? codigoMateria.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -119,7 +118,7 @@ public class Microcurriculo implements Serializable {
             return false;
         }
         Microcurriculo other = (Microcurriculo) object;
-        if ((this.codigoMateria == null && other.codigoMateria != null) || (this.codigoMateria != null && !this.codigoMateria.equals(other.codigoMateria))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -127,7 +126,7 @@ public class Microcurriculo implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.Microcurriculo[ codigoMateria=" + codigoMateria + " ]";
+        return "dto.Microcurriculo[ id=" + id + " ]";
     }
     
 }

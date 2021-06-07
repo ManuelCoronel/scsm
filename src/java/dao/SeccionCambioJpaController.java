@@ -43,28 +43,28 @@ public class SeccionCambioJpaController implements Serializable {
                 cambioId = em.getReference(cambioId.getClass(), cambioId.getId());
                 seccionCambio.setCambioId(cambioId);
             }
-            SeccionMicrocurriculo seccionMicrocurriculo = seccionCambio.getSeccionMicrocurriculo();
-            if (seccionMicrocurriculo != null) {
-                seccionMicrocurriculo = em.getReference(seccionMicrocurriculo.getClass(), seccionMicrocurriculo.getSeccionMicrocurriculoPK());
-                seccionCambio.setSeccionMicrocurriculo(seccionMicrocurriculo);
+            SeccionMicrocurriculo seccionMicrocurriculoIdNuevo = seccionCambio.getSeccionMicrocurriculoIdNuevo();
+            if (seccionMicrocurriculoIdNuevo != null) {
+                seccionMicrocurriculoIdNuevo = em.getReference(seccionMicrocurriculoIdNuevo.getClass(), seccionMicrocurriculoIdNuevo.getId());
+                seccionCambio.setSeccionMicrocurriculoIdNuevo(seccionMicrocurriculoIdNuevo);
             }
-            SeccionMicrocurriculo seccionMicrocurriculo1 = seccionCambio.getSeccionMicrocurriculo1();
-            if (seccionMicrocurriculo1 != null) {
-                seccionMicrocurriculo1 = em.getReference(seccionMicrocurriculo1.getClass(), seccionMicrocurriculo1.getSeccionMicrocurriculoPK());
-                seccionCambio.setSeccionMicrocurriculo1(seccionMicrocurriculo1);
+            SeccionMicrocurriculo seccionMicrocurriculoIdAntigua = seccionCambio.getSeccionMicrocurriculoIdAntigua();
+            if (seccionMicrocurriculoIdAntigua != null) {
+                seccionMicrocurriculoIdAntigua = em.getReference(seccionMicrocurriculoIdAntigua.getClass(), seccionMicrocurriculoIdAntigua.getId());
+                seccionCambio.setSeccionMicrocurriculoIdAntigua(seccionMicrocurriculoIdAntigua);
             }
             em.persist(seccionCambio);
             if (cambioId != null) {
                 cambioId.getSeccionCambioList().add(seccionCambio);
                 cambioId = em.merge(cambioId);
             }
-            if (seccionMicrocurriculo != null) {
-                seccionMicrocurriculo.getSeccionCambioList().add(seccionCambio);
-                seccionMicrocurriculo = em.merge(seccionMicrocurriculo);
+            if (seccionMicrocurriculoIdNuevo != null) {
+                seccionMicrocurriculoIdNuevo.getSeccionCambioList().add(seccionCambio);
+                seccionMicrocurriculoIdNuevo = em.merge(seccionMicrocurriculoIdNuevo);
             }
-            if (seccionMicrocurriculo1 != null) {
-                seccionMicrocurriculo1.getSeccionCambioList().add(seccionCambio);
-                seccionMicrocurriculo1 = em.merge(seccionMicrocurriculo1);
+            if (seccionMicrocurriculoIdAntigua != null) {
+                seccionMicrocurriculoIdAntigua.getSeccionCambioList().add(seccionCambio);
+                seccionMicrocurriculoIdAntigua = em.merge(seccionMicrocurriculoIdAntigua);
             }
             em.getTransaction().commit();
         } finally {
@@ -82,21 +82,21 @@ public class SeccionCambioJpaController implements Serializable {
             SeccionCambio persistentSeccionCambio = em.find(SeccionCambio.class, seccionCambio.getId());
             Cambio cambioIdOld = persistentSeccionCambio.getCambioId();
             Cambio cambioIdNew = seccionCambio.getCambioId();
-            SeccionMicrocurriculo seccionMicrocurriculoOld = persistentSeccionCambio.getSeccionMicrocurriculo();
-            SeccionMicrocurriculo seccionMicrocurriculoNew = seccionCambio.getSeccionMicrocurriculo();
-            SeccionMicrocurriculo seccionMicrocurriculo1Old = persistentSeccionCambio.getSeccionMicrocurriculo1();
-            SeccionMicrocurriculo seccionMicrocurriculo1New = seccionCambio.getSeccionMicrocurriculo1();
+            SeccionMicrocurriculo seccionMicrocurriculoIdNuevoOld = persistentSeccionCambio.getSeccionMicrocurriculoIdNuevo();
+            SeccionMicrocurriculo seccionMicrocurriculoIdNuevoNew = seccionCambio.getSeccionMicrocurriculoIdNuevo();
+            SeccionMicrocurriculo seccionMicrocurriculoIdAntiguaOld = persistentSeccionCambio.getSeccionMicrocurriculoIdAntigua();
+            SeccionMicrocurriculo seccionMicrocurriculoIdAntiguaNew = seccionCambio.getSeccionMicrocurriculoIdAntigua();
             if (cambioIdNew != null) {
                 cambioIdNew = em.getReference(cambioIdNew.getClass(), cambioIdNew.getId());
                 seccionCambio.setCambioId(cambioIdNew);
             }
-            if (seccionMicrocurriculoNew != null) {
-                seccionMicrocurriculoNew = em.getReference(seccionMicrocurriculoNew.getClass(), seccionMicrocurriculoNew.getSeccionMicrocurriculoPK());
-                seccionCambio.setSeccionMicrocurriculo(seccionMicrocurriculoNew);
+            if (seccionMicrocurriculoIdNuevoNew != null) {
+                seccionMicrocurriculoIdNuevoNew = em.getReference(seccionMicrocurriculoIdNuevoNew.getClass(), seccionMicrocurriculoIdNuevoNew.getId());
+                seccionCambio.setSeccionMicrocurriculoIdNuevo(seccionMicrocurriculoIdNuevoNew);
             }
-            if (seccionMicrocurriculo1New != null) {
-                seccionMicrocurriculo1New = em.getReference(seccionMicrocurriculo1New.getClass(), seccionMicrocurriculo1New.getSeccionMicrocurriculoPK());
-                seccionCambio.setSeccionMicrocurriculo1(seccionMicrocurriculo1New);
+            if (seccionMicrocurriculoIdAntiguaNew != null) {
+                seccionMicrocurriculoIdAntiguaNew = em.getReference(seccionMicrocurriculoIdAntiguaNew.getClass(), seccionMicrocurriculoIdAntiguaNew.getId());
+                seccionCambio.setSeccionMicrocurriculoIdAntigua(seccionMicrocurriculoIdAntiguaNew);
             }
             seccionCambio = em.merge(seccionCambio);
             if (cambioIdOld != null && !cambioIdOld.equals(cambioIdNew)) {
@@ -107,21 +107,21 @@ public class SeccionCambioJpaController implements Serializable {
                 cambioIdNew.getSeccionCambioList().add(seccionCambio);
                 cambioIdNew = em.merge(cambioIdNew);
             }
-            if (seccionMicrocurriculoOld != null && !seccionMicrocurriculoOld.equals(seccionMicrocurriculoNew)) {
-                seccionMicrocurriculoOld.getSeccionCambioList().remove(seccionCambio);
-                seccionMicrocurriculoOld = em.merge(seccionMicrocurriculoOld);
+            if (seccionMicrocurriculoIdNuevoOld != null && !seccionMicrocurriculoIdNuevoOld.equals(seccionMicrocurriculoIdNuevoNew)) {
+                seccionMicrocurriculoIdNuevoOld.getSeccionCambioList().remove(seccionCambio);
+                seccionMicrocurriculoIdNuevoOld = em.merge(seccionMicrocurriculoIdNuevoOld);
             }
-            if (seccionMicrocurriculoNew != null && !seccionMicrocurriculoNew.equals(seccionMicrocurriculoOld)) {
-                seccionMicrocurriculoNew.getSeccionCambioList().add(seccionCambio);
-                seccionMicrocurriculoNew = em.merge(seccionMicrocurriculoNew);
+            if (seccionMicrocurriculoIdNuevoNew != null && !seccionMicrocurriculoIdNuevoNew.equals(seccionMicrocurriculoIdNuevoOld)) {
+                seccionMicrocurriculoIdNuevoNew.getSeccionCambioList().add(seccionCambio);
+                seccionMicrocurriculoIdNuevoNew = em.merge(seccionMicrocurriculoIdNuevoNew);
             }
-            if (seccionMicrocurriculo1Old != null && !seccionMicrocurriculo1Old.equals(seccionMicrocurriculo1New)) {
-                seccionMicrocurriculo1Old.getSeccionCambioList().remove(seccionCambio);
-                seccionMicrocurriculo1Old = em.merge(seccionMicrocurriculo1Old);
+            if (seccionMicrocurriculoIdAntiguaOld != null && !seccionMicrocurriculoIdAntiguaOld.equals(seccionMicrocurriculoIdAntiguaNew)) {
+                seccionMicrocurriculoIdAntiguaOld.getSeccionCambioList().remove(seccionCambio);
+                seccionMicrocurriculoIdAntiguaOld = em.merge(seccionMicrocurriculoIdAntiguaOld);
             }
-            if (seccionMicrocurriculo1New != null && !seccionMicrocurriculo1New.equals(seccionMicrocurriculo1Old)) {
-                seccionMicrocurriculo1New.getSeccionCambioList().add(seccionCambio);
-                seccionMicrocurriculo1New = em.merge(seccionMicrocurriculo1New);
+            if (seccionMicrocurriculoIdAntiguaNew != null && !seccionMicrocurriculoIdAntiguaNew.equals(seccionMicrocurriculoIdAntiguaOld)) {
+                seccionMicrocurriculoIdAntiguaNew.getSeccionCambioList().add(seccionCambio);
+                seccionMicrocurriculoIdAntiguaNew = em.merge(seccionMicrocurriculoIdAntiguaNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -157,15 +157,15 @@ public class SeccionCambioJpaController implements Serializable {
                 cambioId.getSeccionCambioList().remove(seccionCambio);
                 cambioId = em.merge(cambioId);
             }
-            SeccionMicrocurriculo seccionMicrocurriculo = seccionCambio.getSeccionMicrocurriculo();
-            if (seccionMicrocurriculo != null) {
-                seccionMicrocurriculo.getSeccionCambioList().remove(seccionCambio);
-                seccionMicrocurriculo = em.merge(seccionMicrocurriculo);
+            SeccionMicrocurriculo seccionMicrocurriculoIdNuevo = seccionCambio.getSeccionMicrocurriculoIdNuevo();
+            if (seccionMicrocurriculoIdNuevo != null) {
+                seccionMicrocurriculoIdNuevo.getSeccionCambioList().remove(seccionCambio);
+                seccionMicrocurriculoIdNuevo = em.merge(seccionMicrocurriculoIdNuevo);
             }
-            SeccionMicrocurriculo seccionMicrocurriculo1 = seccionCambio.getSeccionMicrocurriculo1();
-            if (seccionMicrocurriculo1 != null) {
-                seccionMicrocurriculo1.getSeccionCambioList().remove(seccionCambio);
-                seccionMicrocurriculo1 = em.merge(seccionMicrocurriculo1);
+            SeccionMicrocurriculo seccionMicrocurriculoIdAntigua = seccionCambio.getSeccionMicrocurriculoIdAntigua();
+            if (seccionMicrocurriculoIdAntigua != null) {
+                seccionMicrocurriculoIdAntigua.getSeccionCambioList().remove(seccionCambio);
+                seccionMicrocurriculoIdAntigua = em.merge(seccionMicrocurriculoIdAntigua);
             }
             em.remove(seccionCambio);
             em.getTransaction().commit();

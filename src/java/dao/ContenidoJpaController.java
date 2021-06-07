@@ -43,10 +43,10 @@ public class ContenidoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            SeccionMicrocurriculo seccionMicrocurriculo = contenido.getSeccionMicrocurriculo();
-            if (seccionMicrocurriculo != null) {
-                seccionMicrocurriculo = em.getReference(seccionMicrocurriculo.getClass(), seccionMicrocurriculo.getSeccionMicrocurriculoPK());
-                contenido.setSeccionMicrocurriculo(seccionMicrocurriculo);
+            SeccionMicrocurriculo seccionMicrocurriculoId = contenido.getSeccionMicrocurriculoId();
+            if (seccionMicrocurriculoId != null) {
+                seccionMicrocurriculoId = em.getReference(seccionMicrocurriculoId.getClass(), seccionMicrocurriculoId.getId());
+                contenido.setSeccionMicrocurriculoId(seccionMicrocurriculoId);
             }
             List<TablaMicrocurriculoInfo> attachedTablaMicrocurriculoInfoList = new ArrayList<TablaMicrocurriculoInfo>();
             for (TablaMicrocurriculoInfo tablaMicrocurriculoInfoListTablaMicrocurriculoInfoToAttach : contenido.getTablaMicrocurriculoInfoList()) {
@@ -55,9 +55,9 @@ public class ContenidoJpaController implements Serializable {
             }
             contenido.setTablaMicrocurriculoInfoList(attachedTablaMicrocurriculoInfoList);
             em.persist(contenido);
-            if (seccionMicrocurriculo != null) {
-                seccionMicrocurriculo.getContenidoList().add(contenido);
-                seccionMicrocurriculo = em.merge(seccionMicrocurriculo);
+            if (seccionMicrocurriculoId != null) {
+                seccionMicrocurriculoId.getContenidoList().add(contenido);
+                seccionMicrocurriculoId = em.merge(seccionMicrocurriculoId);
             }
             for (TablaMicrocurriculoInfo tablaMicrocurriculoInfoListTablaMicrocurriculoInfo : contenido.getTablaMicrocurriculoInfoList()) {
                 Contenido oldContenidoIdOfTablaMicrocurriculoInfoListTablaMicrocurriculoInfo = tablaMicrocurriculoInfoListTablaMicrocurriculoInfo.getContenidoId();
@@ -82,8 +82,8 @@ public class ContenidoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Contenido persistentContenido = em.find(Contenido.class, contenido.getId());
-            SeccionMicrocurriculo seccionMicrocurriculoOld = persistentContenido.getSeccionMicrocurriculo();
-            SeccionMicrocurriculo seccionMicrocurriculoNew = contenido.getSeccionMicrocurriculo();
+            SeccionMicrocurriculo seccionMicrocurriculoIdOld = persistentContenido.getSeccionMicrocurriculoId();
+            SeccionMicrocurriculo seccionMicrocurriculoIdNew = contenido.getSeccionMicrocurriculoId();
             List<TablaMicrocurriculoInfo> tablaMicrocurriculoInfoListOld = persistentContenido.getTablaMicrocurriculoInfoList();
             List<TablaMicrocurriculoInfo> tablaMicrocurriculoInfoListNew = contenido.getTablaMicrocurriculoInfoList();
             List<String> illegalOrphanMessages = null;
@@ -98,9 +98,9 @@ public class ContenidoJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (seccionMicrocurriculoNew != null) {
-                seccionMicrocurriculoNew = em.getReference(seccionMicrocurriculoNew.getClass(), seccionMicrocurriculoNew.getSeccionMicrocurriculoPK());
-                contenido.setSeccionMicrocurriculo(seccionMicrocurriculoNew);
+            if (seccionMicrocurriculoIdNew != null) {
+                seccionMicrocurriculoIdNew = em.getReference(seccionMicrocurriculoIdNew.getClass(), seccionMicrocurriculoIdNew.getId());
+                contenido.setSeccionMicrocurriculoId(seccionMicrocurriculoIdNew);
             }
             List<TablaMicrocurriculoInfo> attachedTablaMicrocurriculoInfoListNew = new ArrayList<TablaMicrocurriculoInfo>();
             for (TablaMicrocurriculoInfo tablaMicrocurriculoInfoListNewTablaMicrocurriculoInfoToAttach : tablaMicrocurriculoInfoListNew) {
@@ -110,13 +110,13 @@ public class ContenidoJpaController implements Serializable {
             tablaMicrocurriculoInfoListNew = attachedTablaMicrocurriculoInfoListNew;
             contenido.setTablaMicrocurriculoInfoList(tablaMicrocurriculoInfoListNew);
             contenido = em.merge(contenido);
-            if (seccionMicrocurriculoOld != null && !seccionMicrocurriculoOld.equals(seccionMicrocurriculoNew)) {
-                seccionMicrocurriculoOld.getContenidoList().remove(contenido);
-                seccionMicrocurriculoOld = em.merge(seccionMicrocurriculoOld);
+            if (seccionMicrocurriculoIdOld != null && !seccionMicrocurriculoIdOld.equals(seccionMicrocurriculoIdNew)) {
+                seccionMicrocurriculoIdOld.getContenidoList().remove(contenido);
+                seccionMicrocurriculoIdOld = em.merge(seccionMicrocurriculoIdOld);
             }
-            if (seccionMicrocurriculoNew != null && !seccionMicrocurriculoNew.equals(seccionMicrocurriculoOld)) {
-                seccionMicrocurriculoNew.getContenidoList().add(contenido);
-                seccionMicrocurriculoNew = em.merge(seccionMicrocurriculoNew);
+            if (seccionMicrocurriculoIdNew != null && !seccionMicrocurriculoIdNew.equals(seccionMicrocurriculoIdOld)) {
+                seccionMicrocurriculoIdNew.getContenidoList().add(contenido);
+                seccionMicrocurriculoIdNew = em.merge(seccionMicrocurriculoIdNew);
             }
             for (TablaMicrocurriculoInfo tablaMicrocurriculoInfoListNewTablaMicrocurriculoInfo : tablaMicrocurriculoInfoListNew) {
                 if (!tablaMicrocurriculoInfoListOld.contains(tablaMicrocurriculoInfoListNewTablaMicrocurriculoInfo)) {
@@ -169,10 +169,10 @@ public class ContenidoJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            SeccionMicrocurriculo seccionMicrocurriculo = contenido.getSeccionMicrocurriculo();
-            if (seccionMicrocurriculo != null) {
-                seccionMicrocurriculo.getContenidoList().remove(contenido);
-                seccionMicrocurriculo = em.merge(seccionMicrocurriculo);
+            SeccionMicrocurriculo seccionMicrocurriculoId = contenido.getSeccionMicrocurriculoId();
+            if (seccionMicrocurriculoId != null) {
+                seccionMicrocurriculoId.getContenidoList().remove(contenido);
+                seccionMicrocurriculoId = em.merge(seccionMicrocurriculoId);
             }
             em.remove(contenido);
             em.getTransaction().commit();

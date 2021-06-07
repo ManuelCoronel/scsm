@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -41,16 +40,12 @@ public class SeccionCambio implements Serializable {
     @JoinColumn(name = "cambio_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Cambio cambioId;
-    @JoinColumns({
-        @JoinColumn(name = "seccion_id_nueva", referencedColumnName = "id"),
-        @JoinColumn(name = "seccion_codigo_materia_nueva", referencedColumnName = "codigo_materia")})
+    @JoinColumn(name = "seccion_microcurriculo_id_nuevo", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private SeccionMicrocurriculo seccionMicrocurriculo;
-    @JoinColumns({
-        @JoinColumn(name = "seccion_id_antigua", referencedColumnName = "id"),
-        @JoinColumn(name = "seccion_codigo_materia", referencedColumnName = "codigo_materia")})
+    private SeccionMicrocurriculo seccionMicrocurriculoIdNuevo;
+    @JoinColumn(name = "seccion_microcurriculo_id_antigua", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private SeccionMicrocurriculo seccionMicrocurriculo1;
+    private SeccionMicrocurriculo seccionMicrocurriculoIdAntigua;
 
     public SeccionCambio() {
     }
@@ -75,20 +70,20 @@ public class SeccionCambio implements Serializable {
         this.cambioId = cambioId;
     }
 
-    public SeccionMicrocurriculo getSeccionMicrocurriculo() {
-        return seccionMicrocurriculo;
+    public SeccionMicrocurriculo getSeccionMicrocurriculoIdNuevo() {
+        return seccionMicrocurriculoIdNuevo;
     }
 
-    public void setSeccionMicrocurriculo(SeccionMicrocurriculo seccionMicrocurriculo) {
-        this.seccionMicrocurriculo = seccionMicrocurriculo;
+    public void setSeccionMicrocurriculoIdNuevo(SeccionMicrocurriculo seccionMicrocurriculoIdNuevo) {
+        this.seccionMicrocurriculoIdNuevo = seccionMicrocurriculoIdNuevo;
     }
 
-    public SeccionMicrocurriculo getSeccionMicrocurriculo1() {
-        return seccionMicrocurriculo1;
+    public SeccionMicrocurriculo getSeccionMicrocurriculoIdAntigua() {
+        return seccionMicrocurriculoIdAntigua;
     }
 
-    public void setSeccionMicrocurriculo1(SeccionMicrocurriculo seccionMicrocurriculo1) {
-        this.seccionMicrocurriculo1 = seccionMicrocurriculo1;
+    public void setSeccionMicrocurriculoIdAntigua(SeccionMicrocurriculo seccionMicrocurriculoIdAntigua) {
+        this.seccionMicrocurriculoIdAntigua = seccionMicrocurriculoIdAntigua;
     }
 
     @Override
