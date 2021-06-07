@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import negocio.AdministrarMicrocurriculo;
+
 /**
  *
  * @author Manuel
@@ -34,7 +35,7 @@ public class ControladorMicrocurriculo extends HttpServlet {
 
     public static void listar(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
+        AdministrarMicrocurriculo adminMicrocurriculo = new AdministrarMicrocurriculo();
         dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
         ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodosMicrocurriculos(usuario.getDocente().getProgramaList().get(0).getCodigo());
           request.getSession().setAttribute("areasFormacion", adminMicrocurriculo.obtenerAreasFormacion());
@@ -46,8 +47,10 @@ public class ControladorMicrocurriculo extends HttpServlet {
     public void editar(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int id = Integer.parseInt(request.getParameter("idMicrocurriculo"));
+        int codigoPensum = Integer.parseInt(request.getParameter("codigoPensum"));
+        int codigoMateria = Integer.parseInt(request.getParameter("codigoMateria"));
         negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
-        dto.Microcurriculo microcurriculo = adminMicrocurriculo.obtenerMicrocurriculo(id);
+        dto.Microcurriculo microcurriculo = adminMicrocurriculo.obtenerMicrocurriculo(id,codigoMateria,codigoPensum);
         request.getSession().setAttribute("microcurriculo", microcurriculo);
         response.sendRedirect("jspTest/registrarMicrocurriculo.jsp");
 
