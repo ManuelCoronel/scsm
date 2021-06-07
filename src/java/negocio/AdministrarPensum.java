@@ -15,6 +15,7 @@ import dto.EquivalenciaMateria;
 import dto.Materia;
 import dto.Pensum;
 import dto.PensumPK;
+import dto.PrerrequisitoMateria;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,14 +63,22 @@ public class AdministrarPensum {
         p.setPrograma(prjpa.findPrograma(id_programa));
         pjpa.create(p);
 
-        MateriaJpaController mjpa = new MateriaJpaController(em);
-        EquivalenciaMateriaJpaController ejpa = new EquivalenciaMateriaJpaController(em);
-        PrerrequisitoMateriaJpaController prejpa = new PrerrequisitoMateriaJpaController(em);
+//        MateriaJpaController mjpa = new MateriaJpaController(em);
+//        EquivalenciaMateriaJpaController ejpa = new EquivalenciaMateriaJpaController(em);
+//        PrerrequisitoMateriaJpaController prejpa = new PrerrequisitoMateriaJpaController(em);
         List<Materia> materias = l.getMaterias(count);
-        for(Materia m: materias){
-        }
-        
-//        p.setMateriaList(l.getMaterias(count));
+//        for(Materia m: materias){
+//            m.setPensum(p);
+//            mjpa.create(m);
+////            for(PrerrequisitoMateria pre: m.getPrerrequisitoMateriaList()){
+////                prejpa.create(pre);
+////            }
+////            for(EquivalenciaMateria equ: m.getEquivalenciaMateriaList()){
+////                ejpa.create(equ);
+////            }
+//        }
+//        
+        p.setMateriaList(materias);
         new MateriaJpaAlternativo(MyConnection.getConnection()).create(p);
         
         return p;
