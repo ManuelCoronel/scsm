@@ -108,7 +108,7 @@ public class ControladorDocente extends HttpServlet {
         int codigo = Integer.parseInt(request.getParameter("txtCodigo"));
         String nombre = request.getParameter("txtNombre");
         String apellido = request.getParameter("txtApellido");
-        int departamento = Integer.parseInt(request.getParameter("txtDepartamento"));
+        int departamento = Integer.parseInt(request.getParameter("optionDepartamento"));
         short estado = 1;
         String password = request.getParameter("txtPassword");
         docente.setNombre(nombre);
@@ -124,9 +124,12 @@ public class ControladorDocente extends HttpServlet {
     public void listarDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
         System.out.println("Listando docentes");
         List<Docente> docentes = (List<Docente>) docenteDao.findDocenteEntities();
+        docentes.forEach((d) -> {
+            System.out.println(d.getNombre() + " " + d.getEstado() + " " + d.getProgramaList() + " " + d.getDepartamentoId());
+        });
         System.out.println("que es esto " + docentes.toString());
         request.getSession().setAttribute("listaDocentes", docentes);
-        response.sendRedirect("scsm/jspTest/listaDocente.jsp");
+        response.sendRedirect("jspTest/listaDocente.jsp");
     }
 
 
