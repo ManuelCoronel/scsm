@@ -39,12 +39,6 @@
                     <td ><%= teacher.getApellido()%></td>
                     <td ><%= teacher.getDepartamentoId().getNombreDepartamento()%></td>
                     <td ><%= teacher.getEstado()%></td>
-                    <!--
-                    <td class="text-center">
-                        <a class="btn btn-warning" href="../../ControladorPersonal?accion=formupdate&id=<%= teacher.getCodigoDocente()%>" style=" width: 90px">Editar</a>
-                        <a class="btn btn-danger"  href="../../ControladorPersonal?accion=Delete&id=<%= teacher.getCodigoDocente()%>">Eliminar</a>
-                    </td>
-                    -->
                 </tr>
                 <%}%>
             </tbody>
