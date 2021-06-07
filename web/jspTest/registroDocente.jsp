@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Registrar docente</title>      
         <script src="../js/JQuery.js"></script>
@@ -16,7 +17,7 @@
     <body>
         <h1>REGISTRO DOCENTE</h1>
         <!--  nombre, apellido, codigo, correo, contraseña, confirmar contraseña, facultad[], departamento[], tipo[] BUTON iniciar sesion, registrar -->
-        <form method="post" action="../ControladorDocente?action=registrarDocente">
+        <form method="post" action="../ControladorDocente">
             <table>
 
                 <tr> 
@@ -34,7 +35,6 @@
                 <tr>
                     <td>
                         <select name="optionFacultad" id="optionFacultad" onchange ="searchDepartamento()">
- 
                         </select>
                     </td>
                     <td>
@@ -44,18 +44,12 @@
                 </tr>
                 <tr>
                     <td>
-                        <select name="optionFacultad" id="optionFacultad" onchange="searcFacultad()">
-                            <option value="value2" selected>Tipo</option>
-                        </select>
+                        <input type="submit"name="action" value="registrarDocente">Registrarse     
+                        <input type="submit"name="action" value="listarDocente" > Docentes adscritos
                     </td>
                 </tr>
-                <tr>
-                    <td><input type="submit"name="action" value="registrarDocente">Registrarse</td>
-                </tr>
             </table> 
-            <input type="submit"name="action" value="listarDocente" > Docentes adscritos
-        </form>
-
+  
 
     </body>
 </html>
