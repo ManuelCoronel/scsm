@@ -41,16 +41,20 @@ public class ControladorMicrocurriculo extends HttpServlet {
         negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
         dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
         ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodosMicrocurriculos(usuario.getDocente().getProgramaList().get(0).getCodigo());
+          request.getSession().setAttribute("areasFormacion", adminMicrocurriculo.obtenerAreasFormacion());
+          request.getSession().setAttribute("tipoAsignatura", adminMicrocurriculo.obtenerTiposAisgnatura());
         request.getSession().setAttribute("microcurriculos", microcurriculos);
-        System.out.println(microcurriculos.toArray());
         response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
     }
-    
-    public void editar(HttpServletRequest request, HttpServletResponse response){
-    
-    int id = Integer.parseInt(request.getParameter("idMicrocurriculo"));
-    
-    
+
+    public void editar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        int id = Integer.parseInt(request.getParameter("idMicrocurriculo"));
+        negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
+        dto.Microcurriculo microcurriculo = adminMicrocurriculo.obtenerMicrocurriculo(id);
+        request.getSession().setAttribute("microcurriculo", microcurriculo);
+        response.sendRedirect("jspTest/registrarMicrocurriculo.jsp");
+
     }
 
     @Override

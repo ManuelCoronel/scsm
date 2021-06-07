@@ -4,6 +4,7 @@
     Author     : Manuel
 --%>
 
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,8 +13,73 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Registrar Microcurriculo</h1>
+        <h1>Microcurriculo</h1>
+        <%
+        dto.Microcurriculo microcurriculo = (dto.Microcurriculo) request.getSession().getAttribute("microcurriculo");
+        List<dto.AreaFormacion> areasFormacion = (List<dto.AreaFormacion>)request.getSession().getAttribute("areasFormacion");
+        List<dto.TipoAsignatura> tiposAsignatura = (List<dto.TipoAsignatura>)request.getSession().getAttribute("tipoAsignatura");
+        %>
         <form action="../ControladorMicrocurriculo" method="POST" >
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Asignatura</th>
+                        <th><%=microcurriculo.getMateria().getNombre() %></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Codigo</td>
+                        <td><%=microcurriculo.getMateria().getMateriaPK().getCodigoMateria() %></td>
+                    </tr>
+                    <tr>
+                        <td>Area de Formacion</td>
+                        <td>
+                            <%
+                                System.out.println(areasFormacion.size());
+                            for (dto.AreaFormacion areas : areasFormacion) {
+                                    
+                                
+                            %>
+                            <div> <%=areas.getNombre()%>
+                            <input type="radio" name="areasFormacion" value=<%=areas.getId() %>
+                         </div>
+                           
+                            <%}%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tipo Asignatura</td>
+                        <td>
+                            <%
+                            for (Object tipos : tiposAsignatura) {
+                                    
+                               
+                            %>
+                            
+                            
+                            <%}%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
             
              <table border="1">
             <thead>
