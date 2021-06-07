@@ -80,12 +80,16 @@ public class Materia implements Serializable {
         @JoinColumn(name = "pensum_programa_codigo", referencedColumnName = "programa_codigo")})
     @ManyToOne(optional = false)
     private Pensum pensum;
+    
+
+    private Boolean typer;
 
     public Materia() {
     }
 
     public Materia(MateriaPK materiaPK) {
         this.materiaPK = materiaPK;
+        this.typer = false;
     }
 
     public Materia(MateriaPK materiaPK, String nombre, int creditos, int semestre, int ht, int hp, int hti) {
@@ -96,6 +100,7 @@ public class Materia implements Serializable {
         this.ht = ht;
         this.hp = hp;
         this.hti = hti;
+        this.typer = false;
     }
 
     public Materia(int codigoMateria, int pensumCodigo) {
@@ -217,6 +222,14 @@ public class Materia implements Serializable {
 
     public void setPensum(Pensum pensum) {
         this.pensum = pensum;
+    }
+
+    public Boolean getTyper() {
+        return typer;
+    }
+
+    public void setTyper(Boolean typer) {
+        this.typer = typer;
     }
 
     @Override
