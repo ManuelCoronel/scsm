@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package negocio;
+
 import dto.Materia;
 import dto.Microcurriculo;
 import dto.Pensum;
@@ -16,6 +17,7 @@ import util.Conexion;
  * @author Manuel
  */
 public class AdministrarMicrocurriculo {
+
     public AdministrarMicrocurriculo() {
     }
 
@@ -28,13 +30,13 @@ public class AdministrarMicrocurriculo {
             microcurriculos.add(materia.getMicrocurriculoList().get(0));
         }
 
-        return microcurriculos; 
+        return microcurriculos;
     }
 
     public dto.Microcurriculo obtenerMicrocurriculo(int idMicrocurriculo, int codigoMateria, int codigoPensum) {
         Conexion con = Conexion.getConexion();
         dao.MicrocurriculoJpaController daoMicrocurriculo = new dao.MicrocurriculoJpaController(con.getBd());
-       dto.MicrocurriculoPK microcurriculoPK = new dto.MicrocurriculoPK(idMicrocurriculo, codigoMateria, codigoPensum);
+        dto.MicrocurriculoPK microcurriculoPK = new dto.MicrocurriculoPK(idMicrocurriculo, codigoMateria, codigoPensum);
         return daoMicrocurriculo.findMicrocurriculo(microcurriculoPK);
     }
 
@@ -60,9 +62,7 @@ public class AdministrarMicrocurriculo {
 //
 //        return microcurriculos;
 //    }
-    
-    
-        public List<dto.Materia> obtenerTodasMateria(int idPrograma) {
+    public List<dto.Materia> obtenerTodasMateria(int idPrograma) {
 
         Conexion con = Conexion.getConexion();
         dao.ProgramaJpaController daoPrograma = new dao.ProgramaJpaController(con.getBd());
@@ -71,7 +71,7 @@ public class AdministrarMicrocurriculo {
         List<dto.Materia> listaMateria = new ArrayList<>();
         for (Pensum pensum : pensums) {
             List<dto.Materia> listaMaterias = pensum.getMateriaList();
-                
+
             for (Materia listaMateria1 : listaMaterias) {
                 listaMateria.add(listaMateria1);
             }
@@ -79,59 +79,56 @@ public class AdministrarMicrocurriculo {
 
         return listaMateria;
     }
-        
-        public dto.Microcurriculo obtenerMicrocurriculoId(int idMicrocurriculo){
+
+    public dto.Microcurriculo obtenerMicrocurriculoId(int idMicrocurriculo) {
         Conexion con = Conexion.getConexion();
         dao.MicrocurriculoJpaController daoMicrocurriculo = new dao.MicrocurriculoJpaController(con.getBd());
         List<dto.Microcurriculo> listaM = daoMicrocurriculo.findMicrocurriculoEntities();
         dto.Microcurriculo microcurriculoRta = new dto.Microcurriculo();
-            for (Microcurriculo microcurriculo : listaM) {
-                if(microcurriculo.getMicrocurriculoPK().getId()==idMicrocurriculo){
+        for (Microcurriculo microcurriculo : listaM) {
+            if (microcurriculo.getMicrocurriculoPK().getId() == idMicrocurriculo) {
                 microcurriculoRta = microcurriculo;
-                }
             }
-            
-            return microcurriculoRta;
         }
-        
-        
-        public void ingresarContenidoSecciones(String informacion, int idSeccionMicrocurriculo){
+
+        return microcurriculoRta;
+    }
+
+    public void ingresarContenidoSecciones(String informacion, int idSeccionMicrocurriculo) {
         Conexion con = Conexion.getConexion();
         dto.Contenido contenido = new dto.Contenido();
         dao.ContenidoJpaController daoContenido = new dao.ContenidoJpaController(con.getBd());
-         dao.SeccionMicrocurriculoJpaController daoSeccionMicrocurriculo = new dao.SeccionMicrocurriculoJpaController(con.getBd());
+        dao.SeccionMicrocurriculoJpaController daoSeccionMicrocurriculo = new dao.SeccionMicrocurriculoJpaController(con.getBd());
         ;
-         contenido.setTexto(informacion);
-          contenido.setSeccionMicrocurriculoId(daoSeccionMicrocurriculo.findSeccionMicrocurriculo(idSeccionMicrocurriculo));
-      contenido.setCantidadItemsLista(0);
-      daoContenido.create(contenido);
-        }
-        
-    public List<dto.Seccion> obtenerSecciones(){
-    
-    Conexion con = Conexion.getConexion();
-    dao.SeccionJpaController daoSeccion = new dao.SeccionJpaController(con.getBd());
-    return daoSeccion.findSeccionEntities();
-    
-    }    
-    
-    
+        contenido.setTexto(informacion);
+        contenido.setSeccionMicrocurriculoId(daoSeccionMicrocurriculo.findSeccionMicrocurriculo(idSeccionMicrocurriculo));
+        contenido.setCantidadItemsLista(0);
+        daoContenido.create(contenido);
+    }
 
-    public void registrarMicrocurriculos(Pensum pensum){
+    public List<dto.Seccion> obtenerSecciones() {
+
+        Conexion con = Conexion.getConexion();
+        dao.SeccionJpaController daoSeccion = new dao.SeccionJpaController(con.getBd());
+        return daoSeccion.findSeccionEntities();
+
+    }
+
+    public void registrarMicrocurriculos(Pensum pensum) {
         new RegistroMicrocurriculoBackground(pensum).start();
     }
-    
-    public List<dto.AreaFormacion> obtenerAreasFormacion(){
+
+    public List<dto.AreaFormacion> obtenerAreasFormacion() {
         Conexion con = Conexion.getConexion();
         dao.AreaFormacionJpaController daoAreasFormacion = new dao.AreaFormacionJpaController(con.getBd());
-      
+
         return daoAreasFormacion.findAreaFormacionEntities();
     }
-    
-    public List<dto.TipoAsignatura> obtenerTiposAisgnatura(){
+
+    public List<dto.TipoAsignatura> obtenerTiposAisgnatura() {
         Conexion con = Conexion.getConexion();
         dao.TipoAsignaturaJpaController daoTipoAsignatura = new dao.TipoAsignaturaJpaController(con.getBd());
         return daoTipoAsignatura.findTipoAsignaturaEntities();
     }
-    
+
 }

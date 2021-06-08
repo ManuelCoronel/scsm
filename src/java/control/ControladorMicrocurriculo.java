@@ -36,15 +36,15 @@ public class ControladorMicrocurriculo extends HttpServlet {
     }
 
     public static void listar(HttpServletRequest request, HttpServletResponse response) throws IOException {
-          request.getSession().removeAttribute("materias"); 
-       
+        request.getSession().removeAttribute("materias");
+
         AdministrarMicrocurriculo adminMicrocurriculo = new AdministrarMicrocurriculo();
         dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
-       List<dto.Materia> materias = adminMicrocurriculo.obtenerTodasMateria(usuario.getDocente().getProgramaList().get(0).getCodigo());
+        List<dto.Materia> materias = adminMicrocurriculo.obtenerTodasMateria(usuario.getDocente().getProgramaList().get(0).getCodigo());
         request.getSession().setAttribute("areasFormacion", adminMicrocurriculo.obtenerAreasFormacion());
         request.getSession().setAttribute("tipoAsignatura", adminMicrocurriculo.obtenerTiposAisgnatura());
         request.getSession().setAttribute("materias", materias);
-        
+
         response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
     }
 
@@ -68,7 +68,7 @@ public class ControladorMicrocurriculo extends HttpServlet {
         if (accion.equalsIgnoreCase("listarTodos")) {
             listar(request, response);
         }
-        if (accion.equals("registrar")) {
+        if (accion.equalsIgnoreCase("registrar")) {
             try {
                 this.registrar(request, response);
             } catch (Exception e) {
@@ -87,52 +87,52 @@ public class ControladorMicrocurriculo extends HttpServlet {
         String accion = request.getParameter("accion");
         System.out.println(accion);
         if (accion.equalsIgnoreCase("Registrar")) {
-           
-           
+
         }
-        
-        
+
     }
-    
-    
-    public void obtenerUnidades(HttpServletRequest request, HttpServletResponse response){
-    int cantidadFilas = Integer.parseInt(request.getParameter("nfilas-1"));
-    String contenido[][] = new String[cantidadFilas][5];
+
+    public void obtenerUnidades(HttpServletRequest request, HttpServletResponse response) {
+        int cantidadFilas = Integer.parseInt(request.getParameter("nfilas-1"));
+        String contenido[][] = new String[cantidadFilas][5];
         for (int i = 0; i < cantidadFilas; i++) {
-            for (int j = 0; j <5 ; j++) {
-           contenido[i][j] = request.getParameter("contenido-1"+"-"+(i+1)+"-"+(j+1));
+            for (int j = 0; j < 5; j++) {
+                contenido[i][j] = request.getParameter("contenido-1" + "-" + (i + 1) + "-" + (j + 1));
             }
         }
-        
+
     }
-    
-        
-    public void obtenerContenidos(HttpServletRequest request, HttpServletResponse response){
-    int cantidadFilas = Integer.parseInt(request.getParameter("nfilas-2"));
-    String contenido[][] = new String[cantidadFilas][3];
+
+    public void obtenerContenidos(HttpServletRequest request, HttpServletResponse response) {
+        int cantidadFilas = Integer.parseInt(request.getParameter("nfilas-2"));
+        String contenido[][] = new String[cantidadFilas][3];
         for (int i = 0; i < cantidadFilas; i++) {
-            for (int j = 0; j <3 ; j++) {
-           contenido[i][j] = request.getParameter("contenido-2"+"-"+(i+1)+"-"+(j+1));
+            for (int j = 0; j < 3; j++) {
+                contenido[i][j] = request.getParameter("contenido-2" + "-" + (i + 1) + "-" + (j + 1));
             }
         }
-        
+
     }
-    
-    public void registrarSecciones(HttpServletRequest request, HttpServletResponse response,AdministrarMicrocurriculo adminM){
+
+    public void registrarSecciones(HttpServletRequest request, HttpServletResponse response, AdministrarMicrocurriculo adminM) {
         List<dto.Seccion> secciones = adminM.obtenerSecciones();
-           for (Seccion seccione : secciones) {
-            String informacion = request.getParameter("seccion-"+seccione.getId());
-            int idMicrocurriculo = Integer.parseInt(request.getParameter("seccionId-"+seccione.getId()));
-            
+        for (Seccion seccione : secciones) {
+            if (seccione.getTipoSeccionId().getId() != 2) {
+                System.out.println(seccione.getTipoSeccionId().getTipo());
+                String informacion = request.getParameter("seccion-" + seccione.getId());
+                int idSeccionMicrocurriculo = Integer.parseInt(request.getParameter("seccionId-" + seccione.getId()));
+                    System.out.println(informacion);
+                adminM.ingresarContenidoSecciones(informacion, idSeccionMicrocurriculo);
+            }
         }
     }
-    
 
     private void registrar(HttpServletRequest request, HttpServletResponse response) throws Exception {
-   AdministrarMicrocurriculo adminMicrocurriculo = new AdministrarMicrocurriculo();
+        AdministrarMicrocurriculo adminMicrocurriculo = new AdministrarMicrocurriculo();
         int area_formacion = Integer.parseInt(request.getParameter("areasFormacion"));
-   int mocrocurriculoId =Integer.parseInt(request.getParameter("microcurriculoId"));
-   
+        int mocrocurriculoId = Integer.parseInt(request.getParameter("microcurriculoId"));
+        registrarSecciones(request, response, adminMicrocurriculo);
+        response.sendRedirect("jspTest/board.jsp");
     }
 
     @Override
