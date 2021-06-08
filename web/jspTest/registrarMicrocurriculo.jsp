@@ -10,7 +10,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         
         <title>JSP Page</title>
+         <script src="../js/JQuery.js"></script>
+        <script src="../js/microcurriculo.js"></script>
     </head>
     <body>
         <h1>Microcurriculo</h1>
@@ -51,16 +54,12 @@
                     <tr>
                         <td>Tipo Asignatura</td>
                         <td>
-                            <%
-                                for (dto.TipoAsignatura tipos : tiposAsignatura) {
-
-
-                            %>
-                            <div>
-                                <%=tipos.getTipo()%>
-                                <input type="radio" name="tipoAsignatura" value=<%=tipos.getId()%>
-                            </div>
-                            <%}%>
+                    
+                        
+                            <%=microcurriculo.getMateria().getTipoAsignaturaId().getTipo() %>
+                              
+                       
+                          
                         </td>
                     </tr>
                     <tr>
@@ -69,7 +68,14 @@
                     </tr>
                     <tr>
                         <td>Prerrequisitos</td>
-                        <td><%=microcurriculo.getMateria().getPrerrequisitoMateriaList()%></td>
+                        <td><%
+                           for (dto.PrerrequisitoMateria prerrequisito :microcurriculo.getMateria().getPrerrequisitoMateriaList()) {
+                                   
+                            %>
+                            
+                            <%=prerrequisito.getMateria1().getNombre() %>  <br><%}%>
+                          </td>
+                        
                     </tr>
                     <tr>
                         <td></td>
@@ -104,31 +110,41 @@
             <%            } else {
             %>
 
-            <table border="1"    style="width: 100%; border-collapse: collapse">
+            <table  border="1" id="tabla<%=seccion.getSeccionId().getId() %>"   style="width: 100%; border-collapse: collapse">
                 <thead>
+                <input type="hidden"  name="nfilas-<%=seccion.getSeccionId().getId()%>" id="nfilas-<%=seccion.getSeccionId().getId()%>" value="0">
+                    <%
+                    if(seccion.getSeccionId().getId()==1){
+                    %>
                     <tr>
                         <th>#</th>
                         <th>Nombre Unidad</th>
                         <th>Dedicacion del estudiante Trabajo Presencial</th>
                         <th>Dedicacion del estudiante Trabajo  Trabajo independiente</th>
                         <th>Hora Totales</th>
-                    </tr>
+                    </tr><%
+                    }else{
+                    %>
+                        <th>Contenidos por unidades</th>
+                        <th>Actividades Presenciales</th>
+                        <th>Trabajo independiente</th>
+                        <%}%>
+                    
                 </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-
+                <tbody  >
+                  
+              
                 </tbody>
 
             </table>
-            <input id="number" type="number">
-            <button onclick="agregarFila()">Agregar Filas</button>
-
+      
+            
+            <button type="button"  onclick="agregarFila(<%=seccion.getSeccionId().getId()%>)">Agregar Fila</button>
+      <button type="button"  onclick="eliminarFila(<%=seccion.getSeccionId().getId()%>)">Eliminar Fila</button>
+            <%
+           int seccionTipo = seccion.getId();
+            %>
+      
             <%
                 }
 
@@ -163,6 +179,7 @@
             <input type="submit" name="accion" value="Registrar">
         </form>
 
-
+            
     </body>
+ 
 </html>
