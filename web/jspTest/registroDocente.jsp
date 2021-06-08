@@ -19,26 +19,25 @@
         <!--  nombre, apellido, codigo, correo, contraseña, confirmar contraseña, facultad[], departamento[], tipo[] BUTON iniciar sesion, registrar -->
         <form method="post" action="../ControladorDocente">
             <table>
-
                 <tr> 
-                    <td><input type="text" name="txtNombre">Nombre</td>
-                    <td><input type="text" name="txtApellido">Apellido</td>
+                    <td><input type="text" name="txtNombre" required>Nombre</td>
+                    <td><input type="text" name="txtApellido" required>Apellido</td>
                 </tr>
                 <tr>
-                    <td><input type="number" name="txtCodigo">Codigo</td>
-                    <td><input type="text" name="txtCorreo">Correo</td>
+                    <td><input type="number" name="txtCodigo" required>Codigo</td>
+                    <td><input type="email" name="txtCorreo" required>Correo</td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="txtPassword">Contraseña</td>
-                    <td><input type="text" name="txtPassword">Confirmar contraseña</td>
+                    <td><input type="password" name="txtPassword" required>Contraseña</td>
+                    <td><input type="password" name="txtPassword" required>Confirmar contraseña</td>
                 </tr>
                 <tr>
-                    <td>
-                        <select name="optionFacultad" id="optionFacultad" onchange ="searchDepartamento()">
+                    <td>    
+                        <select name="optionFacultad" id="optionFacultad" onchange ="searchDepartamento()" required>
                         </select>
                     </td>
                     <td>
-                        <select name="optionDepartamento" id="optionDepartamento">
+                        <select name="optionDepartamento" id="optionDepartamento" required>
                         </select>
                     </td>
                 </tr>
@@ -49,7 +48,6 @@
                     </td>
                 </tr>
             </table> 
-  
-
+        </form>
     </body>
 </html>
