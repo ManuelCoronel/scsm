@@ -66,7 +66,7 @@ public class ControladorDepartamento extends HttpServlet {
 
     private void listarDepartamento(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter pw = new PrintWriter(response.getOutputStream());
-        Integer id = Integer.parseInt(request.getParameter("query"));
+        int id = Integer.parseInt(request.getParameter("query"));
         DepartamentoJpaController djpa = new DepartamentoJpaController(Conexion.getConexion().getBd());
         List<Departamento> depar = djpa.findDepartamentoEntities();
         for(Departamento d: depar){

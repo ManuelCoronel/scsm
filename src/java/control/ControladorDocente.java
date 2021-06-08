@@ -19,6 +19,9 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletException;
@@ -78,7 +81,22 @@ public class ControladorDocente extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter pw = response.getWriter();
+        try {
+            switch (request.getParameter("action")) {
+                case "editarDocente":
+                    this.editarDocente(request, response);
+                    break;
+            }
+            pw.println("<h1>Hizo algo</h1>");
 
+        } catch (Exception e) {
+            System.out.println("estoy editando");
+            pw.println("<h1>Error</h1>");
+            e.printStackTrace();
+            System.err.println(e);
+        }
+        pw.flush();
     }
 
     /**
@@ -101,14 +119,34 @@ public class ControladorDocente extends HttpServlet {
                 case "listarDocente":
                     this.listarDocente(request, response);
                     break;
+                case "activarDocente":
+                    this.activarDocente(request, response);
+                    break;
             }
             pw.println("<h1>Hizo algo</h1>");
 
         } catch (Exception e) {
-
+            System.out.println("estoy editando");
             pw.println("<h1>Error</h1>");
             e.printStackTrace();
+            System.err.println(e);
         }
+        pw.flush();
+    }
+
+    public void activarDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+        System.out.println("ACTIVAR DOCENTE");
+        String[] inactivos = request.getParameterValues("activarDocente");
+        for (String s : inactivos) {
+            String[] spliteado = s.split("-");
+            Docente d = docenteDao.findDocente(Integer.parseInt(spliteado[1]));
+            short in;
+            in = (short) ((d.getEstado() == 1) ? 0 : 1);
+            d.setEstado(in);
+            docenteDao.edit(d);
+        }
+        listarDocente(request, response);
+
     }
 
     public void guardarDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
@@ -142,11 +180,14 @@ public class ControladorDocente extends HttpServlet {
     public void listarDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
         System.out.println("Listando docentes");
         List<Docente> docentes = (List<Docente>) docenteDao.findDocenteEntities();
-        docentes.forEach((d) -> {
-            System.out.println(d.getNombre() + " " + d.getEstado() + " " + d.getProgramaList() + " " + d.getDepartamentoId());
-        });
-        System.out.println("que es esto " + docentes.toString());
         request.getSession().setAttribute("listaDocentes", docentes);
+        response.sendRedirect("jspTest/listaDocente.jsp");
+    }
+
+    public void editarDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+        System.out.println("Estoy en editar");
+        PrintWriter pw = response.getWriter();
+        pw.println("<h1>Error</h1>");
         response.sendRedirect("jspTest/listaDocente.jsp");
     }
 
