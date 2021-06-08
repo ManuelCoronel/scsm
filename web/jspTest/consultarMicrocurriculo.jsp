@@ -1,4 +1,10 @@
 <%-- 
+    Document   : consultarMicrocurriculo
+    Created on : 08-jun-2021, 3:59:40
+    Author     : Manuel
+--%>
+
+<%-- 
     Document   : registrarMicrocurriculo
     Created on : 05-jun-2021, 11:51:37
     Author     : Manuel
@@ -85,6 +91,7 @@
             <%
 
                 List<dto.SeccionMicrocurriculo> secciones = microcurriculo.getSeccionMicrocurriculoList();
+                int con=0;
                 for (dto.SeccionMicrocurriculo seccion : secciones) {
 
 
@@ -96,14 +103,16 @@
             <%
                 int tipo = seccion.getSeccionId().getTipoSeccionId().getId();
                 if (tipo == 1) {
-
+                        for (dto.Contenido elem : seccion.getContenidoList()) {
+                                
+                            
             %>
             
-            <textarea  name="seccion-<%= seccion.getSeccionId().getId()%>" rows="10" cols="50" value="info"></textarea>
+            <textarea  name="seccion-<%= seccion.getSeccionId().getId()%>" rows="10" cols="50" value="info"><%=elem.getTexto() %></textarea>
    <input type="hidden"  name="seccionId-<%=seccion.getSeccionId().getId()%>" value="<%=seccion.getId() %>">
                
 
-            <%            } else {
+            <%         } } else {
             %>
 
             <table  border="1" id="tabla<%=seccion.getSeccionId().getId() %>"   style="width: 100%; border-collapse: collapse">
@@ -113,6 +122,7 @@
                 <input type="hidden"  name="nfilas-<%=seccion.getSeccionId().getId()%>" id="nfilas-<%=seccion.getSeccionId().getId()%>" value="0">
                     <%
                     if(seccion.getSeccionId().getId()==1){
+
                     %>
                     <tr>
                         <th>#</th>
@@ -145,7 +155,6 @@
       
             <%
                 }
-
             %>
 
 
@@ -153,7 +162,7 @@
             %>
  
             
-            <input type="submit" name="accion" value="Registrar">
+        
         </form>
 
             

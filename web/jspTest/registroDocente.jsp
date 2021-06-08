@@ -44,10 +44,15 @@
                 <tr>
                     <td>
                         <input type="submit"name="action" value="registrarDocente">Registrarse     
-                        <input type="submit"name="action" value="listarDocente" > Docentes adscritos
+                      
                     </td>
                 </tr>
             </table> 
         </form>
+           <form method="post" action="../ControladorDocente">
+             <input type="submit"name="action" value="listarDocente" > Docentes adscritos
+            
+           </form>
+    
     </body>
 </html>

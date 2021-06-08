@@ -14,12 +14,8 @@
         
     </head>
     <body>
-        <form action="../ControladorMicrocurriculo" method="GET">
-            
-           <input type="submit" name="accion" value="listarTodos"></input>
-        </form>
-        malo
-         <a href="../ControladorMicrocurriculo?accion=listarTodos"><button type="button">Consultar Microcurriculo</button></a>
+      
+         <a href="../ControladorMicrocurriculo?accion=listarTodos"><button type="button">Actualizar</button></a>
         <table border="1">
             <thead>
                 <tr>
@@ -47,7 +43,9 @@
                     <%
                         if(elem.getMicrocurriculoList().size()>0){
                         %>
-                    <td> <a href="../ControladorMicrocurriculo?accion=Editar&idMicrocurriculo=<%=elem.getMicrocurriculoList().get(0).getMicrocurriculoPK().getId()%>&codigoMateria=<%=elem.getMicrocurriculoList().get(0).getMateria().getMateriaPK().getCodigoMateria()%>&codigoPensum=<%=elem.getPensum().getPensumPK().getCodigo() %>"><button type="button">Editar </button></a>   </td>
+                    <td> <a href="../ControladorMicrocurriculo?accion=Editar&idMicrocurriculo=<%=elem.getMicrocurriculoList().get(0).getMicrocurriculoPK().getId()%>&codigoMateria=<%=elem.getMicrocurriculoList().get(0).getMateria().getMateriaPK().getCodigoMateria()%>&codigoPensum=<%=elem.getPensum().getPensumPK().getCodigo() %>"><button type="button">Editar </button></a>  
+                     <a href="../ControladorMicrocurriculo?accion=Consultar&idMicrocurriculo=<%=elem.getMicrocurriculoList().get(0).getMicrocurriculoPK().getId()%>&codigoMateria=<%=elem.getMicrocurriculoList().get(0).getMateria().getMateriaPK().getCodigoMateria()%>&codigoPensum=<%=elem.getPensum().getPensumPK().getCodigo() %>"><button type="button">Consultar </button></a> 
+                    </td>
         <%}%>       
         </tr>
                 <%

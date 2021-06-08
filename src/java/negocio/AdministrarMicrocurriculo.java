@@ -5,6 +5,7 @@
  */
 package negocio;
 
+import dao.exceptions.NonexistentEntityException;
 import dto.Materia;
 import dto.Microcurriculo;
 import dto.Pensum;
@@ -94,12 +95,17 @@ public class AdministrarMicrocurriculo {
         return microcurriculoRta;
     }
 
-    public void ingresarContenidoSecciones(String informacion, int idSeccionMicrocurriculo) {
+    public void ingresarContenidoSecciones(String informacion, int idSeccionMicrocurriculo) throws NonexistentEntityException, Exception {
         Conexion con = Conexion.getConexion();
         dto.Contenido contenido = new dto.Contenido();
         dao.ContenidoJpaController daoContenido = new dao.ContenidoJpaController(con.getBd());
         dao.SeccionMicrocurriculoJpaController daoSeccionMicrocurriculo = new dao.SeccionMicrocurriculoJpaController(con.getBd());
         ;
+        dto.SeccionMicrocurriculo seccionMicro =daoSeccionMicrocurriculo.findSeccionMicrocurriculo(idSeccionMicrocurriculo);
+        seccionMicro.getContenidoList().get(0).setTexto(informacion);
+        daoSeccionMicrocurriculo.edit(seccionMicro);
+        daoContenido.destroy(   seccionMicro.getContenidoList().get(0).getId());
+     
         contenido.setTexto(informacion);
         contenido.setSeccionMicrocurriculoId(daoSeccionMicrocurriculo.findSeccionMicrocurriculo(idSeccionMicrocurriculo));
         contenido.setCantidadItemsLista(0);
