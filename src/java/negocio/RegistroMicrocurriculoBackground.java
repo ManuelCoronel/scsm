@@ -46,6 +46,7 @@ public class RegistroMicrocurriculoBackground extends Thread {
     }
 
     private void registrarMicrocurriculos(Pensum pensum) throws Exception {
+       
         EntityManagerFactory em = Conexion.getConexion().getBd();
         SeccionJpaController tjpa = new SeccionJpaController(em);
         SeccionMicrocurriculoJpaController sjpa = new SeccionMicrocurriculoJpaController(em);

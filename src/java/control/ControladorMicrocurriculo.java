@@ -9,6 +9,7 @@ import dto.Pensum;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,10 +38,11 @@ public class ControladorMicrocurriculo extends HttpServlet {
 
         AdministrarMicrocurriculo adminMicrocurriculo = new AdministrarMicrocurriculo();
         dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
-        ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodosMicrocurriculos(usuario.getDocente().getProgramaList().get(0).getCodigo());
-          request.getSession().setAttribute("areasFormacion", adminMicrocurriculo.obtenerAreasFormacion());
-          request.getSession().setAttribute("tipoAsignatura", adminMicrocurriculo.obtenerTiposAisgnatura());
-        request.getSession().setAttribute("microcurriculos", microcurriculos);
+       List<dto.Materia> materias = adminMicrocurriculo.obtenerTodasMateria(usuario.getDocente().getProgramaList().get(0).getCodigo());
+        request.getSession().setAttribute("areasFormacion", adminMicrocurriculo.obtenerAreasFormacion());
+        request.getSession().setAttribute("tipoAsignatura", adminMicrocurriculo.obtenerTiposAisgnatura());
+        request.getSession().setAttribute("materias", materias);
+        
         response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
     }
 
@@ -50,7 +52,7 @@ public class ControladorMicrocurriculo extends HttpServlet {
         int codigoPensum = Integer.parseInt(request.getParameter("codigoPensum"));
         int codigoMateria = Integer.parseInt(request.getParameter("codigoMateria"));
         negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
-        dto.Microcurriculo microcurriculo = adminMicrocurriculo.obtenerMicrocurriculo(id,codigoMateria,codigoPensum);
+        dto.Microcurriculo microcurriculo = adminMicrocurriculo.obtenerMicrocurriculo(id, codigoMateria, codigoPensum);
         request.getSession().setAttribute("microcurriculo", microcurriculo);
         response.sendRedirect("jspTest/registrarMicrocurriculo.jsp");
 
@@ -65,9 +67,9 @@ public class ControladorMicrocurriculo extends HttpServlet {
             listar(request, response);
         }
         if (accion.equals("registrar")) {
-            try{
+            try {
                 this.registrar(request, response);
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

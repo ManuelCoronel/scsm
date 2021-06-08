@@ -11,8 +11,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        
     </head>
     <body>
+        <form action="../ControladorMicrocurriculo" method="GET">
+            
+           <input type="submit" name="accion" value="listarTodos"></input>
+        </form>
+        malo
+         <a href="../ControladorMicrocurriculo?accion=listarTodos"><button type="button">Consultar Microcurriculo</button></a>
         <table border="1">
             <thead>
                 <tr>
@@ -26,19 +33,23 @@
             </thead>
             <tbody>
                 <%
-              List<dto.Microcurriculo> microcurriculos = (List<dto.Microcurriculo>)request.getSession().getAttribute("microcurriculos");
-                for (dto.Microcurriculo elem : microcurriculos) {
+              List<dto.Materia> materias = (List<dto.Materia>)request.getSession().getAttribute("materias");
+                for (dto.Materia elem : materias) {
                         
                     
                 %>
                 <tr>
-                    <td><%=elem.getMateria().getPensum().getPensumPK().getProgramaCodigo() %> - <%=elem.getMateria().getPensum().getPensumPK().getCodigo() %></td>
-                    <td><%=elem.getMateria().getMateriaPK().getCodigoMateria() %></td>
-                    <td><%=elem.getMateria().getNombre() %></td>
-                    <td><%=elem.getMateria().getCreditos()%></td>
-                    <td><%=elem.getMateria().getSemestre() %></td>
-                    <td> <a href="../ControladorMicrocurriculo?accion=Editar&idMicrocurriculo=<%=elem.getMicrocurriculoPK().getId()%>&codigoMateria=<%=elem.getMateria().getMateriaPK().getCodigoMateria()%>&codigoPensum=<%=elem.getMateria().getPensum().getPensumPK().getCodigo() %>"><button type="button">Editar </button></a>   </td>
-                </tr>
+                    <td><%=elem.getPensum().getPensumPK().getProgramaCodigo() %> - <%=elem.getPensum().getPensumPK().getCodigo() %></td>
+                    <td><%=elem.getMateriaPK().getCodigoMateria() %></td>
+                    <td><%=elem.getNombre() %></td>
+                    <td><%=elem.getCreditos()%></td>
+                    <td><%=elem.getSemestre() %></td>
+                    <%
+                        if(elem.getMicrocurriculoList().size()>0){
+                        %>
+                    <td> <a href="../ControladorMicrocurriculo?accion=Editar&idMicrocurriculo=<%=elem.getMicrocurriculoList().get(0).getMicrocurriculoPK().getId()%>&codigoMateria=<%=elem.getMicrocurriculoList().get(0).getMateria().getMateriaPK().getCodigoMateria()%>&codigoPensum=<%=elem.getPensum().getPensumPK().getCodigo() %>"><button type="button">Editar </button></a>   </td>
+        <%}%>       
+        </tr>
                 <%
                 }
                 %>

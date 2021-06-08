@@ -6,9 +6,13 @@
 package control;
 
 import dao.DocenteJpaController;
+import dao.UsuarioJpaController;
 import dto.Departamento;
 import dto.Docente;
 import dto.Materia;
+import dto.Rol;
+import dto.Usuario;
+import dto.UsuarioPK;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,11 +20,13 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import util.PasswordAuthentication;
 import util.Conexion;
 
 /**
@@ -30,7 +36,9 @@ import util.Conexion;
 @WebServlet(name = "ControladorDocente", urlPatterns = {"/ControladorDocente"})
 public class ControladorDocente extends HttpServlet {
 
-    DocenteJpaController docenteDao = new DocenteJpaController(Conexion.getConexion().getBd());
+    EntityManagerFactory em = Conexion.getConexion().getBd();
+    DocenteJpaController docenteDao = new DocenteJpaController(em);
+    UsuarioJpaController usuarioDao = new UsuarioJpaController(em);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -99,27 +107,37 @@ public class ControladorDocente extends HttpServlet {
         } catch (Exception e) {
 
             pw.println("<h1>Error</h1>");
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 
     public void guardarDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
         Docente docente = new Docente();
+        PasswordAuthentication encriptarPass = new PasswordAuthentication();
+        //lectura de datos
         int codigo = Integer.parseInt(request.getParameter("txtCodigo"));
         String nombre = request.getParameter("txtNombre");
         String apellido = request.getParameter("txtApellido");
         int departamento = Integer.parseInt(request.getParameter("optionDepartamento"));
         short estado = 1;
         String password = request.getParameter("txtPassword");
+        //Creacion del docente
         docente.setNombre(nombre);
         docente.setApellido(apellido);
         docente.setDepartamentoId(new Departamento(departamento));
         docente.setCodigoDocente(codigo);
         docente.setEstado(estado);
-        docenteDao.create(docente);
+        //Creacion del usuario
+        password = encriptarPass.hash(password.toCharArray()); //encriptando password
+        UsuarioPK upk = new UsuarioPK(0, codigo);
+        Usuario usuario = new Usuario(upk, password);
+        usuario.setRol(new Rol(2));
+        usuario.setDocente(docente);
+        upk.setDocenteCodigo(codigo);
+        docenteDao.create(docente); //docente creado 
+        usuarioDao.create(usuario); //usuario creado
         response.sendRedirect("jspTest/registroDocente.jsp");
     }
-    
 
     public void listarDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
         System.out.println("Listando docentes");

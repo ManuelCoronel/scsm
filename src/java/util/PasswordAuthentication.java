@@ -1,4 +1,4 @@
-package sinonote.com.util;
+package util;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
