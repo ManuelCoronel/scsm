@@ -9,6 +9,7 @@ import dto.Pensum;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,10 +38,11 @@ public class ControladorMicrocurriculo extends HttpServlet {
 
         AdministrarMicrocurriculo adminMicrocurriculo = new AdministrarMicrocurriculo();
         dto.Usuario usuario = (dto.Usuario) request.getSession().getAttribute("usuario");
-        ArrayList<dto.Microcurriculo> microcurriculos = adminMicrocurriculo.obtenerTodosMicrocurriculos(usuario.getDocente().getProgramaList().get(0).getCodigo());
+       List<dto.Materia> materias = adminMicrocurriculo.obtenerTodasMateria(usuario.getDocente().getProgramaList().get(0).getCodigo());
         request.getSession().setAttribute("areasFormacion", adminMicrocurriculo.obtenerAreasFormacion());
         request.getSession().setAttribute("tipoAsignatura", adminMicrocurriculo.obtenerTiposAisgnatura());
-        request.getSession().setAttribute("microcurriculos", microcurriculos);
+        request.getSession().setAttribute("materias", materias);
+        
         response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
     }
 

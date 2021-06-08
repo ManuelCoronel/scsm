@@ -39,28 +39,49 @@ public class AdministrarMicrocurriculo {
         return daoMicrocurriculo.findMicrocurriculo(microcurriculoPK);
     }
 
-    public ArrayList<dto.Microcurriculo> obtenerTodosMicrocurriculos(int idPrograma) {
+//    public ArrayList<dto.Microcurriculo> obtenerTodosMicrocurriculos(int idPrograma) {
+//
+//        Conexion con = Conexion.getConexion();
+//        dao.ProgramaJpaController daoPrograma = new dao.ProgramaJpaController(con.getBd());
+//        dto.Programa programa = daoPrograma.findPrograma(idPrograma);
+//        List<dto.Pensum> pensums = programa.getPensumList();
+//        ArrayList<dto.Microcurriculo> microcurriculos = new ArrayList<>();
+//        for (Pensum pensum : pensums) {
+//            List<dto.Materia> materias = pensum.getMateriaList();
+//            for (Materia materia : materias) {
+//
+//                try {
+//                    microcurriculos.add(materia.getMicrocurriculoList().get(0));
+//                } catch (Exception e) {
+//                    System.out.println(e.getMessage());
+//                }
+//
+//            }
+//        }
+//
+//        return microcurriculos;
+//    }
+    
+    
+        public List<dto.Materia> obtenerTodasMateria(int idPrograma) {
 
         Conexion con = Conexion.getConexion();
         dao.ProgramaJpaController daoPrograma = new dao.ProgramaJpaController(con.getBd());
         dto.Programa programa = daoPrograma.findPrograma(idPrograma);
         List<dto.Pensum> pensums = programa.getPensumList();
-        ArrayList<dto.Microcurriculo> microcurriculos = new ArrayList<>();
+        List<dto.Materia> listaMateria = new ArrayList<>();
         for (Pensum pensum : pensums) {
-            List<dto.Materia> materias = pensum.getMateriaList();
-            for (Materia materia : materias) {
-
-                try {
-                    microcurriculos.add(materia.getMicrocurriculoList().get(0));
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-
+            List<dto.Materia> listaMaterias = pensum.getMateriaList();
+                
+            for (Materia listaMateria1 : listaMaterias) {
+                listaMateria.add(listaMateria1);
             }
         }
 
-        return microcurriculos;
+        return listaMateria;
     }
+    
+    
 
     public void registrarMicrocurriculos(Pensum pensum){
         new RegistroMicrocurriculoBackground(pensum).start();
