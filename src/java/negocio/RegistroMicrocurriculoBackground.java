@@ -46,12 +46,11 @@ public class RegistroMicrocurriculoBackground extends Thread {
     }
 
     private void registrarMicrocurriculos(Pensum pensum) throws Exception {
-        System.out.println("corriendo en segundo plano perras");
         EntityManagerFactory em = Conexion.getConexion().getBd();
         SeccionJpaController tjpa = new SeccionJpaController(em);
         SeccionMicrocurriculoJpaController sjpa = new SeccionMicrocurriculoJpaController(em);
         ContenidoJpaController cjpa = new ContenidoJpaController(em);
-        TablaMicrocurriculoJpaController tmjpa = new TablaMicrocurriculoJpaController(Conexion.getConexion().getBd());
+        TablaMicrocurriculoJpaController tmjpa = new TablaMicrocurriculoJpaController(em);
         List<Seccion> secciones = tjpa.findSeccionEntities();
         List<Materia> materias = pensum.getMateriaList();
         MicrocurriculoJpaController mjpa = new MicrocurriculoJpaController(em);
@@ -65,6 +64,11 @@ public class RegistroMicrocurriculoBackground extends Thread {
 
             getDefaultSecciones(micro, secciones, sjpa, cjpa, tmjpa);
         }
+        tjpa.getEntityManager().close();
+        sjpa.getEntityManager().close();
+        cjpa.getEntityManager().close();
+        tmjpa.getEntityManager().close();
+        mjpa.getEntityManager().close();
     }
 
     private void getDefaultSecciones(Microcurriculo micro, List<Seccion> secciones, SeccionMicrocurriculoJpaController sjpa, ContenidoJpaController cjpa, TablaMicrocurriculoJpaController tmjpa) throws NonexistentEntityException, Exception {

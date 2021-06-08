@@ -19,8 +19,6 @@ public class AdministrarMicrocurriculo {
     }
 
     public ArrayList<dto.Microcurriculo> obtenerMicrocurriculosPensum(int codigo, int programaCodigo) {
-
-        Conexion con = Conexion.getConexion();
         AdministrarPensum administrarPensum = new AdministrarPensum();
         dto.Pensum pensum = administrarPensum.obtenerPensum(codigo, programaCodigo);
 
@@ -29,7 +27,7 @@ public class AdministrarMicrocurriculo {
             microcurriculos.add(materia.getMicrocurriculoList().get(0));
         }
 
-        return microcurriculos;
+        return microcurriculos; 
     }
 
     public dto.Microcurriculo obtenerMicrocurriculo(int idMicrocurriculo, int codigoMateria, int codigoPensum) {
