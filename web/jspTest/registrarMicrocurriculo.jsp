@@ -10,9 +10,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-         
+
         <title>JSP Page</title>
-         <script src="../js/JQuery.js"></script>
+        <script src="../js/JQuery.js"></script>
         <script src="../js/microcurriculo.js"></script>
     </head>
     <body>
@@ -23,7 +23,7 @@
             List<dto.TipoAsignatura> tiposAsignatura = (List<dto.TipoAsignatura>) request.getSession().getAttribute("tipoAsignatura");
         %>
         <form action="../ControladorMicrocurriculo" method="POST" >
-              <input type="hidden"  name="microcurriculoId"  value=<%=microcurriculo.getMicrocurriculoPK().getId() %>>
+            <input type="hidden"  name="microcurriculoId"  value=<%=microcurriculo.getMicrocurriculoPK().getId()%>>
             <table border="1">
                 <thead>
                     <tr>
@@ -55,7 +55,7 @@
                     <tr>
                         <td>Tipo Asignatura</td>
                         <td>
-                              <%=microcurriculo.getMateria().getTipoAsignaturaId().getTipo() %>
+                            <%=microcurriculo.getMateria().getTipoAsignaturaId().getTipo()%>
                         </td>
                     </tr>
                     <tr>
@@ -65,20 +65,20 @@
                     <tr>
                         <td>Prerrequisitos</td>
                         <td><%
-                           for (dto.PrerrequisitoMateria prerrequisito :microcurriculo.getMateria().getPrerrequisitoMateriaList()) {
-                                   
+                            for (dto.PrerrequisitoMateria prerrequisito : microcurriculo.getMateria().getPrerrequisitoMateriaList()) {
+
                             %>
-                            
-                            <%=prerrequisito.getMateria1().getNombre() %>  <br><%}%>
-                          </td>
-                        
+
+                            <%=prerrequisito.getMateria1().getNombre()%>  <br><%}%>
+                        </td>
+
                     </tr>
-                    
+
                     <tr>
                         <td>Correquisitos</td>
                         <td></td>
                     </tr>
-         
+
                 </tbody>
             </table>
 
@@ -98,65 +98,64 @@
                 if (tipo == 1) {
 
             %>
-            
+
             <textarea  name="seccion-<%= seccion.getSeccionId().getId()%>" rows="10" cols="50" value="info"></textarea>
-   <input type="hidden"  name="seccionId-<%=seccion.getSeccionId().getId()%>" value="<%=seccion.getId() %>">
-               
+            <input type="hidden"  name="seccionId-<%=seccion.getSeccionId().getId()%>" value="<%=seccion.getId()%>">
+
 
             <%            } else {
+
+                int canFilas = seccion.getTablaMicrocurriculoList().get(0).getCantidadFilas();
+                int canColum = seccion.getTablaMicrocurriculoList().get(0).getCantColumnas();
+%>
+   <table  border="1" id="tabla<%=seccion.getSeccionId().getId()%>"   style="width: 100%; border-collapse: collapse">
+                <thead>
+                    <tr>
+ <%               for (int i = 0; i < canColum; i++) {
+                        
+                    
             %>
 
-            <table  border="1" id="tabla<%=seccion.getSeccionId().getId() %>"   style="width: 100%; border-collapse: collapse">
-                <thead>
-              
-              
+            <th><%=seccion.getTablaMicrocurriculoList().get(0).getEncabezadoTablaList().get(i).getIdEncabezado().getNombre()
+                   %></th>
+            <%
+            
+            }
+            %>
+                    </tr>
                 <input type="hidden"  name="nfilas-<%=seccion.getSeccionId().getId()%>" id="nfilas-<%=seccion.getSeccionId().getId()%>" value="0">
-                    <%
-                    if(seccion.getSeccionId().getId()==1){
-                    %>
-                    <tr>
-                        <th>#</th>
-                        <th>Nombre Unidad</th>
-                        <th>Dedicacion del estudiante Trabajo Presencial</th>
-                        <th>Dedicacion del estudiante Trabajo  Trabajo independiente</th>
-                        <th>Hora Totales</th>
-                    </tr><%
-                    }else{
-                    %>
-                        <th>Contenidos por unidades</th>
-                        <th>Actividades Presenciales</th>
-                        <th>Trabajo independiente</th>
-                        <%}%>
-                    
+                <%
+                    if (seccion.getSeccionId().getId() == 1) {
+                %>
+             
+                
+                <%
+                } else {
+                %>
+             
+                    <%}%>
+
                 </thead>
                 <tbody  >
-                  
-              
+
+
                 </tbody>
 
             </table>
-      
-            
+
+
             <button type="button"  onclick="agregarFila(<%=seccion.getSeccionId().getId()%>)">Agregar Fila</button>
-      <button type="button"  onclick="eliminarFila(<%=seccion.getSeccionId().getId()%>)">Eliminar Fila</button>
-            <%
-      
-            %>
-      
-            <%
-                }
-
-            %>
-
+            <button type="button"  onclick="eliminarFila(<%=seccion.getSeccionId().getId()%>)">Eliminar Fila</button>
 
             <%                }
+                }
             %>
- 
-            
+
+
             <input type="submit" name="accion" value="Registrar">
         </form>
 
-            
+
     </body>
- 
+
 </html>
