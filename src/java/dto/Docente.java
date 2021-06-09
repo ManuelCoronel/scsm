@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -50,11 +51,15 @@ public class Docente implements Serializable {
     @Basic(optional = false)
     @Column(name = "estado")
     private short estado;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "img_perfil")
+    private byte[] imgPerfil;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "directorPrograma")
+    private List<Programa> programaList;
     @JoinColumn(name = "departamento_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Departamento departamentoId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "directorPrograma")
-    private List<Programa> programaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "docente")
     private List<MateriaPeriodoGrupo> materiaPeriodoGrupoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "docente")
@@ -67,11 +72,12 @@ public class Docente implements Serializable {
         this.codigoDocente = codigoDocente;
     }
 
-    public Docente(Integer codigoDocente, String nombre, String apellido, short estado) {
+    public Docente(Integer codigoDocente, String nombre, String apellido, short estado, byte[] imgPerfil) {
         this.codigoDocente = codigoDocente;
         this.nombre = nombre;
         this.apellido = apellido;
         this.estado = estado;
+        this.imgPerfil = imgPerfil;
     }
 
     public Integer getCodigoDocente() {
@@ -106,12 +112,12 @@ public class Docente implements Serializable {
         this.estado = estado;
     }
 
-    public Departamento getDepartamentoId() {
-        return departamentoId;
+    public byte[] getImgPerfil() {
+        return imgPerfil;
     }
 
-    public void setDepartamentoId(Departamento departamentoId) {
-        this.departamentoId = departamentoId;
+    public void setImgPerfil(byte[] imgPerfil) {
+        this.imgPerfil = imgPerfil;
     }
 
     @XmlTransient
@@ -121,6 +127,14 @@ public class Docente implements Serializable {
 
     public void setProgramaList(List<Programa> programaList) {
         this.programaList = programaList;
+    }
+
+    public Departamento getDepartamentoId() {
+        return departamentoId;
+    }
+
+    public void setDepartamentoId(Departamento departamentoId) {
+        this.departamentoId = departamentoId;
     }
 
     @XmlTransient

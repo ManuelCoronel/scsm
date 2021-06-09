@@ -69,6 +69,12 @@ public class Materia implements Serializable {
     private List<PrerrequisitoMateria> prerrequisitoMateriaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia1")
     private List<PrerrequisitoMateria> prerrequisitoMateriaList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
+    private List<EquivalenciaMateria> equivalenciaMateriaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
+    private List<Microcurriculo> microcurriculoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
+    private List<MateriaPeriodo> materiaPeriodoList;
     @JoinColumns({
         @JoinColumn(name = "pensum_codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
         , @JoinColumn(name = "pensum_programa_codigo", referencedColumnName = "programa_codigo")})
@@ -77,12 +83,6 @@ public class Materia implements Serializable {
     @JoinColumn(name = "tipo_asignatura_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TipoAsignatura tipoAsignaturaId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
-    private List<EquivalenciaMateria> equivalenciaMateriaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
-    private List<Microcurriculo> microcurriculoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
-    private List<MateriaPeriodo> materiaPeriodoList;
 
     public Materia() {
     }
@@ -187,22 +187,6 @@ public class Materia implements Serializable {
         this.prerrequisitoMateriaList1 = prerrequisitoMateriaList1;
     }
 
-    public Pensum getPensum() {
-        return pensum;
-    }
-
-    public void setPensum(Pensum pensum) {
-        this.pensum = pensum;
-    }
-
-    public TipoAsignatura getTipoAsignaturaId() {
-        return tipoAsignaturaId;
-    }
-
-    public void setTipoAsignaturaId(TipoAsignatura tipoAsignaturaId) {
-        this.tipoAsignaturaId = tipoAsignaturaId;
-    }
-
     @XmlTransient
     public List<EquivalenciaMateria> getEquivalenciaMateriaList() {
         return equivalenciaMateriaList;
@@ -228,6 +212,22 @@ public class Materia implements Serializable {
 
     public void setMateriaPeriodoList(List<MateriaPeriodo> materiaPeriodoList) {
         this.materiaPeriodoList = materiaPeriodoList;
+    }
+
+    public Pensum getPensum() {
+        return pensum;
+    }
+
+    public void setPensum(Pensum pensum) {
+        this.pensum = pensum;
+    }
+
+    public TipoAsignatura getTipoAsignaturaId() {
+        return tipoAsignaturaId;
+    }
+
+    public void setTipoAsignaturaId(TipoAsignatura tipoAsignaturaId) {
+        this.tipoAsignaturaId = tipoAsignaturaId;
     }
 
     @Override

@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -42,6 +43,10 @@ public class Programa implements Serializable {
     @Basic(optional = false)
     @Column(name = "nombre_programa")
     private String nombrePrograma;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "img_programa")
+    private byte[] imgPrograma;
     @JoinColumn(name = "director_programa", referencedColumnName = "codigo_docente")
     @ManyToOne(optional = false)
     private Docente directorPrograma;
@@ -58,9 +63,10 @@ public class Programa implements Serializable {
         this.codigo = codigo;
     }
 
-    public Programa(Integer codigo, String nombrePrograma) {
+    public Programa(Integer codigo, String nombrePrograma, byte[] imgPrograma) {
         this.codigo = codigo;
         this.nombrePrograma = nombrePrograma;
+        this.imgPrograma = imgPrograma;
     }
 
     public Integer getCodigo() {
@@ -77,6 +83,14 @@ public class Programa implements Serializable {
 
     public void setNombrePrograma(String nombrePrograma) {
         this.nombrePrograma = nombrePrograma;
+    }
+
+    public byte[] getImgPrograma() {
+        return imgPrograma;
+    }
+
+    public void setImgPrograma(byte[] imgPrograma) {
+        this.imgPrograma = imgPrograma;
     }
 
     public Docente getDirectorPrograma() {

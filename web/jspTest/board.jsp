@@ -12,13 +12,14 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+  
         
         <%
         request.getSession().removeAttribute("materias");
         %>
-        <a href="../ControladorMicrocurriculo?accion=listarTodos"><button type="button">Consultar Microcurriculo</button></a>
+        <a href="../ControladorMicrocurriculo?accion=listarTodos"><button type="button">Microcurriculo</button></a><br><br>
+        <a href="registroPensum.jsp"><button type="button">Pensum</button></a><br><br>
         
-       
+        <a href="registroDocente.jsp"><button type="button">Docentes</button></a><br>
     </body>
 </html>

@@ -14,7 +14,7 @@
     <body>
         <form action="../ControladorLogin" method="POST">
             <input type="number" name="codigo" placeholder="Codigo">
-            <input type="text" name="clave" placeholder="Contrasena">
+            <input type="password" name="clave" placeholder="Contrasena">
             Director
             <input type="radio" name="rol" value="1">
             Docente

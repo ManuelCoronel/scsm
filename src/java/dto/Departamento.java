@@ -46,9 +46,9 @@ public class Departamento implements Serializable {
     @Column(name = "nombre_departamento")
     private String nombreDepartamento;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamentoId")
-    private List<Docente> docenteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamentoId")
     private List<Programa> programaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamentoId")
+    private List<Docente> docenteList;
     @JoinColumn(name = "facultad_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Facultad facultadId;
@@ -82,21 +82,21 @@ public class Departamento implements Serializable {
     }
 
     @XmlTransient
-    public List<Docente> getDocenteList() {
-        return docenteList;
-    }
-
-    public void setDocenteList(List<Docente> docenteList) {
-        this.docenteList = docenteList;
-    }
-
-    @XmlTransient
     public List<Programa> getProgramaList() {
         return programaList;
     }
 
     public void setProgramaList(List<Programa> programaList) {
         this.programaList = programaList;
+    }
+
+    @XmlTransient
+    public List<Docente> getDocenteList() {
+        return docenteList;
+    }
+
+    public void setDocenteList(List<Docente> docenteList) {
+        this.docenteList = docenteList;
     }
 
     public Facultad getFacultadId() {

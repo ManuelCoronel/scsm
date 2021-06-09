@@ -14,8 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -28,12 +26,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Manuel
  */
 @Entity
-@Table(name = "cambio")
+@Table(name = "encabezado")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Cambio.findAll", query = "SELECT c FROM Cambio c")
-    , @NamedQuery(name = "Cambio.findById", query = "SELECT c FROM Cambio c WHERE c.id = :id")})
-public class Cambio implements Serializable {
+    @NamedQuery(name = "Encabezado.findAll", query = "SELECT e FROM Encabezado e")
+    , @NamedQuery(name = "Encabezado.findById", query = "SELECT e FROM Encabezado e WHERE e.id = :id")
+    , @NamedQuery(name = "Encabezado.findByNombre", query = "SELECT e FROM Encabezado e WHERE e.nombre = :nombre")})
+public class Encabezado implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,17 +40,22 @@ public class Cambio implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cambioId")
-    private List<SeccionCambio> seccionCambioList;
-    @JoinColumn(name = "estado_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Estado estadoId;
+    @Basic(optional = false)
+    @Column(name = "nombre")
+    private String nombre;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEncabezado")
+    private List<EncabezadoTabla> encabezadoTablaList;
 
-    public Cambio() {
+    public Encabezado() {
     }
 
-    public Cambio(Integer id) {
+    public Encabezado(Integer id) {
         this.id = id;
+    }
+
+    public Encabezado(Integer id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
     }
 
     public Integer getId() {
@@ -62,21 +66,21 @@ public class Cambio implements Serializable {
         this.id = id;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     @XmlTransient
-    public List<SeccionCambio> getSeccionCambioList() {
-        return seccionCambioList;
+    public List<EncabezadoTabla> getEncabezadoTablaList() {
+        return encabezadoTablaList;
     }
 
-    public void setSeccionCambioList(List<SeccionCambio> seccionCambioList) {
-        this.seccionCambioList = seccionCambioList;
-    }
-
-    public Estado getEstadoId() {
-        return estadoId;
-    }
-
-    public void setEstadoId(Estado estadoId) {
-        this.estadoId = estadoId;
+    public void setEncabezadoTablaList(List<EncabezadoTabla> encabezadoTablaList) {
+        this.encabezadoTablaList = encabezadoTablaList;
     }
 
     @Override
@@ -89,10 +93,10 @@ public class Cambio implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Cambio)) {
+        if (!(object instanceof Encabezado)) {
             return false;
         }
-        Cambio other = (Cambio) object;
+        Encabezado other = (Encabezado) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -101,7 +105,7 @@ public class Cambio implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.Cambio[ id=" + id + " ]";
+        return "dto.Encabezado[ id=" + id + " ]";
     }
     
 }
