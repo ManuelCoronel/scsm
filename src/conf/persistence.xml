@@ -28,12 +28,14 @@
     <class>dto.Departamento</class>
     <class>dto.Programa_1</class>
     <class>dto.PrerrequisitoMateria</class>
+    <class>dto.Encabezado</class>
+    <class>tempo.EncabezadoTabla</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://madarme.co:3306/estudiante_31?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="estudiante_31"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="javax.persistence.jdbc.password" value="pCPstUBGOM"/>
+      <property name="javax.persistence.jdbc.password" value="pCPstUBGOM"/>
     </properties>
   </persistence-unit>
 </persistence>

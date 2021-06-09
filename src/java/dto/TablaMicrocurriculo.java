@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "TablaMicrocurriculo.findAll", query = "SELECT t FROM TablaMicrocurriculo t")
     , @NamedQuery(name = "TablaMicrocurriculo.findById", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.id = :id")
     , @NamedQuery(name = "TablaMicrocurriculo.findByCantidadFilas", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.cantidadFilas = :cantidadFilas")
-    , @NamedQuery(name = "TablaMicrocurriculo.findBySeccionMicrocurriculoCodigoMateria", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.seccionMicrocurriculoCodigoMateria = :seccionMicrocurriculoCodigoMateria")})
+    , @NamedQuery(name = "TablaMicrocurriculo.findBySeccionMicrocurriculoCodigoMateria", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.seccionMicrocurriculoCodigoMateria = :seccionMicrocurriculoCodigoMateria")
+    , @NamedQuery(name = "TablaMicrocurriculo.findByCantColumnas", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.cantColumnas = :cantColumnas")})
 public class TablaMicrocurriculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,8 +50,13 @@ public class TablaMicrocurriculo implements Serializable {
     @Basic(optional = false)
     @Column(name = "seccion_microcurriculo_codigo_materia")
     private int seccionMicrocurriculoCodigoMateria;
+    @Basic(optional = false)
+    @Column(name = "cant_columnas")
+    private int cantColumnas;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tablaMicrocurriculo")
     private List<TablaMicrocurriculoInfo> tablaMicrocurriculoInfoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTabla")
+    private List<EncabezadoTabla> encabezadoTablaList;
     @JoinColumn(name = "seccion_microcurriculo_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private SeccionMicrocurriculo seccionMicrocurriculoId;
@@ -62,10 +68,11 @@ public class TablaMicrocurriculo implements Serializable {
         this.id = id;
     }
 
-    public TablaMicrocurriculo(Integer id, int cantidadFilas, int seccionMicrocurriculoCodigoMateria) {
+    public TablaMicrocurriculo(Integer id, int cantidadFilas, int seccionMicrocurriculoCodigoMateria, int cantColumnas) {
         this.id = id;
         this.cantidadFilas = cantidadFilas;
         this.seccionMicrocurriculoCodigoMateria = seccionMicrocurriculoCodigoMateria;
+        this.cantColumnas = cantColumnas;
     }
 
     public Integer getId() {
@@ -92,6 +99,14 @@ public class TablaMicrocurriculo implements Serializable {
         this.seccionMicrocurriculoCodigoMateria = seccionMicrocurriculoCodigoMateria;
     }
 
+    public int getCantColumnas() {
+        return cantColumnas;
+    }
+
+    public void setCantColumnas(int cantColumnas) {
+        this.cantColumnas = cantColumnas;
+    }
+
     @XmlTransient
     public List<TablaMicrocurriculoInfo> getTablaMicrocurriculoInfoList() {
         return tablaMicrocurriculoInfoList;
@@ -99,6 +114,15 @@ public class TablaMicrocurriculo implements Serializable {
 
     public void setTablaMicrocurriculoInfoList(List<TablaMicrocurriculoInfo> tablaMicrocurriculoInfoList) {
         this.tablaMicrocurriculoInfoList = tablaMicrocurriculoInfoList;
+    }
+
+    @XmlTransient
+    public List<EncabezadoTabla> getEncabezadoTablaList() {
+        return encabezadoTablaList;
+    }
+
+    public void setEncabezadoTablaList(List<EncabezadoTabla> encabezadoTablaList) {
+        this.encabezadoTablaList = encabezadoTablaList;
     }
 
     public SeccionMicrocurriculo getSeccionMicrocurriculoId() {

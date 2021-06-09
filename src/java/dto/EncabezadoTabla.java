@@ -6,9 +6,7 @@
 package dto;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,22 +16,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Manuel
  */
 @Entity
-@Table(name = "cambio")
+@Table(name = "encabezado_tabla")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Cambio.findAll", query = "SELECT c FROM Cambio c")
-    , @NamedQuery(name = "Cambio.findById", query = "SELECT c FROM Cambio c WHERE c.id = :id")})
-public class Cambio implements Serializable {
+    @NamedQuery(name = "EncabezadoTabla.findAll", query = "SELECT e FROM EncabezadoTabla e")
+    , @NamedQuery(name = "EncabezadoTabla.findById", query = "SELECT e FROM EncabezadoTabla e WHERE e.id = :id")})
+public class EncabezadoTabla implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,16 +37,17 @@ public class Cambio implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cambioId")
-    private List<SeccionCambio> seccionCambioList;
-    @JoinColumn(name = "estado_id", referencedColumnName = "id")
+    @JoinColumn(name = "id_encabezado", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Estado estadoId;
+    private Encabezado idEncabezado;
+    @JoinColumn(name = "id_tabla", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private TablaMicrocurriculo idTabla;
 
-    public Cambio() {
+    public EncabezadoTabla() {
     }
 
-    public Cambio(Integer id) {
+    public EncabezadoTabla(Integer id) {
         this.id = id;
     }
 
@@ -62,21 +59,20 @@ public class Cambio implements Serializable {
         this.id = id;
     }
 
-    @XmlTransient
-    public List<SeccionCambio> getSeccionCambioList() {
-        return seccionCambioList;
+    public Encabezado getIdEncabezado() {
+        return idEncabezado;
     }
 
-    public void setSeccionCambioList(List<SeccionCambio> seccionCambioList) {
-        this.seccionCambioList = seccionCambioList;
+    public void setIdEncabezado(Encabezado idEncabezado) {
+        this.idEncabezado = idEncabezado;
     }
 
-    public Estado getEstadoId() {
-        return estadoId;
+    public TablaMicrocurriculo getIdTabla() {
+        return idTabla;
     }
 
-    public void setEstadoId(Estado estadoId) {
-        this.estadoId = estadoId;
+    public void setIdTabla(TablaMicrocurriculo idTabla) {
+        this.idTabla = idTabla;
     }
 
     @Override
@@ -89,10 +85,10 @@ public class Cambio implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Cambio)) {
+        if (!(object instanceof EncabezadoTabla)) {
             return false;
         }
-        Cambio other = (Cambio) object;
+        EncabezadoTabla other = (EncabezadoTabla) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -101,7 +97,7 @@ public class Cambio implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.Cambio[ id=" + id + " ]";
+        return "dto.EncabezadoTabla[ id=" + id + " ]";
     }
     
 }
