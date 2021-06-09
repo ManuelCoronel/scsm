@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -26,7 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "TablaMicrocurriculoInfo.findAll", query = "SELECT t FROM TablaMicrocurriculoInfo t")
     , @NamedQuery(name = "TablaMicrocurriculoInfo.findByIdFila", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.idFila = :idFila")
     , @NamedQuery(name = "TablaMicrocurriculoInfo.findByIdColumna", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.idColumna = :idColumna")
-    , @NamedQuery(name = "TablaMicrocurriculoInfo.findByTablaMicrocurriculoId", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.tablaMicrocurriculoId = :tablaMicrocurriculoId")})
+    , @NamedQuery(name = "TablaMicrocurriculoInfo.findByTablaMicrocurriculoId", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.tablaMicrocurriculoId = :tablaMicrocurriculoId")
+    , @NamedQuery(name = "TablaMicrocurriculoInfo.findByTablaId", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.tablaId = :tablaId")})
 public class TablaMicrocurriculoInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +37,9 @@ public class TablaMicrocurriculoInfo implements Serializable {
     @JoinColumn(name = "contenido_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Contenido contenidoId;
-    @JoinColumn(name = "tabla_microcurriculo_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumns({
+        @JoinColumn(name = "tabla_id", referencedColumnName = "id", insertable = false, updatable = false)
+        , @JoinColumn(name = "tabla_microcurriculo_id", referencedColumnName = "seccion_microcurriculo_id", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private TablaMicrocurriculo tablaMicrocurriculo;
 
@@ -46,8 +50,8 @@ public class TablaMicrocurriculoInfo implements Serializable {
         this.tablaMicrocurriculoInfoPK = tablaMicrocurriculoInfoPK;
     }
 
-    public TablaMicrocurriculoInfo(int idFila, int idColumna, int tablaMicrocurriculoId) {
-        this.tablaMicrocurriculoInfoPK = new TablaMicrocurriculoInfoPK(idFila, idColumna, tablaMicrocurriculoId);
+    public TablaMicrocurriculoInfo(int idFila, int idColumna, int tablaMicrocurriculoId, int tablaId) {
+        this.tablaMicrocurriculoInfoPK = new TablaMicrocurriculoInfoPK(idFila, idColumna, tablaMicrocurriculoId, tablaId);
     }
 
     public TablaMicrocurriculoInfoPK getTablaMicrocurriculoInfoPK() {
