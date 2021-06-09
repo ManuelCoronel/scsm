@@ -13,7 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -41,12 +41,11 @@ public class EncabezadoTabla implements Serializable {
     @JoinColumn(name = "id_encabezado", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Encabezado idEncabezado;
-    @JoinColumn(name = "id_tabla", referencedColumnName = "id")
+    @JoinColumns({
+        @JoinColumn(name = "id_tabla", referencedColumnName = "id")
+        , @JoinColumn(name = "id_seccion", referencedColumnName = "seccion_microcurriculo_id")})
     @ManyToOne(optional = false)
-    private TablaMicrocurriculo idTabla;
-    @JoinColumn(name = "id_seccion", referencedColumnName = "seccion_microcurriculo_id")
-    @ManyToOne(optional = false)
-    private TablaMicrocurriculo idSeccion;
+    private TablaMicrocurriculo tablaMicrocurriculo;
 
     public EncabezadoTabla() {
     }
@@ -71,20 +70,12 @@ public class EncabezadoTabla implements Serializable {
         this.idEncabezado = idEncabezado;
     }
 
-    public TablaMicrocurriculo getIdTabla() {
-        return idTabla;
+    public TablaMicrocurriculo getTablaMicrocurriculo() {
+        return tablaMicrocurriculo;
     }
 
-    public void setIdTabla(TablaMicrocurriculo idTabla) {
-        this.idTabla = idTabla;
-    }
-
-    public TablaMicrocurriculo getIdSeccion() {
-        return idSeccion;
-    }
-
-    public void setIdSeccion(TablaMicrocurriculo idSeccion) {
-        this.idSeccion = idSeccion;
+    public void setTablaMicrocurriculo(TablaMicrocurriculo tablaMicrocurriculo) {
+        this.tablaMicrocurriculo = tablaMicrocurriculo;
     }
 
     @Override
