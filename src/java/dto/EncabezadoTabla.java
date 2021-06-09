@@ -44,6 +44,9 @@ public class EncabezadoTabla implements Serializable {
     @JoinColumn(name = "id_tabla", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TablaMicrocurriculo idTabla;
+    @JoinColumn(name = "id_seccion", referencedColumnName = "seccion_microcurriculo_id")
+    @ManyToOne(optional = false)
+    private TablaMicrocurriculo idSeccion;
 
     public EncabezadoTabla() {
     }
@@ -74,6 +77,14 @@ public class EncabezadoTabla implements Serializable {
 
     public void setIdTabla(TablaMicrocurriculo idTabla) {
         this.idTabla = idTabla;
+    }
+
+    public TablaMicrocurriculo getIdSeccion() {
+        return idSeccion;
+    }
+
+    public void setIdSeccion(TablaMicrocurriculo idSeccion) {
+        this.idSeccion = idSeccion;
     }
 
     @Override

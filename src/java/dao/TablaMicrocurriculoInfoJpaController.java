@@ -39,8 +39,8 @@ public class TablaMicrocurriculoInfoJpaController implements Serializable {
         if (tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK() == null) {
             tablaMicrocurriculoInfo.setTablaMicrocurriculoInfoPK(new TablaMicrocurriculoInfoPK());
         }
-        tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getTablaMicrocurriculoPK().getId());
         tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaMicrocurriculoId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getTablaMicrocurriculoPK().getSeccionMicrocurriculoId());
+        tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getTablaMicrocurriculoPK().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -78,8 +78,8 @@ public class TablaMicrocurriculoInfoJpaController implements Serializable {
     }
 
     public void edit(TablaMicrocurriculoInfo tablaMicrocurriculoInfo) throws NonexistentEntityException, Exception {
-        tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getTablaMicrocurriculoPK().getId());
         tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaMicrocurriculoId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getTablaMicrocurriculoPK().getSeccionMicrocurriculoId());
+        tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getTablaMicrocurriculoPK().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
