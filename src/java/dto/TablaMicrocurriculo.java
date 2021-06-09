@@ -10,10 +10,8 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -32,24 +30,18 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TablaMicrocurriculo.findAll", query = "SELECT t FROM TablaMicrocurriculo t")
-    , @NamedQuery(name = "TablaMicrocurriculo.findById", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.id = :id")
+    , @NamedQuery(name = "TablaMicrocurriculo.findById", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.tablaMicrocurriculoPK.id = :id")
     , @NamedQuery(name = "TablaMicrocurriculo.findByCantidadFilas", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.cantidadFilas = :cantidadFilas")
-    , @NamedQuery(name = "TablaMicrocurriculo.findBySeccionMicrocurriculoCodigoMateria", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.seccionMicrocurriculoCodigoMateria = :seccionMicrocurriculoCodigoMateria")
+    , @NamedQuery(name = "TablaMicrocurriculo.findBySeccionMicrocurriculoId", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.tablaMicrocurriculoPK.seccionMicrocurriculoId = :seccionMicrocurriculoId")
     , @NamedQuery(name = "TablaMicrocurriculo.findByCantColumnas", query = "SELECT t FROM TablaMicrocurriculo t WHERE t.cantColumnas = :cantColumnas")})
 public class TablaMicrocurriculo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
+    @EmbeddedId
+    protected TablaMicrocurriculoPK tablaMicrocurriculoPK;
     @Basic(optional = false)
     @Column(name = "cantidad_filas")
     private int cantidadFilas;
-    @Basic(optional = false)
-    @Column(name = "seccion_microcurriculo_codigo_materia")
-    private int seccionMicrocurriculoCodigoMateria;
     @Basic(optional = false)
     @Column(name = "cant_columnas")
     private int cantColumnas;
@@ -57,30 +49,33 @@ public class TablaMicrocurriculo implements Serializable {
     private List<TablaMicrocurriculoInfo> tablaMicrocurriculoInfoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTabla")
     private List<EncabezadoTabla> encabezadoTablaList;
-    @JoinColumn(name = "seccion_microcurriculo_id", referencedColumnName = "id")
+    @JoinColumn(name = "seccion_microcurriculo_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private SeccionMicrocurriculo seccionMicrocurriculoId;
+    private SeccionMicrocurriculo seccionMicrocurriculo;
 
     public TablaMicrocurriculo() {
     }
 
-    public TablaMicrocurriculo(Integer id) {
-        this.id = id;
+    public TablaMicrocurriculo(TablaMicrocurriculoPK tablaMicrocurriculoPK) {
+        this.tablaMicrocurriculoPK = tablaMicrocurriculoPK;
     }
 
-    public TablaMicrocurriculo(Integer id, int cantidadFilas, int seccionMicrocurriculoCodigoMateria, int cantColumnas) {
-        this.id = id;
+    public TablaMicrocurriculo(TablaMicrocurriculoPK tablaMicrocurriculoPK, int cantidadFilas, int cantColumnas) {
+        this.tablaMicrocurriculoPK = tablaMicrocurriculoPK;
         this.cantidadFilas = cantidadFilas;
-        this.seccionMicrocurriculoCodigoMateria = seccionMicrocurriculoCodigoMateria;
         this.cantColumnas = cantColumnas;
     }
 
-    public Integer getId() {
-        return id;
+    public TablaMicrocurriculo(int id, int seccionMicrocurriculoId) {
+        this.tablaMicrocurriculoPK = new TablaMicrocurriculoPK(id, seccionMicrocurriculoId);
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public TablaMicrocurriculoPK getTablaMicrocurriculoPK() {
+        return tablaMicrocurriculoPK;
+    }
+
+    public void setTablaMicrocurriculoPK(TablaMicrocurriculoPK tablaMicrocurriculoPK) {
+        this.tablaMicrocurriculoPK = tablaMicrocurriculoPK;
     }
 
     public int getCantidadFilas() {
@@ -89,14 +84,6 @@ public class TablaMicrocurriculo implements Serializable {
 
     public void setCantidadFilas(int cantidadFilas) {
         this.cantidadFilas = cantidadFilas;
-    }
-
-    public int getSeccionMicrocurriculoCodigoMateria() {
-        return seccionMicrocurriculoCodigoMateria;
-    }
-
-    public void setSeccionMicrocurriculoCodigoMateria(int seccionMicrocurriculoCodigoMateria) {
-        this.seccionMicrocurriculoCodigoMateria = seccionMicrocurriculoCodigoMateria;
     }
 
     public int getCantColumnas() {
@@ -125,18 +112,18 @@ public class TablaMicrocurriculo implements Serializable {
         this.encabezadoTablaList = encabezadoTablaList;
     }
 
-    public SeccionMicrocurriculo getSeccionMicrocurriculoId() {
-        return seccionMicrocurriculoId;
+    public SeccionMicrocurriculo getSeccionMicrocurriculo() {
+        return seccionMicrocurriculo;
     }
 
-    public void setSeccionMicrocurriculoId(SeccionMicrocurriculo seccionMicrocurriculoId) {
-        this.seccionMicrocurriculoId = seccionMicrocurriculoId;
+    public void setSeccionMicrocurriculo(SeccionMicrocurriculo seccionMicrocurriculo) {
+        this.seccionMicrocurriculo = seccionMicrocurriculo;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (tablaMicrocurriculoPK != null ? tablaMicrocurriculoPK.hashCode() : 0);
         return hash;
     }
 
@@ -147,7 +134,7 @@ public class TablaMicrocurriculo implements Serializable {
             return false;
         }
         TablaMicrocurriculo other = (TablaMicrocurriculo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.tablaMicrocurriculoPK == null && other.tablaMicrocurriculoPK != null) || (this.tablaMicrocurriculoPK != null && !this.tablaMicrocurriculoPK.equals(other.tablaMicrocurriculoPK))) {
             return false;
         }
         return true;
@@ -155,7 +142,7 @@ public class TablaMicrocurriculo implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.TablaMicrocurriculo[ id=" + id + " ]";
+        return "dto.TablaMicrocurriculo[ tablaMicrocurriculoPK=" + tablaMicrocurriculoPK + " ]";
     }
     
 }

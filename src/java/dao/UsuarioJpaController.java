@@ -39,8 +39,8 @@ public class UsuarioJpaController implements Serializable {
         if (usuario.getUsuarioPK() == null) {
             usuario.setUsuarioPK(new UsuarioPK());
         }
-        usuario.getUsuarioPK().setRolId(usuario.getRol().getId());
         usuario.getUsuarioPK().setDocenteCodigo(usuario.getDocente().getCodigoDocente());
+        usuario.getUsuarioPK().setRolId(usuario.getRol().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -78,8 +78,8 @@ public class UsuarioJpaController implements Serializable {
     }
 
     public void edit(Usuario usuario) throws NonexistentEntityException, Exception {
-        usuario.getUsuarioPK().setRolId(usuario.getRol().getId());
         usuario.getUsuarioPK().setDocenteCodigo(usuario.getDocente().getCodigoDocente());
+        usuario.getUsuarioPK().setRolId(usuario.getRol().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();

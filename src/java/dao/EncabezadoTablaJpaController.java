@@ -45,7 +45,7 @@ public class EncabezadoTablaJpaController implements Serializable {
             }
             TablaMicrocurriculo idTabla = encabezadoTabla.getIdTabla();
             if (idTabla != null) {
-                idTabla = em.getReference(idTabla.getClass(), idTabla.getId());
+                idTabla = em.getReference(idTabla.getClass(), idTabla.getTablaMicrocurriculoPK());
                 encabezadoTabla.setIdTabla(idTabla);
             }
             em.persist(encabezadoTabla);
@@ -80,7 +80,7 @@ public class EncabezadoTablaJpaController implements Serializable {
                 encabezadoTabla.setIdEncabezado(idEncabezadoNew);
             }
             if (idTablaNew != null) {
-                idTablaNew = em.getReference(idTablaNew.getClass(), idTablaNew.getId());
+                idTablaNew = em.getReference(idTablaNew.getClass(), idTablaNew.getTablaMicrocurriculoPK());
                 encabezadoTabla.setIdTabla(idTablaNew);
             }
             encabezadoTabla = em.merge(encabezadoTabla);
