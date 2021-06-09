@@ -49,6 +49,8 @@ public class TablaMicrocurriculo implements Serializable {
     private List<TablaMicrocurriculoInfo> tablaMicrocurriculoInfoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTabla")
     private List<EncabezadoTabla> encabezadoTablaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSeccion")
+    private List<EncabezadoTabla> encabezadoTablaList1;
     @JoinColumn(name = "seccion_microcurriculo_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private SeccionMicrocurriculo seccionMicrocurriculo;
@@ -110,6 +112,15 @@ public class TablaMicrocurriculo implements Serializable {
 
     public void setEncabezadoTablaList(List<EncabezadoTabla> encabezadoTablaList) {
         this.encabezadoTablaList = encabezadoTablaList;
+    }
+
+    @XmlTransient
+    public List<EncabezadoTabla> getEncabezadoTablaList1() {
+        return encabezadoTablaList1;
+    }
+
+    public void setEncabezadoTablaList1(List<EncabezadoTabla> encabezadoTablaList1) {
+        this.encabezadoTablaList1 = encabezadoTablaList1;
     }
 
     public SeccionMicrocurriculo getSeccionMicrocurriculo() {

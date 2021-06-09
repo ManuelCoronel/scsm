@@ -48,6 +48,11 @@ public class EncabezadoTablaJpaController implements Serializable {
                 idTabla = em.getReference(idTabla.getClass(), idTabla.getTablaMicrocurriculoPK());
                 encabezadoTabla.setIdTabla(idTabla);
             }
+            TablaMicrocurriculo idSeccion = encabezadoTabla.getIdSeccion();
+            if (idSeccion != null) {
+                idSeccion = em.getReference(idSeccion.getClass(), idSeccion.getTablaMicrocurriculoPK());
+                encabezadoTabla.setIdSeccion(idSeccion);
+            }
             em.persist(encabezadoTabla);
             if (idEncabezado != null) {
                 idEncabezado.getEncabezadoTablaList().add(encabezadoTabla);
@@ -56,6 +61,10 @@ public class EncabezadoTablaJpaController implements Serializable {
             if (idTabla != null) {
                 idTabla.getEncabezadoTablaList().add(encabezadoTabla);
                 idTabla = em.merge(idTabla);
+            }
+            if (idSeccion != null) {
+                idSeccion.getEncabezadoTablaList().add(encabezadoTabla);
+                idSeccion = em.merge(idSeccion);
             }
             em.getTransaction().commit();
         } finally {
@@ -75,6 +84,8 @@ public class EncabezadoTablaJpaController implements Serializable {
             Encabezado idEncabezadoNew = encabezadoTabla.getIdEncabezado();
             TablaMicrocurriculo idTablaOld = persistentEncabezadoTabla.getIdTabla();
             TablaMicrocurriculo idTablaNew = encabezadoTabla.getIdTabla();
+            TablaMicrocurriculo idSeccionOld = persistentEncabezadoTabla.getIdSeccion();
+            TablaMicrocurriculo idSeccionNew = encabezadoTabla.getIdSeccion();
             if (idEncabezadoNew != null) {
                 idEncabezadoNew = em.getReference(idEncabezadoNew.getClass(), idEncabezadoNew.getId());
                 encabezadoTabla.setIdEncabezado(idEncabezadoNew);
@@ -82,6 +93,10 @@ public class EncabezadoTablaJpaController implements Serializable {
             if (idTablaNew != null) {
                 idTablaNew = em.getReference(idTablaNew.getClass(), idTablaNew.getTablaMicrocurriculoPK());
                 encabezadoTabla.setIdTabla(idTablaNew);
+            }
+            if (idSeccionNew != null) {
+                idSeccionNew = em.getReference(idSeccionNew.getClass(), idSeccionNew.getTablaMicrocurriculoPK());
+                encabezadoTabla.setIdSeccion(idSeccionNew);
             }
             encabezadoTabla = em.merge(encabezadoTabla);
             if (idEncabezadoOld != null && !idEncabezadoOld.equals(idEncabezadoNew)) {
@@ -99,6 +114,14 @@ public class EncabezadoTablaJpaController implements Serializable {
             if (idTablaNew != null && !idTablaNew.equals(idTablaOld)) {
                 idTablaNew.getEncabezadoTablaList().add(encabezadoTabla);
                 idTablaNew = em.merge(idTablaNew);
+            }
+            if (idSeccionOld != null && !idSeccionOld.equals(idSeccionNew)) {
+                idSeccionOld.getEncabezadoTablaList().remove(encabezadoTabla);
+                idSeccionOld = em.merge(idSeccionOld);
+            }
+            if (idSeccionNew != null && !idSeccionNew.equals(idSeccionOld)) {
+                idSeccionNew.getEncabezadoTablaList().add(encabezadoTabla);
+                idSeccionNew = em.merge(idSeccionNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -138,6 +161,11 @@ public class EncabezadoTablaJpaController implements Serializable {
             if (idTabla != null) {
                 idTabla.getEncabezadoTablaList().remove(encabezadoTabla);
                 idTabla = em.merge(idTabla);
+            }
+            TablaMicrocurriculo idSeccion = encabezadoTabla.getIdSeccion();
+            if (idSeccion != null) {
+                idSeccion.getEncabezadoTablaList().remove(encabezadoTabla);
+                idSeccion = em.merge(idSeccion);
             }
             em.remove(encabezadoTabla);
             em.getTransaction().commit();
