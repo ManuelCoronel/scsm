@@ -6,7 +6,6 @@
 package negocio;
 
 import dao.ContenidoJpaController;
-import dao.EncabezadoJpaController;
 import dao.EncabezadoTablaJpaController;
 import dao.MicrocurriculoJpaController;
 import dao.SeccionJpaController;
@@ -44,13 +43,13 @@ public class RegistroMicrocurriculoBackground extends Thread {
     @Override
     public void run() {
         try {
-            this.registrarMicrocurriculos(pensum);
+            this.registrarMicrocurriculos();
         } catch (Exception err) {
             err.printStackTrace();
         }
     }
 
-    private void registrarMicrocurriculos(Pensum pensum) throws Exception {
+    private void registrarMicrocurriculos() throws Exception {
        
         EntityManagerFactory em = Conexion.getConexion().getBd();
         SeccionJpaController tjpa = new SeccionJpaController(em);
@@ -99,15 +98,15 @@ public class RegistroMicrocurriculoBackground extends Thread {
                 sjpa.create(s);
                 TablaMicrocurriculo tm = new TablaMicrocurriculo();
                 tm.setCantidadFilas(a);
-                tm.setCantColumnas(s.getId()==1 ? 5 : 3);
                 tm.setSeccionMicrocurriculo(s);
                 tm.setTablaMicrocurriculoPK(new TablaMicrocurriculoPK(id++, s.getId()));
+                tm.setCantColumnas(tm.getTablaMicrocurriculoPK().getId()==1 ? 5 : 3);
                 tmjpa.create(tm);
                 List<EncabezadoTabla> ets = new ArrayList<>();
                 for(int i=(s.getId()==1 ? 0 : 5); i<tm.getCantColumnas(); i++){
                     EncabezadoTabla et = new EncabezadoTabla();
                     et.setIdEncabezado(new Encabezado(i+1));
-                    et.setIdTabla(tm);
+                    et.setTablaMicrocurriculo(tm);
                     ets.add(et);
                     etjpa.create(et);
                 }

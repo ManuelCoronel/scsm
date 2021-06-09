@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import negocio.AdministrarMicrocurriculo;
+import negocio.RegistroMicrocurriculoBackground;
 
 /**
  *
@@ -92,6 +93,14 @@ public class ControladorMicrocurriculo extends HttpServlet {
           if (accion.equalsIgnoreCase("Consultar")) {
             consultar(request, response);
         }
+          
+        if(accion.equalsIgnoreCase("registrar")){
+            try{
+                registrarSachica(request, response);
+            }catch(Exception err){
+                System.out.println(err.getMessage());
+            }
+        }
     }
 
     @Override
@@ -158,6 +167,10 @@ public class ControladorMicrocurriculo extends HttpServlet {
         response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
     }
 
+    private void registrarSachica(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        new RegistroMicrocurriculoBackground(((Pensum)request.getSession().getAttribute("pensum"))).start();
+    }
+    
     @Override
     public String getServletInfo() {
         return "Short description";
