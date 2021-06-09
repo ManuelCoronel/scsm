@@ -61,7 +61,7 @@ public class SeccionMicrocurriculo implements Serializable {
     private List<SeccionCambio> seccionCambioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculoIdAntigua")
     private List<SeccionCambio> seccionCambioList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculoId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seccionMicrocurriculo")
     private List<TablaMicrocurriculo> tablaMicrocurriculoList;
 
     public SeccionMicrocurriculo() {

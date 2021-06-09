@@ -39,7 +39,8 @@ public class TablaMicrocurriculoInfoJpaController implements Serializable {
         if (tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK() == null) {
             tablaMicrocurriculoInfo.setTablaMicrocurriculoInfoPK(new TablaMicrocurriculoInfoPK());
         }
-        tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaMicrocurriculoId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getId());
+        tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaMicrocurriculoId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getTablaMicrocurriculoPK().getSeccionMicrocurriculoId());
+        tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getTablaMicrocurriculoPK().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -51,7 +52,7 @@ public class TablaMicrocurriculoInfoJpaController implements Serializable {
             }
             TablaMicrocurriculo tablaMicrocurriculo = tablaMicrocurriculoInfo.getTablaMicrocurriculo();
             if (tablaMicrocurriculo != null) {
-                tablaMicrocurriculo = em.getReference(tablaMicrocurriculo.getClass(), tablaMicrocurriculo.getId());
+                tablaMicrocurriculo = em.getReference(tablaMicrocurriculo.getClass(), tablaMicrocurriculo.getTablaMicrocurriculoPK());
                 tablaMicrocurriculoInfo.setTablaMicrocurriculo(tablaMicrocurriculo);
             }
             em.persist(tablaMicrocurriculoInfo);
@@ -77,7 +78,8 @@ public class TablaMicrocurriculoInfoJpaController implements Serializable {
     }
 
     public void edit(TablaMicrocurriculoInfo tablaMicrocurriculoInfo) throws NonexistentEntityException, Exception {
-        tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaMicrocurriculoId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getId());
+        tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaMicrocurriculoId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getTablaMicrocurriculoPK().getSeccionMicrocurriculoId());
+        tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK().setTablaId(tablaMicrocurriculoInfo.getTablaMicrocurriculo().getTablaMicrocurriculoPK().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -92,7 +94,7 @@ public class TablaMicrocurriculoInfoJpaController implements Serializable {
                 tablaMicrocurriculoInfo.setContenidoId(contenidoIdNew);
             }
             if (tablaMicrocurriculoNew != null) {
-                tablaMicrocurriculoNew = em.getReference(tablaMicrocurriculoNew.getClass(), tablaMicrocurriculoNew.getId());
+                tablaMicrocurriculoNew = em.getReference(tablaMicrocurriculoNew.getClass(), tablaMicrocurriculoNew.getTablaMicrocurriculoPK());
                 tablaMicrocurriculoInfo.setTablaMicrocurriculo(tablaMicrocurriculoNew);
             }
             tablaMicrocurriculoInfo = em.merge(tablaMicrocurriculoInfo);
