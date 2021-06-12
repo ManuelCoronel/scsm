@@ -18,30 +18,26 @@ import javax.persistence.Embeddable;
 public class MateriaPeriodoPK implements Serializable {
 
     @Basic(optional = false)
-    @Column(name = "materia_codigo_materia")
-    private int materiaCodigoMateria;
-    @Basic(optional = false)
     @Column(name = "anio")
     private int anio;
     @Basic(optional = false)
     @Column(name = "semestre_anio")
     private int semestreAnio;
+    @Basic(optional = false)
+    @Column(name = "materia_codigo_materia")
+    private int materiaCodigoMateria;
+    @Basic(optional = false)
+    @Column(name = "materia_pensum_codigo")
+    private int materiaPensumCodigo;
 
     public MateriaPeriodoPK() {
     }
 
-    public MateriaPeriodoPK(int materiaCodigoMateria, int anio, int semestreAnio) {
-        this.materiaCodigoMateria = materiaCodigoMateria;
+    public MateriaPeriodoPK(int anio, int semestreAnio, int materiaCodigoMateria, int materiaPensumCodigo) {
         this.anio = anio;
         this.semestreAnio = semestreAnio;
-    }
-
-    public int getMateriaCodigoMateria() {
-        return materiaCodigoMateria;
-    }
-
-    public void setMateriaCodigoMateria(int materiaCodigoMateria) {
         this.materiaCodigoMateria = materiaCodigoMateria;
+        this.materiaPensumCodigo = materiaPensumCodigo;
     }
 
     public int getAnio() {
@@ -60,12 +56,29 @@ public class MateriaPeriodoPK implements Serializable {
         this.semestreAnio = semestreAnio;
     }
 
+    public int getMateriaCodigoMateria() {
+        return materiaCodigoMateria;
+    }
+
+    public void setMateriaCodigoMateria(int materiaCodigoMateria) {
+        this.materiaCodigoMateria = materiaCodigoMateria;
+    }
+
+    public int getMateriaPensumCodigo() {
+        return materiaPensumCodigo;
+    }
+
+    public void setMateriaPensumCodigo(int materiaPensumCodigo) {
+        this.materiaPensumCodigo = materiaPensumCodigo;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) materiaCodigoMateria;
         hash += (int) anio;
         hash += (int) semestreAnio;
+        hash += (int) materiaCodigoMateria;
+        hash += (int) materiaPensumCodigo;
         return hash;
     }
 
@@ -76,13 +89,16 @@ public class MateriaPeriodoPK implements Serializable {
             return false;
         }
         MateriaPeriodoPK other = (MateriaPeriodoPK) object;
-        if (this.materiaCodigoMateria != other.materiaCodigoMateria) {
-            return false;
-        }
         if (this.anio != other.anio) {
             return false;
         }
         if (this.semestreAnio != other.semestreAnio) {
+            return false;
+        }
+        if (this.materiaCodigoMateria != other.materiaCodigoMateria) {
+            return false;
+        }
+        if (this.materiaPensumCodigo != other.materiaPensumCodigo) {
             return false;
         }
         return true;
@@ -90,7 +106,7 @@ public class MateriaPeriodoPK implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.MateriaPeriodoPK[ materiaCodigoMateria=" + materiaCodigoMateria + ", anio=" + anio + ", semestreAnio=" + semestreAnio + " ]";
+        return "dto.MateriaPeriodoPK[ anio=" + anio + ", semestreAnio=" + semestreAnio + ", materiaCodigoMateria=" + materiaCodigoMateria + ", materiaPensumCodigo=" + materiaPensumCodigo + " ]";
     }
     
 }

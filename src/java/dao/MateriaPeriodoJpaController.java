@@ -44,6 +44,8 @@ public class MateriaPeriodoJpaController implements Serializable {
         if (materiaPeriodo.getMateriaPeriodoGrupoList() == null) {
             materiaPeriodo.setMateriaPeriodoGrupoList(new ArrayList<MateriaPeriodoGrupo>());
         }
+        materiaPeriodo.getMateriaPeriodoPK().setMateriaCodigoMateria(materiaPeriodo.getMateria().getMateriaPK().getCodigoMateria());
+        materiaPeriodo.getMateriaPeriodoPK().setMateriaPensumCodigo(materiaPeriodo.getMateria().getMateriaPK().getPensumCodigo());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -87,6 +89,8 @@ public class MateriaPeriodoJpaController implements Serializable {
     }
 
     public void edit(MateriaPeriodo materiaPeriodo) throws IllegalOrphanException, NonexistentEntityException, Exception {
+        materiaPeriodo.getMateriaPeriodoPK().setMateriaCodigoMateria(materiaPeriodo.getMateria().getMateriaPK().getCodigoMateria());
+        materiaPeriodo.getMateriaPeriodoPK().setMateriaPensumCodigo(materiaPeriodo.getMateria().getMateriaPK().getPensumCodigo());
         EntityManager em = null;
         try {
             em = getEntityManager();

@@ -51,7 +51,6 @@ public class Docente implements Serializable {
     @Basic(optional = false)
     @Column(name = "estado")
     private short estado;
-    @Basic(optional = false)
     @Lob
     @Column(name = "img_perfil")
     private byte[] imgPerfil;
@@ -72,12 +71,11 @@ public class Docente implements Serializable {
         this.codigoDocente = codigoDocente;
     }
 
-    public Docente(Integer codigoDocente, String nombre, String apellido, short estado, byte[] imgPerfil) {
+    public Docente(Integer codigoDocente, String nombre, String apellido, short estado) {
         this.codigoDocente = codigoDocente;
         this.nombre = nombre;
         this.apellido = apellido;
         this.estado = estado;
-        this.imgPerfil = imgPerfil;
     }
 
     public Integer getCodigoDocente() {

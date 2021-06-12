@@ -23,13 +23,29 @@ public class MateriaPeriodoGrupoPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "docente_codigo")
     private int docenteCodigo;
+    @Basic(optional = false)
+    @Column(name = "materia_periodo_anio")
+    private int materiaPeriodoAnio;
+    @Basic(optional = false)
+    @Column(name = "materia_periodo_semestre_anio")
+    private int materiaPeriodoSemestreAnio;
+    @Basic(optional = false)
+    @Column(name = "materia_periodo_materia_pensum_codigo")
+    private int materiaPeriodoMateriaPensumCodigo;
+    @Basic(optional = false)
+    @Column(name = "materia_periodo_materia_codigo_materia")
+    private int materiaPeriodoMateriaCodigoMateria;
 
     public MateriaPeriodoGrupoPK() {
     }
 
-    public MateriaPeriodoGrupoPK(String grupo, int docenteCodigo) {
+    public MateriaPeriodoGrupoPK(String grupo, int docenteCodigo, int materiaPeriodoAnio, int materiaPeriodoSemestreAnio, int materiaPeriodoMateriaPensumCodigo, int materiaPeriodoMateriaCodigoMateria) {
         this.grupo = grupo;
         this.docenteCodigo = docenteCodigo;
+        this.materiaPeriodoAnio = materiaPeriodoAnio;
+        this.materiaPeriodoSemestreAnio = materiaPeriodoSemestreAnio;
+        this.materiaPeriodoMateriaPensumCodigo = materiaPeriodoMateriaPensumCodigo;
+        this.materiaPeriodoMateriaCodigoMateria = materiaPeriodoMateriaCodigoMateria;
     }
 
     public String getGrupo() {
@@ -48,11 +64,47 @@ public class MateriaPeriodoGrupoPK implements Serializable {
         this.docenteCodigo = docenteCodigo;
     }
 
+    public int getMateriaPeriodoAnio() {
+        return materiaPeriodoAnio;
+    }
+
+    public void setMateriaPeriodoAnio(int materiaPeriodoAnio) {
+        this.materiaPeriodoAnio = materiaPeriodoAnio;
+    }
+
+    public int getMateriaPeriodoSemestreAnio() {
+        return materiaPeriodoSemestreAnio;
+    }
+
+    public void setMateriaPeriodoSemestreAnio(int materiaPeriodoSemestreAnio) {
+        this.materiaPeriodoSemestreAnio = materiaPeriodoSemestreAnio;
+    }
+
+    public int getMateriaPeriodoMateriaPensumCodigo() {
+        return materiaPeriodoMateriaPensumCodigo;
+    }
+
+    public void setMateriaPeriodoMateriaPensumCodigo(int materiaPeriodoMateriaPensumCodigo) {
+        this.materiaPeriodoMateriaPensumCodigo = materiaPeriodoMateriaPensumCodigo;
+    }
+
+    public int getMateriaPeriodoMateriaCodigoMateria() {
+        return materiaPeriodoMateriaCodigoMateria;
+    }
+
+    public void setMateriaPeriodoMateriaCodigoMateria(int materiaPeriodoMateriaCodigoMateria) {
+        this.materiaPeriodoMateriaCodigoMateria = materiaPeriodoMateriaCodigoMateria;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (grupo != null ? grupo.hashCode() : 0);
         hash += (int) docenteCodigo;
+        hash += (int) materiaPeriodoAnio;
+        hash += (int) materiaPeriodoSemestreAnio;
+        hash += (int) materiaPeriodoMateriaPensumCodigo;
+        hash += (int) materiaPeriodoMateriaCodigoMateria;
         return hash;
     }
 
@@ -69,12 +121,24 @@ public class MateriaPeriodoGrupoPK implements Serializable {
         if (this.docenteCodigo != other.docenteCodigo) {
             return false;
         }
+        if (this.materiaPeriodoAnio != other.materiaPeriodoAnio) {
+            return false;
+        }
+        if (this.materiaPeriodoSemestreAnio != other.materiaPeriodoSemestreAnio) {
+            return false;
+        }
+        if (this.materiaPeriodoMateriaPensumCodigo != other.materiaPeriodoMateriaPensumCodigo) {
+            return false;
+        }
+        if (this.materiaPeriodoMateriaCodigoMateria != other.materiaPeriodoMateriaCodigoMateria) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "dto.MateriaPeriodoGrupoPK[ grupo=" + grupo + ", docenteCodigo=" + docenteCodigo + " ]";
+        return "dto.MateriaPeriodoGrupoPK[ grupo=" + grupo + ", docenteCodigo=" + docenteCodigo + ", materiaPeriodoAnio=" + materiaPeriodoAnio + ", materiaPeriodoSemestreAnio=" + materiaPeriodoSemestreAnio + ", materiaPeriodoMateriaPensumCodigo=" + materiaPeriodoMateriaPensumCodigo + ", materiaPeriodoMateriaCodigoMateria=" + materiaPeriodoMateriaCodigoMateria + " ]";
     }
     
 }

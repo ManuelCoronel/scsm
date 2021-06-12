@@ -27,17 +27,17 @@ public class TablaMicrocurriculoInfoPK implements Serializable {
     @Column(name = "tabla_microcurriculo_id")
     private int tablaMicrocurriculoId;
     @Basic(optional = false)
-    @Column(name = "tabla_id")
-    private int tablaId;
+    @Column(name = "tabla_microcurriculo_seccion_microcurriculo_id")
+    private int tablaMicrocurriculoSeccionMicrocurriculoId;
 
     public TablaMicrocurriculoInfoPK() {
     }
 
-    public TablaMicrocurriculoInfoPK(int idFila, int idColumna, int tablaMicrocurriculoId, int tablaId) {
+    public TablaMicrocurriculoInfoPK(int idFila, int idColumna, int tablaMicrocurriculoId, int tablaMicrocurriculoSeccionMicrocurriculoId) {
         this.idFila = idFila;
         this.idColumna = idColumna;
         this.tablaMicrocurriculoId = tablaMicrocurriculoId;
-        this.tablaId = tablaId;
+        this.tablaMicrocurriculoSeccionMicrocurriculoId = tablaMicrocurriculoSeccionMicrocurriculoId;
     }
 
     public int getIdFila() {
@@ -64,12 +64,12 @@ public class TablaMicrocurriculoInfoPK implements Serializable {
         this.tablaMicrocurriculoId = tablaMicrocurriculoId;
     }
 
-    public int getTablaId() {
-        return tablaId;
+    public int getTablaMicrocurriculoSeccionMicrocurriculoId() {
+        return tablaMicrocurriculoSeccionMicrocurriculoId;
     }
 
-    public void setTablaId(int tablaId) {
-        this.tablaId = tablaId;
+    public void setTablaMicrocurriculoSeccionMicrocurriculoId(int tablaMicrocurriculoSeccionMicrocurriculoId) {
+        this.tablaMicrocurriculoSeccionMicrocurriculoId = tablaMicrocurriculoSeccionMicrocurriculoId;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class TablaMicrocurriculoInfoPK implements Serializable {
         hash += (int) idFila;
         hash += (int) idColumna;
         hash += (int) tablaMicrocurriculoId;
-        hash += (int) tablaId;
+        hash += (int) tablaMicrocurriculoSeccionMicrocurriculoId;
         return hash;
     }
 
@@ -98,7 +98,7 @@ public class TablaMicrocurriculoInfoPK implements Serializable {
         if (this.tablaMicrocurriculoId != other.tablaMicrocurriculoId) {
             return false;
         }
-        if (this.tablaId != other.tablaId) {
+        if (this.tablaMicrocurriculoSeccionMicrocurriculoId != other.tablaMicrocurriculoSeccionMicrocurriculoId) {
             return false;
         }
         return true;
@@ -106,7 +106,7 @@ public class TablaMicrocurriculoInfoPK implements Serializable {
 
     @Override
     public String toString() {
-        return "dto.TablaMicrocurriculoInfoPK[ idFila=" + idFila + ", idColumna=" + idColumna + ", tablaMicrocurriculoId=" + tablaMicrocurriculoId + ", tablaId=" + tablaId + " ]";
+        return "dto.TablaMicrocurriculoInfoPK[ idFila=" + idFila + ", idColumna=" + idColumna + ", tablaMicrocurriculoId=" + tablaMicrocurriculoId + ", tablaMicrocurriculoSeccionMicrocurriculoId=" + tablaMicrocurriculoSeccionMicrocurriculoId + " ]";
     }
     
 }
