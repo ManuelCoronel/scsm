@@ -7,15 +7,17 @@ package dao;
 
 import dao.exceptions.NonexistentEntityException;
 import dao.exceptions.PreexistingEntityException;
-import dto.EncabezadoTabla;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import dto.Encabezado;
+import dto.EncabezadoTabla;
+import dto.TablaMicrocurriculo;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -37,7 +39,25 @@ public class EncabezadoTablaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Encabezado encabezadoId = encabezadoTabla.getEncabezadoId();
+            if (encabezadoId != null) {
+                encabezadoId = em.getReference(encabezadoId.getClass(), encabezadoId.getId());
+                encabezadoTabla.setEncabezadoId(encabezadoId);
+            }
+            TablaMicrocurriculo tablaMicrocurriculo = encabezadoTabla.getTablaMicrocurriculo();
+            if (tablaMicrocurriculo != null) {
+                tablaMicrocurriculo = em.getReference(tablaMicrocurriculo.getClass(), tablaMicrocurriculo.getTablaMicrocurriculoPK());
+                encabezadoTabla.setTablaMicrocurriculo(tablaMicrocurriculo);
+            }
             em.persist(encabezadoTabla);
+            if (encabezadoId != null) {
+                encabezadoId.getEncabezadoTablaList().add(encabezadoTabla);
+                encabezadoId = em.merge(encabezadoId);
+            }
+            if (tablaMicrocurriculo != null) {
+                tablaMicrocurriculo.getEncabezadoTablaList().add(encabezadoTabla);
+                tablaMicrocurriculo = em.merge(tablaMicrocurriculo);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findEncabezadoTabla(encabezadoTabla.getId()) != null) {
@@ -56,7 +76,36 @@ public class EncabezadoTablaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            EncabezadoTabla persistentEncabezadoTabla = em.find(EncabezadoTabla.class, encabezadoTabla.getId());
+            Encabezado encabezadoIdOld = persistentEncabezadoTabla.getEncabezadoId();
+            Encabezado encabezadoIdNew = encabezadoTabla.getEncabezadoId();
+            TablaMicrocurriculo tablaMicrocurriculoOld = persistentEncabezadoTabla.getTablaMicrocurriculo();
+            TablaMicrocurriculo tablaMicrocurriculoNew = encabezadoTabla.getTablaMicrocurriculo();
+            if (encabezadoIdNew != null) {
+                encabezadoIdNew = em.getReference(encabezadoIdNew.getClass(), encabezadoIdNew.getId());
+                encabezadoTabla.setEncabezadoId(encabezadoIdNew);
+            }
+            if (tablaMicrocurriculoNew != null) {
+                tablaMicrocurriculoNew = em.getReference(tablaMicrocurriculoNew.getClass(), tablaMicrocurriculoNew.getTablaMicrocurriculoPK());
+                encabezadoTabla.setTablaMicrocurriculo(tablaMicrocurriculoNew);
+            }
             encabezadoTabla = em.merge(encabezadoTabla);
+            if (encabezadoIdOld != null && !encabezadoIdOld.equals(encabezadoIdNew)) {
+                encabezadoIdOld.getEncabezadoTablaList().remove(encabezadoTabla);
+                encabezadoIdOld = em.merge(encabezadoIdOld);
+            }
+            if (encabezadoIdNew != null && !encabezadoIdNew.equals(encabezadoIdOld)) {
+                encabezadoIdNew.getEncabezadoTablaList().add(encabezadoTabla);
+                encabezadoIdNew = em.merge(encabezadoIdNew);
+            }
+            if (tablaMicrocurriculoOld != null && !tablaMicrocurriculoOld.equals(tablaMicrocurriculoNew)) {
+                tablaMicrocurriculoOld.getEncabezadoTablaList().remove(encabezadoTabla);
+                tablaMicrocurriculoOld = em.merge(tablaMicrocurriculoOld);
+            }
+            if (tablaMicrocurriculoNew != null && !tablaMicrocurriculoNew.equals(tablaMicrocurriculoOld)) {
+                tablaMicrocurriculoNew.getEncabezadoTablaList().add(encabezadoTabla);
+                tablaMicrocurriculoNew = em.merge(tablaMicrocurriculoNew);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -85,6 +134,16 @@ public class EncabezadoTablaJpaController implements Serializable {
                 encabezadoTabla.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The encabezadoTabla with id " + id + " no longer exists.", enfe);
+            }
+            Encabezado encabezadoId = encabezadoTabla.getEncabezadoId();
+            if (encabezadoId != null) {
+                encabezadoId.getEncabezadoTablaList().remove(encabezadoTabla);
+                encabezadoId = em.merge(encabezadoId);
+            }
+            TablaMicrocurriculo tablaMicrocurriculo = encabezadoTabla.getTablaMicrocurriculo();
+            if (tablaMicrocurriculo != null) {
+                tablaMicrocurriculo.getEncabezadoTablaList().remove(encabezadoTabla);
+                tablaMicrocurriculo = em.merge(tablaMicrocurriculo);
             }
             em.remove(encabezadoTabla);
             em.getTransaction().commit();

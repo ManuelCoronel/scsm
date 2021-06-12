@@ -10,6 +10,9 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -24,47 +27,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EncabezadoTabla.findAll", query = "SELECT e FROM EncabezadoTabla e")
-    , @NamedQuery(name = "EncabezadoTabla.findByEncabezadoId", query = "SELECT e FROM EncabezadoTabla e WHERE e.encabezadoId = :encabezadoId")
-    , @NamedQuery(name = "EncabezadoTabla.findById", query = "SELECT e FROM EncabezadoTabla e WHERE e.id = :id")
-    , @NamedQuery(name = "EncabezadoTabla.findByTablaMicrocurriculoId", query = "SELECT e FROM EncabezadoTabla e WHERE e.tablaMicrocurriculoId = :tablaMicrocurriculoId")
-    , @NamedQuery(name = "EncabezadoTabla.findByTablaMicrocurriculoSeccionMicrocurriculoId", query = "SELECT e FROM EncabezadoTabla e WHERE e.tablaMicrocurriculoSeccionMicrocurriculoId = :tablaMicrocurriculoSeccionMicrocurriculoId")})
+    , @NamedQuery(name = "EncabezadoTabla.findById", query = "SELECT e FROM EncabezadoTabla e WHERE e.id = :id")})
 public class EncabezadoTabla implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @Column(name = "encabezado_id")
-    private int encabezadoId;
     @Id
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @Column(name = "tabla_microcurriculo_id")
-    private int tablaMicrocurriculoId;
-    @Basic(optional = false)
-    @Column(name = "tabla_microcurriculo_seccion_microcurriculo_id")
-    private int tablaMicrocurriculoSeccionMicrocurriculoId;
+    @JoinColumn(name = "encabezado_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Encabezado encabezadoId;
+    @JoinColumns({
+        @JoinColumn(name = "tabla_microcurriculo_id", referencedColumnName = "id")
+        , @JoinColumn(name = "tabla_microcurriculo_seccion_microcurriculo_id", referencedColumnName = "seccion_microcurriculo_id")})
+    @ManyToOne(optional = false)
+    private TablaMicrocurriculo tablaMicrocurriculo;
 
     public EncabezadoTabla() {
     }
 
     public EncabezadoTabla(Integer id) {
         this.id = id;
-    }
-
-    public EncabezadoTabla(Integer id, int encabezadoId, int tablaMicrocurriculoId, int tablaMicrocurriculoSeccionMicrocurriculoId) {
-        this.id = id;
-        this.encabezadoId = encabezadoId;
-        this.tablaMicrocurriculoId = tablaMicrocurriculoId;
-        this.tablaMicrocurriculoSeccionMicrocurriculoId = tablaMicrocurriculoSeccionMicrocurriculoId;
-    }
-
-    public int getEncabezadoId() {
-        return encabezadoId;
-    }
-
-    public void setEncabezadoId(int encabezadoId) {
-        this.encabezadoId = encabezadoId;
     }
 
     public Integer getId() {
@@ -75,20 +59,20 @@ public class EncabezadoTabla implements Serializable {
         this.id = id;
     }
 
-    public int getTablaMicrocurriculoId() {
-        return tablaMicrocurriculoId;
+    public Encabezado getEncabezadoId() {
+        return encabezadoId;
     }
 
-    public void setTablaMicrocurriculoId(int tablaMicrocurriculoId) {
-        this.tablaMicrocurriculoId = tablaMicrocurriculoId;
+    public void setEncabezadoId(Encabezado encabezadoId) {
+        this.encabezadoId = encabezadoId;
     }
 
-    public int getTablaMicrocurriculoSeccionMicrocurriculoId() {
-        return tablaMicrocurriculoSeccionMicrocurriculoId;
+    public TablaMicrocurriculo getTablaMicrocurriculo() {
+        return tablaMicrocurriculo;
     }
 
-    public void setTablaMicrocurriculoSeccionMicrocurriculoId(int tablaMicrocurriculoSeccionMicrocurriculoId) {
-        this.tablaMicrocurriculoSeccionMicrocurriculoId = tablaMicrocurriculoSeccionMicrocurriculoId;
+    public void setTablaMicrocurriculo(TablaMicrocurriculo tablaMicrocurriculo) {
+        this.tablaMicrocurriculo = tablaMicrocurriculo;
     }
 
     @Override
