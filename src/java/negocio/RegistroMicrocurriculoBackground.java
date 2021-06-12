@@ -100,12 +100,12 @@ public class RegistroMicrocurriculoBackground extends Thread {
                 tm.setCantidadFilas(a);
                 tm.setSeccionMicrocurriculo(s);
                 tm.setTablaMicrocurriculoPK(new TablaMicrocurriculoPK(id++, s.getId()));
-                tm.setCantColumnas(tm.getTablaMicrocurriculoPK().getId()==1 ? 5 : 3);
+                tm.setCantidadColumnas(tm.getTablaMicrocurriculoPK().getId()==1 ? 5 : 3);
                 tmjpa.create(tm);
                 List<EncabezadoTabla> ets = new ArrayList<>();
-                for(int i=(tm.getCantColumnas()==5 ? 1 : 6); i<(tm.getCantColumnas()==5 ? 6 : 9); i++){
+                for(int i=(tm.getCantidadColumnas()==5 ? 1 : 6); i<(tm.getCantidadColumnas()==5 ? 6 : 9); i++){
                     EncabezadoTabla et = new EncabezadoTabla();
-                    et.setIdEncabezado(new Encabezado(i));
+                    et.setEncabezadoId(new Encabezado(i));
                     et.setTablaMicrocurriculo(tm);
                     ets.add(et);
                     etjpa.create(et);
