@@ -6,6 +6,7 @@
 package dao;
 
 import dao.exceptions.NonexistentEntityException;
+import dao.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -33,15 +34,15 @@ public class EncabezadoTablaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(EncabezadoTabla encabezadoTabla) {
+    public void create(EncabezadoTabla encabezadoTabla) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Encabezado idEncabezado = encabezadoTabla.getIdEncabezado();
-            if (idEncabezado != null) {
-                idEncabezado = em.getReference(idEncabezado.getClass(), idEncabezado.getId());
-                encabezadoTabla.setIdEncabezado(idEncabezado);
+            Encabezado encabezadoId = encabezadoTabla.getEncabezadoId();
+            if (encabezadoId != null) {
+                encabezadoId = em.getReference(encabezadoId.getClass(), encabezadoId.getId());
+                encabezadoTabla.setEncabezadoId(encabezadoId);
             }
             TablaMicrocurriculo tablaMicrocurriculo = encabezadoTabla.getTablaMicrocurriculo();
             if (tablaMicrocurriculo != null) {
@@ -49,15 +50,20 @@ public class EncabezadoTablaJpaController implements Serializable {
                 encabezadoTabla.setTablaMicrocurriculo(tablaMicrocurriculo);
             }
             em.persist(encabezadoTabla);
-            if (idEncabezado != null) {
-                idEncabezado.getEncabezadoTablaList().add(encabezadoTabla);
-                idEncabezado = em.merge(idEncabezado);
+            if (encabezadoId != null) {
+                encabezadoId.getEncabezadoTablaList().add(encabezadoTabla);
+                encabezadoId = em.merge(encabezadoId);
             }
             if (tablaMicrocurriculo != null) {
                 tablaMicrocurriculo.getEncabezadoTablaList().add(encabezadoTabla);
                 tablaMicrocurriculo = em.merge(tablaMicrocurriculo);
             }
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findEncabezadoTabla(encabezadoTabla.getId()) != null) {
+                throw new PreexistingEntityException("EncabezadoTabla " + encabezadoTabla + " already exists.", ex);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -71,26 +77,26 @@ public class EncabezadoTablaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             EncabezadoTabla persistentEncabezadoTabla = em.find(EncabezadoTabla.class, encabezadoTabla.getId());
-            Encabezado idEncabezadoOld = persistentEncabezadoTabla.getIdEncabezado();
-            Encabezado idEncabezadoNew = encabezadoTabla.getIdEncabezado();
+            Encabezado encabezadoIdOld = persistentEncabezadoTabla.getEncabezadoId();
+            Encabezado encabezadoIdNew = encabezadoTabla.getEncabezadoId();
             TablaMicrocurriculo tablaMicrocurriculoOld = persistentEncabezadoTabla.getTablaMicrocurriculo();
             TablaMicrocurriculo tablaMicrocurriculoNew = encabezadoTabla.getTablaMicrocurriculo();
-            if (idEncabezadoNew != null) {
-                idEncabezadoNew = em.getReference(idEncabezadoNew.getClass(), idEncabezadoNew.getId());
-                encabezadoTabla.setIdEncabezado(idEncabezadoNew);
+            if (encabezadoIdNew != null) {
+                encabezadoIdNew = em.getReference(encabezadoIdNew.getClass(), encabezadoIdNew.getId());
+                encabezadoTabla.setEncabezadoId(encabezadoIdNew);
             }
             if (tablaMicrocurriculoNew != null) {
                 tablaMicrocurriculoNew = em.getReference(tablaMicrocurriculoNew.getClass(), tablaMicrocurriculoNew.getTablaMicrocurriculoPK());
                 encabezadoTabla.setTablaMicrocurriculo(tablaMicrocurriculoNew);
             }
             encabezadoTabla = em.merge(encabezadoTabla);
-            if (idEncabezadoOld != null && !idEncabezadoOld.equals(idEncabezadoNew)) {
-                idEncabezadoOld.getEncabezadoTablaList().remove(encabezadoTabla);
-                idEncabezadoOld = em.merge(idEncabezadoOld);
+            if (encabezadoIdOld != null && !encabezadoIdOld.equals(encabezadoIdNew)) {
+                encabezadoIdOld.getEncabezadoTablaList().remove(encabezadoTabla);
+                encabezadoIdOld = em.merge(encabezadoIdOld);
             }
-            if (idEncabezadoNew != null && !idEncabezadoNew.equals(idEncabezadoOld)) {
-                idEncabezadoNew.getEncabezadoTablaList().add(encabezadoTabla);
-                idEncabezadoNew = em.merge(idEncabezadoNew);
+            if (encabezadoIdNew != null && !encabezadoIdNew.equals(encabezadoIdOld)) {
+                encabezadoIdNew.getEncabezadoTablaList().add(encabezadoTabla);
+                encabezadoIdNew = em.merge(encabezadoIdNew);
             }
             if (tablaMicrocurriculoOld != null && !tablaMicrocurriculoOld.equals(tablaMicrocurriculoNew)) {
                 tablaMicrocurriculoOld.getEncabezadoTablaList().remove(encabezadoTabla);
@@ -129,10 +135,10 @@ public class EncabezadoTablaJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The encabezadoTabla with id " + id + " no longer exists.", enfe);
             }
-            Encabezado idEncabezado = encabezadoTabla.getIdEncabezado();
-            if (idEncabezado != null) {
-                idEncabezado.getEncabezadoTablaList().remove(encabezadoTabla);
-                idEncabezado = em.merge(idEncabezado);
+            Encabezado encabezadoId = encabezadoTabla.getEncabezadoId();
+            if (encabezadoId != null) {
+                encabezadoId.getEncabezadoTablaList().remove(encabezadoTabla);
+                encabezadoId = em.merge(encabezadoId);
             }
             TablaMicrocurriculo tablaMicrocurriculo = encabezadoTabla.getTablaMicrocurriculo();
             if (tablaMicrocurriculo != null) {

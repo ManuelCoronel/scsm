@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TablaMicrocurriculoInfo.findByIdFila", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.idFila = :idFila")
     , @NamedQuery(name = "TablaMicrocurriculoInfo.findByIdColumna", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.idColumna = :idColumna")
     , @NamedQuery(name = "TablaMicrocurriculoInfo.findByTablaMicrocurriculoId", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.tablaMicrocurriculoId = :tablaMicrocurriculoId")
-    , @NamedQuery(name = "TablaMicrocurriculoInfo.findByTablaId", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.tablaId = :tablaId")})
+    , @NamedQuery(name = "TablaMicrocurriculoInfo.findByTablaMicrocurriculoSeccionMicrocurriculoId", query = "SELECT t FROM TablaMicrocurriculoInfo t WHERE t.tablaMicrocurriculoInfoPK.tablaMicrocurriculoSeccionMicrocurriculoId = :tablaMicrocurriculoSeccionMicrocurriculoId")})
 public class TablaMicrocurriculoInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,8 +38,8 @@ public class TablaMicrocurriculoInfo implements Serializable {
     @ManyToOne(optional = false)
     private Contenido contenidoId;
     @JoinColumns({
-        @JoinColumn(name = "tabla_id", referencedColumnName = "id", insertable = false, updatable = false)
-        , @JoinColumn(name = "tabla_microcurriculo_id", referencedColumnName = "seccion_microcurriculo_id", insertable = false, updatable = false)})
+        @JoinColumn(name = "tabla_microcurriculo_id", referencedColumnName = "id", insertable = false, updatable = false)
+        , @JoinColumn(name = "tabla_microcurriculo_seccion_microcurriculo_id", referencedColumnName = "seccion_microcurriculo_id", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private TablaMicrocurriculo tablaMicrocurriculo;
 
@@ -50,8 +50,8 @@ public class TablaMicrocurriculoInfo implements Serializable {
         this.tablaMicrocurriculoInfoPK = tablaMicrocurriculoInfoPK;
     }
 
-    public TablaMicrocurriculoInfo(int idFila, int idColumna, int tablaMicrocurriculoId, int tablaId) {
-        this.tablaMicrocurriculoInfoPK = new TablaMicrocurriculoInfoPK(idFila, idColumna, tablaMicrocurriculoId, tablaId);
+    public TablaMicrocurriculoInfo(int idFila, int idColumna, int tablaMicrocurriculoId, int tablaMicrocurriculoSeccionMicrocurriculoId) {
+        this.tablaMicrocurriculoInfoPK = new TablaMicrocurriculoInfoPK(idFila, idColumna, tablaMicrocurriculoId, tablaMicrocurriculoSeccionMicrocurriculoId);
     }
 
     public TablaMicrocurriculoInfoPK getTablaMicrocurriculoInfoPK() {

@@ -43,7 +43,6 @@ public class Programa implements Serializable {
     @Basic(optional = false)
     @Column(name = "nombre_programa")
     private String nombrePrograma;
-    @Basic(optional = false)
     @Lob
     @Column(name = "img_programa")
     private byte[] imgPrograma;
@@ -63,10 +62,9 @@ public class Programa implements Serializable {
         this.codigo = codigo;
     }
 
-    public Programa(Integer codigo, String nombrePrograma, byte[] imgPrograma) {
+    public Programa(Integer codigo, String nombrePrograma) {
         this.codigo = codigo;
         this.nombrePrograma = nombrePrograma;
-        this.imgPrograma = imgPrograma;
     }
 
     public Integer getCodigo() {

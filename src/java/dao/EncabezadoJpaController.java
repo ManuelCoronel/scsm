@@ -7,6 +7,7 @@ package dao;
 
 import dao.exceptions.IllegalOrphanException;
 import dao.exceptions.NonexistentEntityException;
+import dao.exceptions.PreexistingEntityException;
 import dto.Encabezado;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -34,7 +35,7 @@ public class EncabezadoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Encabezado encabezado) {
+    public void create(Encabezado encabezado) throws PreexistingEntityException, Exception {
         if (encabezado.getEncabezadoTablaList() == null) {
             encabezado.setEncabezadoTablaList(new ArrayList<EncabezadoTabla>());
         }
@@ -50,15 +51,20 @@ public class EncabezadoJpaController implements Serializable {
             encabezado.setEncabezadoTablaList(attachedEncabezadoTablaList);
             em.persist(encabezado);
             for (EncabezadoTabla encabezadoTablaListEncabezadoTabla : encabezado.getEncabezadoTablaList()) {
-                Encabezado oldIdEncabezadoOfEncabezadoTablaListEncabezadoTabla = encabezadoTablaListEncabezadoTabla.getIdEncabezado();
-                encabezadoTablaListEncabezadoTabla.setIdEncabezado(encabezado);
+                Encabezado oldEncabezadoIdOfEncabezadoTablaListEncabezadoTabla = encabezadoTablaListEncabezadoTabla.getEncabezadoId();
+                encabezadoTablaListEncabezadoTabla.setEncabezadoId(encabezado);
                 encabezadoTablaListEncabezadoTabla = em.merge(encabezadoTablaListEncabezadoTabla);
-                if (oldIdEncabezadoOfEncabezadoTablaListEncabezadoTabla != null) {
-                    oldIdEncabezadoOfEncabezadoTablaListEncabezadoTabla.getEncabezadoTablaList().remove(encabezadoTablaListEncabezadoTabla);
-                    oldIdEncabezadoOfEncabezadoTablaListEncabezadoTabla = em.merge(oldIdEncabezadoOfEncabezadoTablaListEncabezadoTabla);
+                if (oldEncabezadoIdOfEncabezadoTablaListEncabezadoTabla != null) {
+                    oldEncabezadoIdOfEncabezadoTablaListEncabezadoTabla.getEncabezadoTablaList().remove(encabezadoTablaListEncabezadoTabla);
+                    oldEncabezadoIdOfEncabezadoTablaListEncabezadoTabla = em.merge(oldEncabezadoIdOfEncabezadoTablaListEncabezadoTabla);
                 }
             }
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findEncabezado(encabezado.getId()) != null) {
+                throw new PreexistingEntityException("Encabezado " + encabezado + " already exists.", ex);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -80,7 +86,7 @@ public class EncabezadoJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain EncabezadoTabla " + encabezadoTablaListOldEncabezadoTabla + " since its idEncabezado field is not nullable.");
+                    illegalOrphanMessages.add("You must retain EncabezadoTabla " + encabezadoTablaListOldEncabezadoTabla + " since its encabezadoId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -96,12 +102,12 @@ public class EncabezadoJpaController implements Serializable {
             encabezado = em.merge(encabezado);
             for (EncabezadoTabla encabezadoTablaListNewEncabezadoTabla : encabezadoTablaListNew) {
                 if (!encabezadoTablaListOld.contains(encabezadoTablaListNewEncabezadoTabla)) {
-                    Encabezado oldIdEncabezadoOfEncabezadoTablaListNewEncabezadoTabla = encabezadoTablaListNewEncabezadoTabla.getIdEncabezado();
-                    encabezadoTablaListNewEncabezadoTabla.setIdEncabezado(encabezado);
+                    Encabezado oldEncabezadoIdOfEncabezadoTablaListNewEncabezadoTabla = encabezadoTablaListNewEncabezadoTabla.getEncabezadoId();
+                    encabezadoTablaListNewEncabezadoTabla.setEncabezadoId(encabezado);
                     encabezadoTablaListNewEncabezadoTabla = em.merge(encabezadoTablaListNewEncabezadoTabla);
-                    if (oldIdEncabezadoOfEncabezadoTablaListNewEncabezadoTabla != null && !oldIdEncabezadoOfEncabezadoTablaListNewEncabezadoTabla.equals(encabezado)) {
-                        oldIdEncabezadoOfEncabezadoTablaListNewEncabezadoTabla.getEncabezadoTablaList().remove(encabezadoTablaListNewEncabezadoTabla);
-                        oldIdEncabezadoOfEncabezadoTablaListNewEncabezadoTabla = em.merge(oldIdEncabezadoOfEncabezadoTablaListNewEncabezadoTabla);
+                    if (oldEncabezadoIdOfEncabezadoTablaListNewEncabezadoTabla != null && !oldEncabezadoIdOfEncabezadoTablaListNewEncabezadoTabla.equals(encabezado)) {
+                        oldEncabezadoIdOfEncabezadoTablaListNewEncabezadoTabla.getEncabezadoTablaList().remove(encabezadoTablaListNewEncabezadoTabla);
+                        oldEncabezadoIdOfEncabezadoTablaListNewEncabezadoTabla = em.merge(oldEncabezadoIdOfEncabezadoTablaListNewEncabezadoTabla);
                     }
                 }
             }
@@ -140,7 +146,7 @@ public class EncabezadoJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Encabezado (" + encabezado + ") cannot be destroyed since the EncabezadoTabla " + encabezadoTablaListOrphanCheckEncabezadoTabla + " in its encabezadoTablaList field has a non-nullable idEncabezado field.");
+                illegalOrphanMessages.add("This Encabezado (" + encabezado + ") cannot be destroyed since the EncabezadoTabla " + encabezadoTablaListOrphanCheckEncabezadoTabla + " in its encabezadoTablaList field has a non-nullable encabezadoId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

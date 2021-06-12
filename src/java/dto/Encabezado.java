@@ -11,8 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -36,14 +34,12 @@ public class Encabezado implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEncabezado")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "encabezadoId")
     private List<EncabezadoTabla> encabezadoTablaList;
 
     public Encabezado() {
@@ -51,11 +47,6 @@ public class Encabezado implements Serializable {
 
     public Encabezado(Integer id) {
         this.id = id;
-    }
-
-    public Encabezado(Integer id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
     }
 
     public Integer getId() {

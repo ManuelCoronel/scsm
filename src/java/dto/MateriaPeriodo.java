@@ -29,17 +29,18 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "MateriaPeriodo.findAll", query = "SELECT m FROM MateriaPeriodo m")
-    , @NamedQuery(name = "MateriaPeriodo.findByMateriaCodigoMateria", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.materiaCodigoMateria = :materiaCodigoMateria")
     , @NamedQuery(name = "MateriaPeriodo.findByAnio", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.anio = :anio")
-    , @NamedQuery(name = "MateriaPeriodo.findBySemestreAnio", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.semestreAnio = :semestreAnio")})
+    , @NamedQuery(name = "MateriaPeriodo.findBySemestreAnio", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.semestreAnio = :semestreAnio")
+    , @NamedQuery(name = "MateriaPeriodo.findByMateriaCodigoMateria", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.materiaCodigoMateria = :materiaCodigoMateria")
+    , @NamedQuery(name = "MateriaPeriodo.findByMateriaPensumCodigo", query = "SELECT m FROM MateriaPeriodo m WHERE m.materiaPeriodoPK.materiaPensumCodigo = :materiaPensumCodigo")})
 public class MateriaPeriodo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected MateriaPeriodoPK materiaPeriodoPK;
     @JoinColumns({
-        @JoinColumn(name = "materia_codigo_materia1", referencedColumnName = "codigo_materia")
-        , @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo")})
+        @JoinColumn(name = "materia_codigo_materia", referencedColumnName = "codigo_materia", insertable = false, updatable = false)
+        , @JoinColumn(name = "materia_pensum_codigo", referencedColumnName = "pensum_codigo", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Materia materia;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "materiaPeriodo")
@@ -52,8 +53,8 @@ public class MateriaPeriodo implements Serializable {
         this.materiaPeriodoPK = materiaPeriodoPK;
     }
 
-    public MateriaPeriodo(int materiaCodigoMateria, int anio, int semestreAnio) {
-        this.materiaPeriodoPK = new MateriaPeriodoPK(materiaCodigoMateria, anio, semestreAnio);
+    public MateriaPeriodo(int anio, int semestreAnio, int materiaCodigoMateria, int materiaPensumCodigo) {
+        this.materiaPeriodoPK = new MateriaPeriodoPK(anio, semestreAnio, materiaCodigoMateria, materiaPensumCodigo);
     }
 
     public MateriaPeriodoPK getMateriaPeriodoPK() {

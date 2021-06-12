@@ -9,8 +9,6 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
@@ -34,16 +32,15 @@ public class EncabezadoTabla implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @JoinColumn(name = "id_encabezado", referencedColumnName = "id")
+    @JoinColumn(name = "encabezado_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Encabezado idEncabezado;
+    private Encabezado encabezadoId;
     @JoinColumns({
-        @JoinColumn(name = "id_tabla", referencedColumnName = "id")
-        , @JoinColumn(name = "id_seccion", referencedColumnName = "seccion_microcurriculo_id")})
+        @JoinColumn(name = "tabla_microcurriculo_id", referencedColumnName = "id")
+        , @JoinColumn(name = "tabla_microcurriculo_seccion_microcurriculo_id", referencedColumnName = "seccion_microcurriculo_id")})
     @ManyToOne(optional = false)
     private TablaMicrocurriculo tablaMicrocurriculo;
 
@@ -62,12 +59,12 @@ public class EncabezadoTabla implements Serializable {
         this.id = id;
     }
 
-    public Encabezado getIdEncabezado() {
-        return idEncabezado;
+    public Encabezado getEncabezadoId() {
+        return encabezadoId;
     }
 
-    public void setIdEncabezado(Encabezado idEncabezado) {
-        this.idEncabezado = idEncabezado;
+    public void setEncabezadoId(Encabezado encabezadoId) {
+        this.encabezadoId = encabezadoId;
     }
 
     public TablaMicrocurriculo getTablaMicrocurriculo() {

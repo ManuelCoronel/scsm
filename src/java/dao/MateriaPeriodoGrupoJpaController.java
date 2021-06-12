@@ -39,6 +39,10 @@ public class MateriaPeriodoGrupoJpaController implements Serializable {
         if (materiaPeriodoGrupo.getMateriaPeriodoGrupoPK() == null) {
             materiaPeriodoGrupo.setMateriaPeriodoGrupoPK(new MateriaPeriodoGrupoPK());
         }
+        materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().setMateriaPeriodoMateriaCodigoMateria(materiaPeriodoGrupo.getMateriaPeriodo().getMateriaPeriodoPK().getMateriaCodigoMateria());
+        materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().setMateriaPeriodoSemestreAnio(materiaPeriodoGrupo.getMateriaPeriodo().getMateriaPeriodoPK().getSemestreAnio());
+        materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().setMateriaPeriodoAnio(materiaPeriodoGrupo.getMateriaPeriodo().getMateriaPeriodoPK().getAnio());
+        materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().setMateriaPeriodoMateriaPensumCodigo(materiaPeriodoGrupo.getMateriaPeriodo().getMateriaPeriodoPK().getMateriaPensumCodigo());
         materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().setDocenteCodigo(materiaPeriodoGrupo.getDocente().getCodigoDocente());
         EntityManager em = null;
         try {
@@ -77,6 +81,10 @@ public class MateriaPeriodoGrupoJpaController implements Serializable {
     }
 
     public void edit(MateriaPeriodoGrupo materiaPeriodoGrupo) throws NonexistentEntityException, Exception {
+        materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().setMateriaPeriodoMateriaCodigoMateria(materiaPeriodoGrupo.getMateriaPeriodo().getMateriaPeriodoPK().getMateriaCodigoMateria());
+        materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().setMateriaPeriodoSemestreAnio(materiaPeriodoGrupo.getMateriaPeriodo().getMateriaPeriodoPK().getSemestreAnio());
+        materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().setMateriaPeriodoAnio(materiaPeriodoGrupo.getMateriaPeriodo().getMateriaPeriodoPK().getAnio());
+        materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().setMateriaPeriodoMateriaPensumCodigo(materiaPeriodoGrupo.getMateriaPeriodo().getMateriaPeriodoPK().getMateriaPensumCodigo());
         materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().setDocenteCodigo(materiaPeriodoGrupo.getDocente().getCodigoDocente());
         EntityManager em = null;
         try {
