@@ -45,8 +45,8 @@ public class MicrocurriculoJpaController implements Serializable {
         if (microcurriculo.getSeccionMicrocurriculoList() == null) {
             microcurriculo.setSeccionMicrocurriculoList(new ArrayList<SeccionMicrocurriculo>());
         }
-        microcurriculo.getMicrocurriculoPK().setMateriaCodigoMateria(microcurriculo.getMateria().getMateriaPK().getCodigoMateria());
         microcurriculo.getMicrocurriculoPK().setMateriaPensumCodigo(microcurriculo.getMateria().getMateriaPK().getPensumCodigo());
+        microcurriculo.getMicrocurriculoPK().setMateriaCodigoMateria(microcurriculo.getMateria().getMateriaPK().getCodigoMateria());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -99,8 +99,8 @@ public class MicrocurriculoJpaController implements Serializable {
     }
 
     public void edit(Microcurriculo microcurriculo) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        microcurriculo.getMicrocurriculoPK().setMateriaCodigoMateria(microcurriculo.getMateria().getMateriaPK().getCodigoMateria());
         microcurriculo.getMicrocurriculoPK().setMateriaPensumCodigo(microcurriculo.getMateria().getMateriaPK().getPensumCodigo());
+        microcurriculo.getMicrocurriculoPK().setMateriaCodigoMateria(microcurriculo.getMateria().getMateriaPK().getCodigoMateria());
         EntityManager em = null;
         try {
             em = getEntityManager();

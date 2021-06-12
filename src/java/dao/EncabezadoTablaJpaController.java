@@ -6,7 +6,6 @@
 package dao;
 
 import dao.exceptions.NonexistentEntityException;
-import dao.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -34,7 +33,7 @@ public class EncabezadoTablaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(EncabezadoTabla encabezadoTabla) throws PreexistingEntityException, Exception {
+    public void create(EncabezadoTabla encabezadoTabla) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -59,11 +58,6 @@ public class EncabezadoTablaJpaController implements Serializable {
                 tablaMicrocurriculo = em.merge(tablaMicrocurriculo);
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findEncabezadoTabla(encabezadoTabla.getId()) != null) {
-                throw new PreexistingEntityException("EncabezadoTabla " + encabezadoTabla + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

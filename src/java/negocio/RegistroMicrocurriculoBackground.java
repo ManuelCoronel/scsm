@@ -67,7 +67,7 @@ public class RegistroMicrocurriculoBackground extends Thread {
             micro.setMateria(m);
 
             mjpa.create(micro);
-
+          
             getDefaultSecciones(micro, secciones, sjpa, cjpa, tmjpa, etjpa);
         }
         tjpa.getEntityManager().close();
@@ -79,6 +79,8 @@ public class RegistroMicrocurriculoBackground extends Thread {
 
     private void getDefaultSecciones(Microcurriculo micro, List<Seccion> secciones, SeccionMicrocurriculoJpaController sjpa, ContenidoJpaController cjpa, TablaMicrocurriculoJpaController tmjpa, EncabezadoTablaJpaController etjpa) throws NonexistentEntityException, Exception {
         List<SeccionMicrocurriculo> seccionesDefault = new ArrayList<>();
+        Conexion con = Conexion.getConexion();
+        dao.EncabezadoJpaController encabezadoDao = new dao.EncabezadoJpaController(con.getBd());
         int id=1;
         for (Seccion t : secciones) {
             SeccionMicrocurriculo s = new SeccionMicrocurriculo();
@@ -105,8 +107,9 @@ public class RegistroMicrocurriculoBackground extends Thread {
                 List<EncabezadoTabla> ets = new ArrayList<>();
                 for(int i=(tm.getCantidadColumnas()==5 ? 1 : 6); i<(tm.getCantidadColumnas()==5 ? 6 : 9); i++){
                     EncabezadoTabla et = new EncabezadoTabla();
-                    et.setEncabezadoId(new Encabezado(i));
+                    et.setEncabezadoId(encabezadoDao.findEncabezado(i));
                     et.setTablaMicrocurriculo(tm);
+                    
                     ets.add(et);
                     etjpa.create(et);
                 }

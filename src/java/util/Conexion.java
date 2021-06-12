@@ -14,7 +14,7 @@ public class Conexion {
  
     private Conexion() {
         this.bd=Persistence.createEntityManagerFactory("scsmPU");
-
+        
     }
 
 
@@ -27,8 +27,10 @@ public class Conexion {
         }
     return conexion;
     }
+   
  
     public EntityManagerFactory getBd() {
+        bd.getCache().evictAll();
         return bd;
     }
 }
