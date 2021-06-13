@@ -6,9 +6,11 @@
 package control;
 
 import dao.DocenteJpaController;
+import dao.FacultadJpaController;
 import dao.UsuarioJpaController;
 import dto.Departamento;
 import dto.Docente;
+import dto.Facultad;
 import dto.Materia;
 import dto.Rol;
 import dto.Usuario;
@@ -192,59 +194,7 @@ public class ControladorDocente extends HttpServlet {
     }
 
 
-    /*public void editarCliente(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String cedula = request.getParameter("cedula");
-        Cliente clienteEditar = new Cliente();
-        clienteEditar = clienteDAO.findCliente(cedula);
-        List<TipoCliente> tiposClientes = tipoDAO.findTipoClienteEntities();
-        request.getSession().setAttribute("tiposDeClientes", tiposClientes);
-        request.getSession().setAttribute("editarCliente", clienteEditar);
-        response.sendRedirect("vistas/jsp/editarCliente.jsp");
-    }
 
-    public void actualizarCliente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
-        Cliente clienteDTO = new Cliente();
-        String cedula = request.getParameter("txtCedula");
-        String telefono = request.getParameter("txtTelefono");
-        String direccion = request.getParameter("txtDireccion");
-        String nombre = request.getParameter("txtNombre");
-        String correo = request.getParameter("txtCorreo");
-        Date fechaRegistro = Date.valueOf(request.getParameter("txtFechaRegistro"));
-        Date fechaNacimiento = Date.valueOf(request.getParameter("txtFechaNacimiento"));
-        TipoCliente tipoC = tipoDAO.findTipoCliente(Integer.parseInt(request.getParameter("opciones")));
-        clienteDTO = clienteDAO.findCliente(cedula);
-        clienteDTO.setCedula(cedula);
-        clienteDTO.setTelefono(telefono);
-        clienteDTO.setDireccion(direccion);
-        clienteDTO.setNombre(nombre);
-        clienteDTO.setCorreo(correo);
-        clienteDTO.setFechaRegistro(fechaRegistro);
-        clienteDTO.setFechaNacimiento(fechaNacimiento);
-        clienteDTO.setTipoClienteIdTipoCliente(tipoC);
-        clienteDAO.edit(clienteDTO);
-        List<DTO.Cliente> clientes = clienteDAO.findClienteEntities();
-        request.getSession().setAttribute("listaClientes", clientes);
-        response.sendRedirect("vistas/jsp/listaClientes.jsp");
-    }
-
-    public void eliminarCliente(HttpServletRequest request, HttpServletResponse response) throws IOException, NonexistentEntityException {
-        String cedula = request.getParameter("cedula");
-        clienteDAO.destroy(cedula);
-        List<DTO.Cliente> clientes = clienteDAO.findClienteEntities();
-        request.getSession().setAttribute("listaClientes", clientes);
-        response.sendRedirect("vistas/jsp/listaClientes.jsp");
-    }
-
-    public void buscarCliente(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String cedula = request.getParameter("cedulaCliente");
-        DTO.Cliente cliente = new DTO.Cliente();
-        cliente = clienteDAO.findCliente(cedula);
-        ArrayList<Cliente> clientes = new ArrayList<Cliente>();
-        clientes.add(cliente);
-        request.getSession().setAttribute("listaClientes", clientes);
-        response.sendRedirect("vistas/jsp/listaClientes.jsp");
-    }
-     */
     /**
      * Returns a short description of the servlet.
      *
