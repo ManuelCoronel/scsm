@@ -67,11 +67,12 @@ public class ControladorMicrocurriculo extends HttpServlet {
 
     public void consultar(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        int id = Integer.parseInt(request.getParameter("idMicrocurriculo"));
+     int id = Integer.parseInt(request.getParameter("idMicrocurriculo"));
         int codigoPensum = Integer.parseInt(request.getParameter("codigoPensum"));
         int codigoMateria = Integer.parseInt(request.getParameter("codigoMateria"));
         negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
         dto.Microcurriculo microcurriculo = adminMicrocurriculo.obtenerMicrocurriculo(id, codigoMateria, codigoPensum);
+        request.getSession().setAttribute("tablas", negocio.AdministrarMicrocurriculo.ordenarTablaInfo(microcurriculo));
         request.getSession().setAttribute("microcurriculo", microcurriculo);
         response.sendRedirect("jspTest/consultarMicrocurriculo.jsp");
 
@@ -165,9 +166,9 @@ public class ControladorMicrocurriculo extends HttpServlet {
 
     private void registrar(HttpServletRequest request, HttpServletResponse response) throws Exception {
         AdministrarMicrocurriculo adminMicrocurriculo = new AdministrarMicrocurriculo();
-  //     int areaFormacion = Integer.parseInt(request.getParameter("areasFormacion"));
+      int areaFormacion = Integer.parseInt(request.getParameter("areasFormacion"));
         dto.Microcurriculo microcurriculo = (dto.Microcurriculo) request.getSession().getAttribute("microcurriculo");
-     //   adminMicrocurriculo.actualizarAreaFormacionMicrocurriculo(microcurriculo, areaFormacion);
+       adminMicrocurriculo.actualizarAreaFormacionMicrocurriculo(microcurriculo, areaFormacion);
         registrarInformacionTablas(request, response, adminMicrocurriculo);
         registrarSecciones(request, response, adminMicrocurriculo);
         response.sendRedirect("jspTest/listaMicrocurriculos.jsp");

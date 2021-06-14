@@ -49,10 +49,11 @@
                             %>
                             <div> <%=areas.getNombre()%>
                                 <%
-                                    if (areas.getId().compareTo(microcurriculo.getAreaDeFormacionId().getId()) == 1) {
+                                    System.out.println(microcurriculo.getAreaDeFormacionId().getId() + " == " + areas.getId());
+                                    if (microcurriculo.getAreaDeFormacionId().getId().equals(areas.getId())) {
                                 %>
                                 <input type="radio" name="areasFormacion"  value="<%=areas.getId()%>" checked>
-                                <%
+                                <%System.out.println("Entro");
                                 } else {
                                 %>
                                 <input type="radio" name="areasFormacion" value="<%=areas.getId()%>">
@@ -83,7 +84,7 @@
                         </td>
 
                     </tr>
-
+                <a href="consultarMicrocurriculo.jsp"></a>
                     <tr>
                         <td>Correquisitos</td>
                         <td></td>
@@ -93,52 +94,47 @@
             </table>
 
             <%
-                List<String[][]>tablas = (List<String[][]>) request.getSession().getAttribute("tablas");
+                List<String[][]> tablas = (List<String[][]>) request.getSession().getAttribute("tablas");
                 List<dto.SeccionMicrocurriculo> secciones = microcurriculo.getSeccionMicrocurriculoList();
                 for (dto.SeccionMicrocurriculo seccion : secciones) {
+             %>
 
-
-            %>
-
-            <%=seccion.getSeccionId().getNombre()%>
-            <br>
-    <%
-                int tipo = seccion.getSeccionId().getTipoSeccionId().getId();
-                if (tipo == 1) {  %>
-                 <input    name="seccionId-<%=seccion.getSeccionId().getId()%>" value="<%=seccion.getId()%>">  
-               <textarea  name="seccion-<%= seccion.getSeccionId().getId()%>" rows="10" cols="50" value="info"></textarea>
-        
+            <%=seccion.getSeccionId().getNombre()%>  <br>
+           
+            <% int tipo = seccion.getSeccionId().getTipoSeccionId().getId();
+                if (tipo == 1) {%>
+         
+                <input  type="hidden"  name="seccionId-<%=seccion.getSeccionId().getId()%>" value="<%=seccion.getId()%>">  
+                <textarea  name="seccion-<%= seccion.getSeccionId().getId()%>" rows="10" cols="50" value="info"><%=seccion.getContenidoList().get(0).getTexto() %></textarea>
 
             <%   } else {
-                          int canColum = seccion.getTablaMicrocurriculoList().get(0).getCantidadColumnas();
+                int canColum = seccion.getTablaMicrocurriculoList().get(0).getCantidadColumnas();
             %>
-           <table  border="1" id="tabla<%=seccion.getSeccionId().getId()%>"   style="width: 100%; border-collapse: collapse">
+            <table  border="1" id="tabla<%=seccion.getSeccionId().getId()%>"   style="width: 100%; border-collapse: collapse">
                 <thead><tr>
-                        <% for (int i = 0; i < canColum; i++) {  %>
-                                 <th><%=seccion.getTablaMicrocurriculoList().get(0).getEncabezadoTablaList().get(i).getEncabezadoId().getNombre()%></th>
-                           <% }%>
+                        <% for (int i = 0; i < canColum; i++) {%>
+                        <th><%=seccion.getTablaMicrocurriculoList().get(0).getEncabezadoTablaList().get(i).getEncabezadoId().getNombre()%></th>
+                            <% }%>
                     </tr>
-                <input   name="nfilas-<%=seccion.getId()%>" id="nfilas-<%=seccion.getSeccionId().getId()%>" value="<%=seccion.getTablaMicrocurriculoList().get(0).getCantidadFilas() %>">
+                <input  type="hidden" name="nfilas-<%=seccion.getId()%>" id="nfilas-<%=seccion.getSeccionId().getId()%>" value="<%=seccion.getTablaMicrocurriculoList().get(0).getCantidadFilas()%>">
 
-                   </thead>
+                </thead>
                 <tbody>
-                            
-                             <%  List<dto.TablaMicrocurriculoInfo> tablainfo = seccion.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList();
-                      int con = 0;
+
+                    <%  List<dto.TablaMicrocurriculoInfo> tablainfo = seccion.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList();
                         for (int i = 0; i < seccion.getTablaMicrocurriculoList().get(0).getCantidadFilas(); i++) {
-                             %><tr><%
+                    %><tr><%
                         for (int j = 0; j < seccion.getTablaMicrocurriculoList().get(0).getCantidadColumnas(); j++) {%>
-                        
-                        <td> <textarea name="contenido-<%=seccion.getSeccionId().getId() %>-<%=i%>-<%=j%>"><%=tablainfo.size() == 0 ? "":tablas.get(seccion.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoPK().getId()-1)[i][j]%></textarea></td>
-                  
-                        <% con++;}
-                        %>
+
+                        <td> <textarea name="contenido-<%=seccion.getSeccionId().getId()%>-<%=i%>-<%=j%>"><%=tablainfo.size() == 0 ? "" : tablas.get(seccion.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoPK().getId() - 1)[i][j]%></textarea></td>
+
+                        <%}%>
                     </tr>
-                    <% } %>
-                    
-                    
-                    
-                    
+                    <% }%>
+
+
+
+
 
                 </tbody>
 
@@ -156,12 +152,12 @@
             <input type="submit" name="accion" value="Registrar">
         </form>
 
-  <script>
-           
-                
-                
-                
-            </script>
+        <script>
+
+
+
+
+        </script>
     </body>
-    
+
 </html>

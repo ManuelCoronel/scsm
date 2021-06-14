@@ -1,4 +1,4 @@
-<%-- 
+    <%-- 
     Document   : consultarMicrocurriculo
     Created on : 08-jun-2021, 3:59:40
     Author     : Manuel
@@ -29,7 +29,7 @@
             List<dto.AreaFormacion> areasFormacion = (List<dto.AreaFormacion>) request.getSession().getAttribute("areasFormacion");
             List<dto.TipoAsignatura> tiposAsignatura = (List<dto.TipoAsignatura>) request.getSession().getAttribute("tipoAsignatura");
         %>
-        <form action="../ControladorMicrocurriculo" method="POST" >
+     
             <input type="hidden"  name="microcurriculoId"  value=<%=microcurriculo.getMicrocurriculoPK().getId()%>>
             <table border="1">
                 <thead>
@@ -79,58 +79,55 @@
                 </tbody>
             </table>
 
-            <%
+ <%
+                List<String[][]> tablas = (List<String[][]>) request.getSession().getAttribute("tablas");
                 List<dto.SeccionMicrocurriculo> secciones = microcurriculo.getSeccionMicrocurriculoList();
                 for (dto.SeccionMicrocurriculo seccion : secciones) {
+             %>
+
+            <%=seccion.getSeccionId().getNombre()%>  <br>
+           
+            <% int tipo = seccion.getSeccionId().getTipoSeccionId().getId();
+                if (tipo == 1) {%>
+         
+          <p ><%=seccion.getContenidoList().get(0).getTexto()%></p>
+
+            <%   } else {
+                int canColum = seccion.getTablaMicrocurriculoList().get(0).getCantidadColumnas();
             %>
-
-            <%=seccion.getSeccionId().getNombre()%>
-            <br>
-
-            <%
-                int tipo = seccion.getSeccionId().getTipoSeccionId().getId();
-                if (tipo == 1) {
-                    for (dto.Contenido elem : seccion.getContenidoList()) {%>
-
-            <textarea  name="seccion-<%= seccion.getSeccionId().getId()%>" rows="10" cols="50" value="info"><%=elem.getTexto()%></textarea>
-            <input type="hidden"  name="seccionId-<%=seccion.getSeccionId().getId()%>" value="<%=seccion.getId()%>">
-
-            <%}
-            } else {%>
-
             <table  border="1" id="tabla<%=seccion.getSeccionId().getId()%>"   style="width: 100%; border-collapse: collapse">
                 <thead><tr>
-                        <%for (int i = 0; i < seccion.getTablaMicrocurriculoList().get(0).getCantidadColumnas(); i++) {%>
-
+                        <% for (int i = 0; i < canColum; i++) {%>
                         <th><%=seccion.getTablaMicrocurriculoList().get(0).getEncabezadoTablaList().get(i).getEncabezadoId().getNombre()%></th>
                             <% }%>
                     </tr>
+       
                 </thead>
-
                 <tbody>
 
                     <%  List<dto.TablaMicrocurriculoInfo> tablainfo = seccion.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList();
-                        System.out.println("JSP" + seccion.getTablaMicrocurriculoList().get(0).getCantidadFilas());
-                        System.out.println(seccion.getTablaMicrocurriculoList().get(0).getCantidadColumnas());
+                        int con = 0;
                         for (int i = 0; i < seccion.getTablaMicrocurriculoList().get(0).getCantidadFilas(); i++) {
                     %><tr><%
                         for (int j = 0; j < seccion.getTablaMicrocurriculoList().get(0).getCantidadColumnas(); j++) {%>
-                      
-                        <td><%=tablainfo.get(j).getContenidoId().getTexto()%></td>
-                        <% }
+
+                        <td> <%=tablainfo.size() == 0 ? "" : tablas.get(seccion.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoPK().getId() - 1)[i][j]%></td>
+
+                        <% con++;
+                            }
                         %>
                     </tr>
-                    <% }
-                        %>
+                    <% }} }  %>
+
+
+
+
+
                 </tbody>
 
             </table>
 
-            <% }} %>
 
-
-
-        </form>
 
 
     </body>
