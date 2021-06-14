@@ -23,8 +23,10 @@ public class Conexion {
         }
         return conexion;
     }
+   
  
     public EntityManagerFactory getBd() {
+        bd.getCache().evictAll();
         return bd;
     }
 }

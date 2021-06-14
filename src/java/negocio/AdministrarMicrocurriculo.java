@@ -6,9 +6,12 @@
 package negocio;
 
 import dao.exceptions.NonexistentEntityException;
+import dto.Contenido;
 import dto.Materia;
 import dto.Microcurriculo;
 import dto.Pensum;
+import dto.SeccionMicrocurriculo;
+import dto.TablaMicrocurriculoInfo;
 import java.util.ArrayList;
 import java.util.List;
 import util.Conexion;
@@ -32,6 +35,33 @@ public class AdministrarMicrocurriculo {
         }
 
         return microcurriculos;
+    }
+
+    public static List<String[][]> ordenarTablaInfo(dto.Microcurriculo microcurriculo) {
+    
+        List<String[][]> tablas = new ArrayList<>();
+        List<dto.SeccionMicrocurriculo> sm = microcurriculo.getSeccionMicrocurriculoList();
+        for (SeccionMicrocurriculo seccionMicrocurriculo : sm) {
+            if (seccionMicrocurriculo.getSeccionId().getTipoSeccionId().getId() == 2) {
+                String tablaMatriz[][] = new String[seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getCantidadFilas()][seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getCantidadColumnas()];
+                System.out.println("Filas"+tablaMatriz.length);
+                    int con = 0;
+                for (int i = 0; i < tablaMatriz.length; i++) {
+                    
+                    System.out.println("Columnas"+tablaMatriz[i].length);
+                    for (int j = 0; j < tablaMatriz[i].length; j++) {
+                        System.out.println("LISTA"+seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList());
+                        if(!seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().isEmpty()){
+                        tablaMatriz[seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().get(con).getTablaMicrocurriculoInfoPK().getIdFila()][seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().get(con).getTablaMicrocurriculoInfoPK().getIdColumna()] = seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().get(con).getContenidoId().getTexto();
+                        con++;}
+                    }
+                }
+                tablas.add(tablaMatriz);
+
+            }
+        }
+        return tablas;
+
     }
 
     public dto.Microcurriculo obtenerMicrocurriculo(int idMicrocurriculo, int codigoMateria, int codigoPensum) {
@@ -95,17 +125,67 @@ public class AdministrarMicrocurriculo {
         return microcurriculoRta;
     }
 
+    public void actualizarAreaFormacionMicrocurriculo(dto.Microcurriculo microcurriculo, int areaFormacion) throws NonexistentEntityException, Exception {
+        Conexion con = Conexion.getConexion();
+        dao.MicrocurriculoJpaController daoMicrocurriculo = new dao.MicrocurriculoJpaController(con.getBd());
+        microcurriculo.setAreaDeFormacionId(new dto.AreaFormacion(areaFormacion));
+        daoMicrocurriculo.edit(microcurriculo);
+
+    }
+
+    public void actualizarFilasTabla(dto.TablaMicrocurriculo tabla) throws NonexistentEntityException, Exception {
+        Conexion con = Conexion.getConexion();
+        dao.TablaMicrocurriculoJpaController tablaDao = new dao.TablaMicrocurriculoJpaController(con.getBd());
+        tablaDao.edit(tabla);
+        borrarDatosTabla(tabla);
+    }
+
+    public void borrarDatosTabla(dto.TablaMicrocurriculo tabla) throws NonexistentEntityException {
+        Conexion con = Conexion.getConexion();
+        dao.TablaMicrocurriculoJpaController tablaDao = new dao.TablaMicrocurriculoJpaController(con.getBd());
+        dao.TablaMicrocurriculoInfoJpaController infoDao = new dao.TablaMicrocurriculoInfoJpaController(con.getBd());
+        List<dto.TablaMicrocurriculoInfo> tablaInfo = tabla.getTablaMicrocurriculoInfoList();
+        for (TablaMicrocurriculoInfo tablaMicrocurriculoInfo : tablaInfo) {
+            infoDao.destroy(tablaMicrocurriculoInfo.getTablaMicrocurriculoInfoPK());
+
+        }
+
+    }
+
+    public void registrarContenidoTablas(String[][] contenido, dto.SeccionMicrocurriculo seccion) throws Exception {
+        Conexion con = Conexion.getConexion();
+        dto.TablaMicrocurriculo tabla =  seccion.getTablaMicrocurriculoList().get(0);
+        dao.ContenidoJpaController contenidoDao = new dao.ContenidoJpaController(con.getBd());
+        dao.TablaMicrocurriculoInfoJpaController tablaDao = new dao.TablaMicrocurriculoInfoJpaController(con.getBd());
+        for (int i = 0; i < contenido.length; i++) {
+            for (int j = 0; j < contenido[i].length; j++) {
+                dto.Contenido contenido2 = new Contenido();
+                contenido2.setId(0);
+                contenido2.setTexto(contenido[i][j]);
+                contenido2.setCantidadItemsLista(0);
+                contenido2.setSeccionMicrocurriculoId(seccion);
+                contenidoDao.create(contenido2);
+                dto.TablaMicrocurriculoInfo tablainfo = new dto.TablaMicrocurriculoInfo(i, j, tabla.getTablaMicrocurriculoPK().getId(), seccion.getId());
+                tablainfo.setContenidoId(contenido2);
+                tablainfo.setTablaMicrocurriculo(tabla);
+                tablaDao.create(tablainfo);
+            }
+
+        }
+
+    }
+
     public void ingresarContenidoSecciones(String informacion, int idSeccionMicrocurriculo) throws NonexistentEntityException, Exception {
         Conexion con = Conexion.getConexion();
         dto.Contenido contenido = new dto.Contenido();
         dao.ContenidoJpaController daoContenido = new dao.ContenidoJpaController(con.getBd());
         dao.SeccionMicrocurriculoJpaController daoSeccionMicrocurriculo = new dao.SeccionMicrocurriculoJpaController(con.getBd());
         ;
-        dto.SeccionMicrocurriculo seccionMicro =daoSeccionMicrocurriculo.findSeccionMicrocurriculo(idSeccionMicrocurriculo);
+        dto.SeccionMicrocurriculo seccionMicro = daoSeccionMicrocurriculo.findSeccionMicrocurriculo(idSeccionMicrocurriculo);
         seccionMicro.getContenidoList().get(0).setTexto(informacion);
         daoSeccionMicrocurriculo.edit(seccionMicro);
-        daoContenido.destroy(   seccionMicro.getContenidoList().get(0).getId());
-     
+        daoContenido.destroy(seccionMicro.getContenidoList().get(0).getId());
+
         contenido.setTexto(informacion);
         contenido.setSeccionMicrocurriculoId(daoSeccionMicrocurriculo.findSeccionMicrocurriculo(idSeccionMicrocurriculo));
         contenido.setCantidadItemsLista(0);
