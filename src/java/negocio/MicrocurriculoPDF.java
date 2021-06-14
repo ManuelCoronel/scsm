@@ -27,6 +27,7 @@ import dto.MicrocurriculoPK;
 import dto.PrerrequisitoMateria;
 import dto.SeccionMicrocurriculo;
 import dto.TablaMicrocurriculo;
+import dto.TablaMicrocurriculoInfo;
 import dto.TipoAsignatura;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -155,7 +156,22 @@ public class MicrocurriculoPDF{
         }
         tab.setWidthPercentage(100);
         this.configEnca(tab, tm);
+        String[][] infoOrder = this.getOrder(tm.getTablaMicrocurriculoInfoList(), tm.getCantidadFilas(), tm.getCantidadColumnas());
+        for(String x[]: infoOrder){
+            for(String y: x){
+                tab.addCell(y);
+            }
+        }
         return tab;
+    }
+    
+    private String[][] getOrder(List<TablaMicrocurriculoInfo> tmis, int row, int col){
+        String[][] info = new String[row][col];
+        for(TablaMicrocurriculoInfo tmi: tmis){
+            info[tmi.getTablaMicrocurriculoInfoPK().getIdFila()][tmi.getTablaMicrocurriculoInfoPK().getIdColumna()] = tmi.getContenidoId().getTexto();
+        }
+        
+        return info;
     }
     
     private void configEnca(PdfPTable tab, TablaMicrocurriculo tm){
@@ -191,7 +207,7 @@ public class MicrocurriculoPDF{
     }
     
     public static void main(String[] args) throws NoSuchAlgorithmException, FileNotFoundException, DocumentException, IOException {
-        Microcurriculo m = new MicrocurriculoJpaController(Conexion.getConexion().getBd()).findMicrocurriculo(new MicrocurriculoPK(27, 1150505, 1));
+        Microcurriculo m = new MicrocurriculoJpaController(Conexion.getConexion().getBd()).findMicrocurriculo(new MicrocurriculoPK(1, 1150101, 1));
         
         MicrocurriculoPDF t = new MicrocurriculoPDF(m);
         t.createPDF();    
