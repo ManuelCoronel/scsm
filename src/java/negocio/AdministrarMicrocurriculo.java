@@ -8,6 +8,7 @@ package negocio;
 import dao.exceptions.NonexistentEntityException;
 import dto.Contenido;
 import dto.Materia;
+import dto.MateriaPK;
 import dto.Microcurriculo;
 import dto.Pensum;
 import dto.SeccionMicrocurriculo;
@@ -37,23 +38,31 @@ public class AdministrarMicrocurriculo {
         return microcurriculos;
     }
 
+    public dto.Microcurriculo obtenerMicrocurriculo(int codigoMateria, int codigoPensum) {
+        Conexion con = Conexion.getConexion();
+        dao.MateriaJpaController materiaDao = new dao.MateriaJpaController(con.getBd());
+        dto.Microcurriculo microcurriculo = materiaDao.findMateria(new MateriaPK(codigoMateria, codigoPensum)).getMicrocurriculoList().get(0);
+        return microcurriculo;
+    }
+
     public static List<String[][]> ordenarTablaInfo(dto.Microcurriculo microcurriculo) {
-    
+
         List<String[][]> tablas = new ArrayList<>();
         List<dto.SeccionMicrocurriculo> sm = microcurriculo.getSeccionMicrocurriculoList();
         for (SeccionMicrocurriculo seccionMicrocurriculo : sm) {
             if (seccionMicrocurriculo.getSeccionId().getTipoSeccionId().getId() == 2) {
                 String tablaMatriz[][] = new String[seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getCantidadFilas()][seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getCantidadColumnas()];
-                System.out.println("Filas"+tablaMatriz.length);
-                    int con = 0;
+                System.out.println("Filas" + tablaMatriz.length);
+                int con = 0;
                 for (int i = 0; i < tablaMatriz.length; i++) {
-                    
-                    System.out.println("Columnas"+tablaMatriz[i].length);
+
+                    System.out.println("Columnas" + tablaMatriz[i].length);
                     for (int j = 0; j < tablaMatriz[i].length; j++) {
-                        System.out.println("LISTA"+seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList());
-                        if(!seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().isEmpty()){
-                        tablaMatriz[seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().get(con).getTablaMicrocurriculoInfoPK().getIdFila()][seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().get(con).getTablaMicrocurriculoInfoPK().getIdColumna()] = seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().get(con).getContenidoId().getTexto();
-                        con++;}
+                        System.out.println("LISTA" + seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList());
+                        if (!seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().isEmpty()) {
+                            tablaMatriz[seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().get(con).getTablaMicrocurriculoInfoPK().getIdFila()][seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().get(con).getTablaMicrocurriculoInfoPK().getIdColumna()] = seccionMicrocurriculo.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList().get(con).getContenidoId().getTexto();
+                            con++;
+                        }
                     }
                 }
                 tablas.add(tablaMatriz);
@@ -154,7 +163,7 @@ public class AdministrarMicrocurriculo {
 
     public void registrarContenidoTablas(String[][] contenido, dto.SeccionMicrocurriculo seccion) throws Exception {
         Conexion con = Conexion.getConexion();
-        dto.TablaMicrocurriculo tabla =  seccion.getTablaMicrocurriculoList().get(0);
+        dto.TablaMicrocurriculo tabla = seccion.getTablaMicrocurriculoList().get(0);
         dao.ContenidoJpaController contenidoDao = new dao.ContenidoJpaController(con.getBd());
         dao.TablaMicrocurriculoInfoJpaController tablaDao = new dao.TablaMicrocurriculoInfoJpaController(con.getBd());
         for (int i = 0; i < contenido.length; i++) {

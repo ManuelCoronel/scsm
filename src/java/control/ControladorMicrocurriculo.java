@@ -5,6 +5,8 @@
  */
 package control;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.DocumentException;
 import dto.Pensum;
 import dto.Seccion;
 import java.io.IOException;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import negocio.AdministrarMicrocurriculo;
+import negocio.MicrocurriculoPDF;
 import negocio.RegistroMicrocurriculoBackground;
 
 /**
@@ -64,10 +67,9 @@ public class ControladorMicrocurriculo extends HttpServlet {
 
     }
 
-
     public void consultar(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-     int id = Integer.parseInt(request.getParameter("idMicrocurriculo"));
+        int id = Integer.parseInt(request.getParameter("idMicrocurriculo"));
         int codigoPensum = Integer.parseInt(request.getParameter("codigoPensum"));
         int codigoMateria = Integer.parseInt(request.getParameter("codigoMateria"));
         negocio.AdministrarMicrocurriculo adminMicrocurriculo = new negocio.AdministrarMicrocurriculo();
@@ -102,6 +104,25 @@ public class ControladorMicrocurriculo extends HttpServlet {
                 System.out.println(err.getMessage());
             }
         }
+        if (accion.equalsIgnoreCase("PDF")) {
+            try {
+                generarPDF(request, response);
+            } catch (DocumentException ex) {
+                Logger.getLogger(ControladorMicrocurriculo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void generarPDF(HttpServletRequest request, HttpServletResponse response) throws DocumentException, BadElementException, IOException {
+
+        int codigoPensum = Integer.parseInt(request.getParameter("codigoPensum"));
+        int codigoMateria = Integer.parseInt(request.getParameter("codigoMateria"));
+        negocio.AdministrarMicrocurriculo admin = new AdministrarMicrocurriculo();
+        
+        dto.Microcurriculo microcurriculo = admin.obtenerMicrocurriculo(codigoMateria, codigoPensum);
+        negocio.MicrocurriculoPDF pdf = new MicrocurriculoPDF(microcurriculo);
+        pdf.createPDF();    
+        
     }
 
     @Override
@@ -129,19 +150,19 @@ public class ControladorMicrocurriculo extends HttpServlet {
             if (secciones.getSeccionId().getTipoSeccionId().getId() == 2) {
 
                 int cantidadFilas = Integer.parseInt(request.getParameter("nfilas-" + secciones.getId()));
-                 secciones.getTablaMicrocurriculoList().get(0).setCantidadFilas(cantidadFilas);
+                secciones.getTablaMicrocurriculoList().get(0).setCantidadFilas(cantidadFilas);
                 adminM.actualizarFilasTabla(secciones.getTablaMicrocurriculoList().get(0));
                 String contenido[][] = new String[cantidadFilas][secciones.getTablaMicrocurriculoList().get(0).getCantidadColumnas()];
-                System.out.println("Cantidad Filas="+cantidadFilas);
-                System.out.println("Cantidad Columnas="+secciones.getTablaMicrocurriculoList().get(0).getCantidadColumnas());
+                System.out.println("Cantidad Filas=" + cantidadFilas);
+                System.out.println("Cantidad Columnas=" + secciones.getTablaMicrocurriculoList().get(0).getCantidadColumnas());
                 for (int i = 0; i < contenido.length; i++) {
                     for (int j = 0; j < contenido[i].length; j++) {
                         contenido[i][j] = (String) request.getParameter("contenido-" + secciones.getSeccionId().getId() + "-" + (i) + "-" + j);
-               }
+                    }
 
                 }
                 adminM.registrarContenidoTablas(contenido, secciones);
-           
+
             }
 
         }
@@ -166,9 +187,9 @@ public class ControladorMicrocurriculo extends HttpServlet {
 
     private void registrar(HttpServletRequest request, HttpServletResponse response) throws Exception {
         AdministrarMicrocurriculo adminMicrocurriculo = new AdministrarMicrocurriculo();
-      int areaFormacion = Integer.parseInt(request.getParameter("areasFormacion"));
+        int areaFormacion = Integer.parseInt(request.getParameter("areasFormacion"));
         dto.Microcurriculo microcurriculo = (dto.Microcurriculo) request.getSession().getAttribute("microcurriculo");
-       adminMicrocurriculo.actualizarAreaFormacionMicrocurriculo(microcurriculo, areaFormacion);
+        adminMicrocurriculo.actualizarAreaFormacionMicrocurriculo(microcurriculo, areaFormacion);
         registrarInformacionTablas(request, response, adminMicrocurriculo);
         registrarSecciones(request, response, adminMicrocurriculo);
         response.sendRedirect("jspTest/listaMicrocurriculos.jsp");
