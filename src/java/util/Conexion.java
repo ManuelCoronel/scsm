@@ -14,18 +14,14 @@ public class Conexion {
  
     private Conexion() {
         this.bd=Persistence.createEntityManagerFactory("scsmPU");
-        
     }
 
 
-    public static Conexion getConexion() 
-
-    {
-        if(conexion==null)
-        {
+    public static Conexion getConexion() {
+        if(conexion==null){
             conexion=new Conexion();
         }
-    return conexion;
+        return conexion;
     }
    
  
