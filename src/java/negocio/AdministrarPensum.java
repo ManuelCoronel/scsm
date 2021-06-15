@@ -41,7 +41,6 @@ public class AdministrarPensum {
 
     public AdministrarPensum() {
     }
-    
 
     public Pensum registrar(Integer id_programa, InputStream pensumFile) throws IOException, Exception {
         LectorPensum l = new LectorPensum();
@@ -80,7 +79,7 @@ public class AdministrarPensum {
 //        
         p.setMateriaList(materias);
         new MateriaJpaAlternativo(MyConnection.getConnection()).create(p);
-        
+
         return p;
     }
 
@@ -94,11 +93,22 @@ public class AdministrarPensum {
         return file.getAbsolutePath();
     }
 
-    public dto.Pensum obtenerPensum( int codigo, int programaCodigo) {
+    public dto.Pensum obtenerPensum(int codigo, int programaCodigo) {
         Conexion con = Conexion.getConexion();
         dao.PensumJpaController daoPensum = new dao.PensumJpaController(con.getBd());
-        Pensum pensum= daoPensum.findPensum(new dto.PensumPK(codigo, programaCodigo));
+        Pensum pensum = daoPensum.findPensum(new dto.PensumPK(codigo, programaCodigo));
         return pensum;
     }
+
+    public List<dto.Pensum> obtenerPensum(dto.Programa programa) {
+        return programa.getPensumList();
+    }
+
+    public List<dto.Materia> obtenerMateriasPensum(int pensumCodigo, int programaCodigo) {
+        System.out.println("Pensum "+pensumCodigo);
+        dto.Pensum pensum = obtenerPensum(pensumCodigo, programaCodigo);
+        List<dto.Materia> materias = pensum.getMateriaList();
+        return materias;
+ }
 
 }

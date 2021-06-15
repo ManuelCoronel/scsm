@@ -20,6 +20,12 @@
 
         <div>
             <form action="../ControladorGrupos" method="post">
+                <label>Pensum</label>
+                <select name="optionPensum" id="optionPensum" onchange="searchMateria()"></select>
+                <%dto.Usuario usuario = (dto.Usuario) (request.getSession().getAttribute("usuario"));%>
+                <br><br>
+
+
                 <label>Materia  </label>
                 <select name="optionMateria" id="optionMateria">
                 </select><br><br>
@@ -46,7 +52,7 @@
                         <th>Accion</th>
                     </tr>
                 </thead>
-                
+
             </table>
         </div> 
     </body>

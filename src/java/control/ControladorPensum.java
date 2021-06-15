@@ -7,17 +7,20 @@ package control;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import negocio.AdministrarGrupos;
 import negocio.AdministrarPensum;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 /**
  *
  * @author dunke
@@ -50,6 +53,7 @@ public class ControladorPensum extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
     }
 
     private void registrar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -59,20 +63,21 @@ public class ControladorPensum extends HttpServlet {
             List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             for (FileItem item : items) {
                 if (item.isFormField()) {
-                    switch(item.getFieldName()){
-                        case "programa": id_programa = Integer.parseInt(item.getString());
+                    switch (item.getFieldName()) {
+                        case "programa":
+                            id_programa = Integer.parseInt(item.getString());
                     }
                 } else {
                     pensumFile = item.getInputStream();
                 }
             }
             AdministrarPensum ap = new AdministrarPensum(request.getServletContext().getRealPath("/"));
-            
+
             request.getSession().setAttribute("pensum", ap.registrar(id_programa, pensumFile));
             response.sendRedirect("ControladorMicrocurriculo?accion=registrar");
         } catch (FileUploadException e) {
             throw new ServletException("Cannot parse multipart request.", e);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -90,8 +95,40 @@ public class ControladorPensum extends HttpServlet {
             throws ServletException, IOException {
         switch (request.getParameter("accion")) {
             case "registrar":
-                    this.registrar(request, response);
+                this.registrar(request, response);
         }
+        if (request.getParameter("accion").equalsIgnoreCase("obtenerPensums")) {
+            listarPensums(request, response);
+        }
+        if (request.getParameter("accion").equalsIgnoreCase("listarMaterias")) {
+            listarMaterias(request, response);
+        }
+    }
+
+    private void listarMaterias(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter pw = new PrintWriter(response.getOutputStream());
+        negocio.AdministrarPensum admin = new AdministrarPensum();
+        
+        dto.Programa programa = (dto.Programa) request.getSession().getAttribute("programaSesion");
+        int pensumCodigo = Integer.parseInt(request.getParameter("pensumCodigo"));
+        System.out.println("DIGITO "+pensumCodigo);
+        List<dto.Materia> materias = admin.obtenerMateriasPensum(pensumCodigo,programa.getCodigo());
+        for (dto.Materia m : materias) {
+            pw.println("<option value=" +m.getMateriaPK().getCodigoMateria() + ">" + m.getMateriaPK().getCodigoMateria() + "-" + m.getNombre() + "</option>");
+        }
+        pw.flush();
+
+    }
+
+    private void listarPensums(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter pw = new PrintWriter(response.getOutputStream());
+        negocio.AdministrarPensum admin = new AdministrarPensum();
+        dto.Programa programa = (dto.Programa) request.getSession().getAttribute("programaSesion");
+        List<dto.Pensum> pensums = admin.obtenerPensum(programa);
+        for (dto.Pensum p : pensums) {
+            pw.println("<option value=" + p.getPensumPK().getCodigo() + ">" + p.getPrograma().getCodigo() + "-" + p.getPensumPK().getCodigo() + "</option>");
+        }
+        pw.flush();
     }
 
     /**

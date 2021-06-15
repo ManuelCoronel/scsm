@@ -68,7 +68,7 @@ public class ControladorLogin extends HttpServlet {
        
         
         if (rol == 1) {
-            System.out.println(usuario.getDocente().getProgramaList().get(0).getNombrePrograma());
+            System.out.println(usuario.getDocente().getProgramaList().get(0));
             cargarPrograma(request, response, usuario);
            
         } else {

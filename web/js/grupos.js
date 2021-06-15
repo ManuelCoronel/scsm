@@ -1,8 +1,10 @@
 
 
 $(document).ready(function () {
+    searchPensums()
     searchDocente();
     searchMateria();
+  
 });
 
 function searchDocente() {
@@ -11,9 +13,23 @@ function searchDocente() {
         $('#optionDocente').html(response);
     });
 }
+
+function searchPensums() {
+    $.post('../ControladorPensum?accion=obtenerPensums', {}, function (response) {
+        $('#optionPensum').html(response);
+      $.post('../ControladorPensum?accion=listarMaterias', {pensumCodigo :$("#optionPensum").val() }, function (response) {
+        $('#optionMateria').html(response);
+    });
+    
+    });
+    
+}
+
 function searchMateria() {
     console.log("Estoy en searchMateria");
-    $.post('../ControladorGrupos?action=optionMateria', {}, function (response) {
+    var p = $("#optionPensum").val();
+    console.log(p); 
+    $.post('../ControladorPensum?accion=listarMaterias', {pensumCodigo : p}, function (response) {
         $('#optionMateria').html(response);
     });
 }
