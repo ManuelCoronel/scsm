@@ -24,7 +24,7 @@
             List<dto.TipoAsignatura> tiposAsignatura = (List<dto.TipoAsignatura>) request.getSession().getAttribute("tipoAsignatura");
         %>
 
-        <form action="../ControladorMicrocurriculo" method="POST" >
+        <form action="../ControladorMicrocurriculo" method="POST" accept-charset="ISO-8859-1">
             <input type="hidden"  name="microcurriculoId"  value=<%=microcurriculo.getMicrocurriculoPK().getId()%>>
             <table border="1">
                 <thead>

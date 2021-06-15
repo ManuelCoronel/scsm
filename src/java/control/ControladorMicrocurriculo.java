@@ -178,7 +178,7 @@ public class ControladorMicrocurriculo extends HttpServlet {
                 String informacion = request.getParameter("seccion-" + seccione.getId());
                 System.out.println("SECCION : " + "seccion-" + seccione.getId());
                 int idSeccionMicrocurriculo = Integer.parseInt(request.getParameter("seccionId-" + seccione.getId()));
-                System.out.println("informacion :" + informacion);
+                System.out.println("informacion asdasd:" + informacion);
                 adminM.ingresarContenidoSecciones(informacion.toString(), idSeccionMicrocurriculo);
             }
         }
