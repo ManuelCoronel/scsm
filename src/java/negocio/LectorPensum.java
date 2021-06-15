@@ -5,7 +5,6 @@
  */
 package negocio;
 
-import dao.TipoAsignaturaJpaController;
 import dto.EquivalenciaMateria;
 import dto.Materia;
 import dto.MateriaPK;
@@ -22,7 +21,6 @@ import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
-import util.Conexion;
 
 /**
  *
@@ -160,8 +158,6 @@ public class LectorPensum extends PDFTextStripper {
     //    0         1       2     3      4      5       6      7      8     9      10
     //{"codigo", "nombre", "ht", "hp", "hti", "cr", "prereq", "si", "rc", "te", "equis"}
     public List<Materia> getMaterias(Integer codigo_pensum) {
-        TipoAsignaturaJpaController tjpa = new TipoAsignaturaJpaController(Conexion.getConexion().getBd());
-        List<TipoAsignatura> ts = tjpa.findTipoAsignaturaEntities();
         List<Materia> materias_rs = new ArrayList<>();
         for (HashMap<String, Object> h : this.materias) {
             Integer prob = Integer.parseInt(h.get(COL_NAMES[0]).toString().replaceAll("\\s+", "").substring(4, 5));
@@ -174,10 +170,10 @@ public class LectorPensum extends PDFTextStripper {
             Integer hti = campoValido(h.get(COL_NAMES[4]).toString().replaceAll("\\s+", ""));
             Integer creditos = campoValido(h.get(COL_NAMES[5]).toString().replaceAll("\\s+", ""));
             Integer cre = campoValido(h.get(COL_NAMES[8]).toString().replaceAll("\\s+", ""));
-            Boolean type = h.get(COL_NAMES[9].toLowerCase().replaceAll("\\s+", "")).toString().equalsIgnoreCase("x");
-
+            Boolean type = h.get(COL_NAMES[9]).toString().replaceAll("\\s+", "").equalsIgnoreCase("X");
+            
             Materia m = new Materia(new MateriaPK(codigo, codigo_pensum), nombre, creditos, semestre, ht, hp, hti);
-            m.setTipoAsignaturaId(ts.get(type ? 1 : 0));
+            m.setTipoAsignaturaId(new TipoAsignatura(type ? 2 : 1));
 
             List<PrerrequisitoMateria> prerreq = this.formatPrerreq(m, codigo_pensum, ((ArrayList<String>) h.get(COL_NAMES[6])));
 

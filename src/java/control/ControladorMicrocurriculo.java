@@ -120,7 +120,7 @@ public class ControladorMicrocurriculo extends HttpServlet {
         negocio.AdministrarMicrocurriculo admin = new AdministrarMicrocurriculo();
         
         dto.Microcurriculo microcurriculo = admin.obtenerMicrocurriculo(codigoMateria, codigoPensum);
-        negocio.MicrocurriculoPDF pdf = new MicrocurriculoPDF(microcurriculo);
+        negocio.MicrocurriculoPDF pdf = new MicrocurriculoPDF(request.getServletContext().getRealPath("/"), microcurriculo);
         pdf.createPDF();    
         
     }

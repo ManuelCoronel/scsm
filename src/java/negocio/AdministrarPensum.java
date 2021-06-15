@@ -5,23 +5,17 @@
  */
 package negocio;
 
-import dao.EquivalenciaMateriaJpaController;
-import dao.MateriaJpaController;
 import dao_alternativo.MateriaJpaAlternativo;
 import dao.PensumJpaController;
-import dao.PrerrequisitoMateriaJpaController;
 import dao.ProgramaJpaController;
-import dto.EquivalenciaMateria;
 import dto.Materia;
 import dto.Pensum;
 import dto.PensumPK;
-import dto.PrerrequisitoMateria;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import util.Conexion;
@@ -45,7 +39,8 @@ public class AdministrarPensum {
 
     public Pensum registrar(Integer id_programa, InputStream pensumFile) throws IOException, Exception {
         LectorPensum l = new LectorPensum();
-        l.parsePDFDocument(cargarPensum(pensumFile, id_programa));
+        String path = cargarPensum(pensumFile, id_programa);
+        l.parsePDFDocument(path);
 
         int count = 1;
         EntityManagerFactory em = Conexion.getConexion().getBd();
@@ -67,6 +62,7 @@ public class AdministrarPensum {
 //        EquivalenciaMateriaJpaController ejpa = new EquivalenciaMateriaJpaController(em);
 //        PrerrequisitoMateriaJpaController prejpa = new PrerrequisitoMateriaJpaController(em);
         List<Materia> materias = l.getMaterias(count);
+        new File(path).delete();
 //        for(Materia m: materias){
 //            m.setPensum(p);
 //            mjpa.create(m);
