@@ -64,19 +64,7 @@ public class ControladorDepartamento extends HttpServlet {
             throws ServletException, IOException {
     }
 
-    private void listarDepartamento(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        PrintWriter pw = new PrintWriter(response.getOutputStream());
-        int id = Integer.parseInt(request.getParameter("query"));
-        DepartamentoJpaController djpa = new DepartamentoJpaController(Conexion.getConexion().getBd());
-        List<Departamento> depar = djpa.findDepartamentoEntities();
-        for(Departamento d: depar){
-            if(d.getFacultadId().getId().equals(id)){
-                pw.println("<option value="+d.getId()+">"+d.getNombreDepartamento()+"</option>");
-            }
-        }
-        pw.flush();
-    }
-    
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -88,11 +76,7 @@ public class ControladorDepartamento extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        switch (request.getParameter("accion")) {
-            case "listar":
-                listarDepartamento(request, response);
-                break;
-        }
+
     }
 
     /**

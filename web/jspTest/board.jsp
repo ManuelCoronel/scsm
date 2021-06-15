@@ -21,5 +21,7 @@
         <a href="registroPensum.jsp"><button type="button">Pensum</button></a><br><br>
         
         <a href="registroDocente.jsp"><button type="button">Docentes</button></a><br>
+        <a href="../ControladorGrupos?accion=listar"><button type="button">Grupos</button></a><br>
+  
     </body>
 </html>
