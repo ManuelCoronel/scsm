@@ -105,10 +105,6 @@ public class ControladorPensum extends HttpServlet {
         }
     }
 
-    public int getCreditos() {
-        return 0;
-    }
-
     private void listarMaterias(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         PrintWriter pw = new PrintWriter(response.getOutputStream());
@@ -121,7 +117,7 @@ public class ControladorPensum extends HttpServlet {
         System.out.println("DIGITO " + pensumCodigo);
         List<dto.Materia> materias = admin.obtenerMateriasPensum(pensumCodigo, programa.getCodigo());
         for (dto.Materia m : materias) {
-            pw.println("<option value=" + m.getMateriaPK().getCodigoMateria() + ">" + m.getMateriaPK().getCodigoMateria() + "-" + m.getNombre() + "</option>");
+            pw.println("<option value=" +m.getMateriaPK().getCodigoMateria() + ">" + m.getMateriaPK().getCodigoMateria() + "-" + m.getNombre() + "</option>");
         }
         pw.flush();
 

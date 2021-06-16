@@ -101,10 +101,25 @@ public class AdministrarPensum {
     }
 
     public List<dto.Materia> obtenerMateriasPensum(int pensumCodigo, int programaCodigo) {
-        System.out.println("Pensum "+pensumCodigo);
+        System.out.println("Pensum " + pensumCodigo);
         dto.Pensum pensum = obtenerPensum(pensumCodigo, programaCodigo);
         List<dto.Materia> materias = pensum.getMateriaList();
         return materias;
- }
+    }
+
+    public int[] creditosMateriasPensum(int pensumCodigo, int programaCodigo) {
+        List<dto.Materia> materias = obtenerMateriasPensum(pensumCodigo, programaCodigo);
+        int materiasXcreditos[] = new int[2];
+        int creditos = 0;
+        int cantMaterias = 0;
+        for (Materia m : materias) {
+            cantMaterias++;
+            creditos += m.getCreditos();
+        }
+        materiasXcreditos[0] = cantMaterias;
+        materiasXcreditos[1] = creditos;
+
+        return materiasXcreditos;
+    }
 
 }
