@@ -13,7 +13,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">      
         <script src="../js/JQuery.js"></script>
-        <script src="../js/grupos.js"></script>
+        <script src="../js/administrarGrupos.js"></script>
         <title>Grupos</title>
     </head>
     <body>
@@ -32,19 +32,28 @@
                 </select><br><br>
 
                 <label> Docente  </label>
+                <% List<dto.Docente> docentes = (List<dto.Docente>) (request.getSession().getAttribute("docentesPrograma"));%>
                 <select name="optionDocente" id="optionDocente">
+                    <%
+                        for (dto.Docente docente : docentes) {
+
+
+                    %>
+
+                    <option value="<%=docente.getCodigoDocente()%>"><%=docente.getNombre() + " " + docente.getApellido()%></option>
+                    <%}%>
                 </select><br>    <br>         
 
                 <label>Grupo </label>
                 <input type="text" name="txtGrupo" id="txtGrupo"><br><br>
-                
-                
-          
-                <%    Date fecha = new Date(); %> 
-              
-                <input type="hidden" name="anio" value="<%=fecha.getYear()+1900%>">
-                <input type="hidden" name="periodo" value="<%=fecha.getMonth()+1%>">
-                
+
+
+
+                <%    Date fecha = new Date();%> 
+
+                <input type="hidden" name="anio" value="<%=fecha.getYear() + 1900%>">
+                <input type="hidden" name="periodo" value="<%=fecha.getMonth() + 1%>">
+
                 <input type="submit" name="accion" value="Registrar Grupo"> Crear Grupo 
             </form><br><br>
         </div> 
@@ -57,10 +66,29 @@
                         <th>Codigo Materia</th>
                         <th>Nombre Materia</th>
                         <th>Codigo Docente</th>
+                        <th>Nombre Docente</th>
                         <th>Grupo</th>
                         <th>Accion</th>
                     </tr>
                 </thead>
+
+                <tbody>
+                    <% List<dto.MateriaPeriodoGrupo> materias = (List<dto.MateriaPeriodoGrupo>)request.getSession().getAttribute("grupos");
+                    for (dto.MateriaPeriodoGrupo materia : materias) {
+                            
+                        
+                    %>
+                    <tr>
+                        <td><%=materia.getMateriaPeriodo().getMateria().getMateriaPK().getCodigoMateria() %></td>
+                        <td><%=materia.getMateriaPeriodo().getMateria().getNombre() %></td>
+                        <td><%=materia.getDocente().getCodigoDocente() %></td>
+                        <td><%=materia.getDocente().getNombre()+" "+materia.getDocente().getApellido() %></td>
+                        <td><%=materia.getMateriaPeriodoGrupoPK().getGrupo() %></td>
+                        <td><a href="../ControladorGrupos?accion=Eliminar&grupo=<%=materia.getMateriaPeriodoGrupoPK().getGrupo()%>&docente_codigo=<%=materia.getDocente().getCodigoDocente()%>&anio=<%=materia.getMateriaPeriodoGrupoPK().getMateriaPeriodoAnio() %>&semestre_anio=<%=materia.getMateriaPeriodoGrupoPK().getMateriaPeriodoSemestreAnio() %>&codigo_materia=<%=materia.getMateriaPeriodoGrupoPK().getMateriaPeriodoMateriaCodigoMateria()%>&codigoPensum=<%=materia.getMateriaPeriodoGrupoPK().getMateriaPeriodoMateriaPensumCodigo() %>"><button type="button">Eliminar</button></a> </td>
+                    </tr>
+                    <%}%>
+                </tbody>
+
 
             </table>
         </div> 

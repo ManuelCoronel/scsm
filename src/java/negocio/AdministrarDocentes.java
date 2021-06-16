@@ -50,4 +50,8 @@ public class AdministrarDocentes {
         daoDocente.create(d);
     }
 
+    public List<dto.Docente> obtenerDocentesPrograma(dto.Programa programa) {
+        return programa.getDepartamentoId().getDocenteList();
+    }
+
 }

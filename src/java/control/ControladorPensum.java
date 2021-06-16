@@ -117,7 +117,7 @@ public class ControladorPensum extends HttpServlet {
         negocio.AdministrarPensum admin = new AdministrarPensum();
 
         dto.Programa programa = (dto.Programa) request.getSession().getAttribute("programaSesion");
-        int pensumCodigo = Integer.parseInt(request.getParameter("pensumCodigo"));
+        int pensumCodigo = Integer.parseInt(request.getParameter("codigoPensum"));
         System.out.println("DIGITO " + pensumCodigo);
         List<dto.Materia> materias = admin.obtenerMateriasPensum(pensumCodigo, programa.getCodigo());
         for (dto.Materia m : materias) {
