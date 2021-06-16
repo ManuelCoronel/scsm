@@ -6,24 +6,12 @@
 package control;
 
 import dao.DocenteJpaController;
-import dao.FacultadJpaController;
 import dao.UsuarioJpaController;
-import dto.Departamento;
 import dto.Docente;
-import dto.Facultad;
-import dto.Materia;
-import dto.Rol;
 import dto.Usuario;
-import dto.UsuarioPK;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletException;
@@ -31,6 +19,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import negocio.AdministrarDocentes;
+import negocio.Login;
 import util.PasswordAuthentication;
 import util.Conexion;
 
@@ -138,22 +128,22 @@ public class ControladorDocente extends HttpServlet {
 
     public void activarDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
         System.out.println("ACTIVAR DOCENTE");
-        String[] inactivos = request.getParameterValues("activarDocente");
+        AdministrarDocentes docentes = new AdministrarDocentes();
+        
+        String[] inactivos = request.getParameterValues("activarDocente2");
+        System.out.println(Arrays.toString(inactivos));
         for (String s : inactivos) {
+            System.out.println(s);
             String[] spliteado = s.split("-");
-            Docente d = docenteDao.findDocente(Integer.parseInt(spliteado[1]));
-            short in;
-            in = (short) ((d.getEstado() == 1) ? 0 : 1);
-            d.setEstado(in);
-            docenteDao.edit(d);
+            Docente d = docentes.obtenerDocente(Integer.parseInt(spliteado[1]));
+            docentes.activarDocente(d, "true".equals(spliteado[0]));
         }
+
         listarDocente(request, response);
 
     }
 
     public void guardarDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
-        Docente docente = new Docente();
-        PasswordAuthentication encriptarPass = new PasswordAuthentication();
         //lectura de datos
         int codigo = Integer.parseInt(request.getParameter("txtCodigo"));
         String nombre = request.getParameter("txtNombre");
@@ -162,27 +152,21 @@ public class ControladorDocente extends HttpServlet {
         short estado = 1;
         String password = request.getParameter("txtPassword");
         //Creacion del docente
-        docente.setNombre(nombre);
-        docente.setApellido(apellido);
-        docente.setDepartamentoId(new Departamento(departamento));
-        docente.setCodigoDocente(codigo);
-        docente.setEstado(estado);
+        AdministrarDocentes docentes = new AdministrarDocentes();
+        docentes.guardarDocente(nombre, apellido, departamento, codigo, estado);
+
         //Creacion del usuario
-        password = encriptarPass.hash(password.toCharArray()); //encriptando password
-        UsuarioPK upk = new UsuarioPK(0, codigo);
-        Usuario usuario = new Usuario(upk, password);
-        usuario.setRol(new Rol(2));
-        usuario.setDocente(docente);
-        upk.setDocenteCodigo(codigo);
-        docenteDao.create(docente); //docente creado 
-        usuarioDao.create(usuario); //usuario creado
+        Login l = new Login();
+        l.guardarDocente(password, codigo);
         response.sendRedirect("jspTest/registroDocente.jsp");
     }
 
     public void listarDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
         System.out.println("Listando docentes");
-        List<Docente> docentes = (List<Docente>) docenteDao.findDocenteEntities();
+        AdministrarDocentes d = new AdministrarDocentes();
+        List<Docente> docentes = d.listarDocentes();
         request.getSession().setAttribute("listaDocentes", docentes);
+        Usuario u = (Usuario) request.getSession().getAttribute("usuario");
         response.sendRedirect("jspTest/listaDocente.jsp");
     }
 
@@ -192,8 +176,6 @@ public class ControladorDocente extends HttpServlet {
         pw.println("<h1>Error</h1>");
         response.sendRedirect("jspTest/listaDocente.jsp");
     }
-
-
 
     /**
      * Returns a short description of the servlet.

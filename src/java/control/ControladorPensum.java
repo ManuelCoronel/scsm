@@ -105,6 +105,10 @@ public class ControladorPensum extends HttpServlet {
         }
     }
 
+    public int getCreditos() {
+        return 0;
+    }
+
     private void listarMaterias(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         PrintWriter pw = new PrintWriter(response.getOutputStream());
