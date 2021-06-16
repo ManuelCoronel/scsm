@@ -82,15 +82,17 @@
  <%
                 List<String[][]> tablas = (List<String[][]>) request.getSession().getAttribute("tablas");
                 List<dto.SeccionMicrocurriculo> secciones = microcurriculo.getSeccionMicrocurriculoList();
+               
                 for (dto.SeccionMicrocurriculo seccion : secciones) {
              %>
-
+           <%=seccion.getId()%>
             <%=seccion.getSeccionId().getNombre()%>  <br>
            
             <% int tipo = seccion.getSeccionId().getTipoSeccionId().getId();
                 if (tipo == 1) {%>
          
-          <p ><%=seccion.getContenidoList().get(0).getTexto()%></p>
+                    <p name="seccion-<%= seccion.getSeccionId().getId()%>" rows="10" cols="50" value="info"><%=seccion.getContenidoList().get(0).getTexto() %></p>
+
 
             <%   } else {
                 int canColum = seccion.getTablaMicrocurriculoList().get(0).getCantidadColumnas();
@@ -101,8 +103,7 @@
                         <th><%=seccion.getTablaMicrocurriculoList().get(0).getEncabezadoTablaList().get(i).getEncabezadoId().getNombre()%></th>
                             <% }%>
                     </tr>
-       
-                </thead>
+               </thead>
                 <tbody>
 
                     <%  List<dto.TablaMicrocurriculoInfo> tablainfo = seccion.getTablaMicrocurriculoList().get(0).getTablaMicrocurriculoInfoList();
@@ -117,16 +118,10 @@
                             }
                         %>
                     </tr>
-                    <% }} }  %>
+                    <% }}  %>
+</tbody>
 
-
-
-
-
-                </tbody>
-
-            </table>
-
+            </table><% } %>
 
 
 

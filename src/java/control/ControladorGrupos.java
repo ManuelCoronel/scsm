@@ -33,12 +33,7 @@ import util.Conexion;
 @WebServlet(name = "ControladorGrupos", urlPatterns = {"/ControladorGrupos"})
 public class ControladorGrupos extends HttpServlet {
 
-    EntityManagerFactory em = Conexion.getConexion().getBd();
-    DocenteJpaController docenteDao = new DocenteJpaController(em);
-    MateriaJpaController materiaDao = new MateriaJpaController(em);
-    MateriaPeriodoGrupoJpaController materiaGrupoDao = new MateriaPeriodoGrupoJpaController(em);
-
-    @Override
+  @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -48,6 +43,25 @@ public class ControladorGrupos extends HttpServlet {
             listar(request, response);
 
         }
+        if(accion.equalsIgnoreCase("Registrar Grupo")){
+            System.out.println("Grupos informacion");
+        
+        }
+    }
+    public void crearGrupo(HttpServletRequest request, HttpServletResponse response){
+    
+    int codigoPensum = (Integer.parseInt(request.getParameter("optionPensum")));
+    int optionMateria = (Integer.parseInt(request.getParameter("optionMateria")));
+    int codigoDocente = (Integer.parseInt(request.getParameter("optionDocente")));
+    String txtGrupo = (request.getParameter("txtGrupo"));
+    int anio = Integer.parseInt(request.getParameter("anio"));
+    int periodo = Integer.parseInt(request.getParameter("periodo"));
+    
+     }
+        
+    public boolean verificarMateriaPeriodo(HttpServletRequest request, HttpServletResponse response, int anio,int semestre, int codigoMateria, int codigoPensum){
+        
+        return true;
     }
 
     public void listar(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -71,10 +85,10 @@ public class ControladorGrupos extends HttpServlet {
         try {
             switch (request.getParameter("action")) {
                 case "optionDocente":
-                    this.optionDocente(request, response);
+                  //  this.optionDocente(request, response);
                     break;
                 case "optionMateria":
-                    this.optionMateria(request, response);
+              //      this.optionMateria(request, response);
                     break;
                 case "registrarGrupo":
                     this.registrarGrupo(request, response);
@@ -110,40 +124,40 @@ public class ControladorGrupos extends HttpServlet {
         pw.flush();
     }
 
-    public void optionDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
-        PrintWriter pw = response.getWriter();
-        List<Docente> docentes = docenteDao.findDocenteEntities();
-        docentes.forEach((teacher) -> {
-            pw.println("<option value=" + teacher.getCodigoDocente() + ">" + teacher.getNombre() + " " + teacher.getApellido() + "</option>");
-        });
-        pw.flush();
-    }
+//    public void optionDocente(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+//        PrintWriter pw = response.getWriter();
+//        List<Docente> docentes = docenteDao.findDocenteEntities();
+//        docentes.forEach((teacher) -> {
+//            pw.println("<option value=" + teacher.getCodigoDocente() + ">" + teacher.getNombre() + " " + teacher.getApellido() + "</option>");
+//        });
+//        pw.flush();
+//    }
+//
+//    public void optionMateria(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+//        PrintWriter pw = response.getWriter();
+//        List<Materia> materias = materiaDao.findMateriaEntities();
+//        materias.forEach((mat) -> {
+//            pw.println("<option value=" + mat.getMateriaPK().getCodigoMateria() + ">" + mat.getNombre() + "</option>");
+//        });
+//        pw.flush();
+//    }
 
-    public void optionMateria(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
-        PrintWriter pw = response.getWriter();
-        List<Materia> materias = materiaDao.findMateriaEntities();
-        materias.forEach((mat) -> {
-            pw.println("<option value=" + mat.getMateriaPK().getCodigoMateria() + ">" + mat.getNombre() + "</option>");
-        });
-        pw.flush();
-    }
-
-    public void listarGrupo(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
-        System.out.println("Listando grupos");
-        List<MateriaPeriodoGrupo> mpg = (List<MateriaPeriodoGrupo>) materiaGrupoDao.findMateriaPeriodoGrupoEntities();
-        request.getSession().setAttribute("listaGrupos", mpg);
-        response.sendRedirect("jspTest/grupos.jsp");
-    }
+//    public void listarGrupo(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
+//        System.out.println("Listando grupos");
+//        List<MateriaPeriodoGrupo> mpg = (List<MateriaPeriodoGrupo>) materiaGrupoDao.findMateriaPeriodoGrupoEntities();
+//        request.getSession().setAttribute("listaGrupos", mpg);
+//        response.sendRedirect("jspTest/grupos.jsp");
+//    }
 
     public void registrarGrupo(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
 
-        Integer idMateria = Integer.parseInt(request.getParameter("optionMateria"));
-        Integer idDocente = Integer.parseInt(request.getParameter("optionDocente"));
-        String txtGrupo = request.getParameter("txtGrupo");
-        MateriaPK mpk = new MateriaPK();
-        mpk.setCodigoMateria(idMateria);
-        Materia m = materiaDao.findMateria(mpk);
-        Docente d = docenteDao.findDocente(idDocente);
+//        Integer idMateria = Integer.parseInt(request.getParameter("optionMateria"));
+//        Integer idDocente = Integer.parseInt(request.getParameter("optionDocente"));
+//        String txtGrupo = request.getParameter("txtGrupo");
+//        MateriaPK mpk = new MateriaPK();
+//        mpk.setCodigoMateria(idMateria);
+//        Materia m = materiaDao.findMateria(mpk);
+//        Docente d = docenteDao.findDocente(idDocente);
 //        MateriaPeriodoGrupo grupo = new MateriaPeriodoGrupo(txtGrupo, idDocente);
 //        MateriaPeriodoGrupoPK grupopk = new MateriaPeriodoGrupoPK(txtGrupo, idDocente);
 //        MateriaPeriodoPK mpgk = new MateriaPeriodoPK(idMateria, 2021, 1);

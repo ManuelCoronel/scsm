@@ -98,7 +98,7 @@
                 List<dto.SeccionMicrocurriculo> secciones = microcurriculo.getSeccionMicrocurriculoList();
                 for (dto.SeccionMicrocurriculo seccion : secciones) {
              %>
-
+ <div>   <%=seccion.getId()%>
             <%=seccion.getSeccionId().getNombre()%>  <br>
            
             <% int tipo = seccion.getSeccionId().getTipoSeccionId().getId();
@@ -131,12 +131,7 @@
                         <%}%>
                     </tr>
                     <% }%>
-
-
-
-
-
-                </tbody>
+ </tbody>
 
             </table>
 

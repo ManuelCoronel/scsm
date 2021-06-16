@@ -7,6 +7,7 @@
 <%@page import="dto.MateriaPeriodoGrupo"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.Date"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,10 +17,10 @@
         <title>Grupos</title>
     </head>
     <body>
-        <h1>Hello Grupos!</h1>
+        <h1>Grupos!</h1>
 
         <div>
-            <form action="../ControladorGrupos" method="post">
+            <form action="../ControladorGrupos" method="GET">
                 <label>Pensum</label>
                 <select name="optionPensum" id="optionPensum" onchange="searchMateria()"></select>
                 <%dto.Usuario usuario = (dto.Usuario) (request.getSession().getAttribute("usuario"));%>
@@ -36,7 +37,15 @@
 
                 <label>Grupo </label>
                 <input type="text" name="txtGrupo" id="txtGrupo"><br><br>
-                <input type="submit" name="action" value="registrarGrupo"> Crear Grupo 
+                
+                
+          
+                <%    Date fecha = new Date(); %> 
+              
+                <input type="hidden" name="anio" value="<%=fecha.getYear()+1900%>">
+                <input type="hidden" name="periodo" value="<%=fecha.getMonth()+1%>">
+                
+                <input type="submit" name="accion" value="Registrar Grupo"> Crear Grupo 
             </form><br><br>
         </div> 
 
