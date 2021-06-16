@@ -101,7 +101,7 @@ public class ControladorPensum extends HttpServlet {
             listarPensums(request, response);
         }
         if (request.getParameter("accion").equalsIgnoreCase("listarMaterias")) {
-            listarMaterias(request, response);
+                listarMaterias(request, response);
         }
     }
 
@@ -111,10 +111,8 @@ public class ControladorPensum extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
         negocio.AdministrarPensum admin = new AdministrarPensum();
-
-        dto.Programa programa = (dto.Programa) request.getSession().getAttribute("programaSesion");
+         dto.Programa programa = (dto.Programa) request.getSession().getAttribute("programaSesion");
         int pensumCodigo = Integer.parseInt(request.getParameter("pensumCodigo"));
-        System.out.println("DIGITO " + pensumCodigo);
         List<dto.Materia> materias = admin.obtenerMateriasPensum(pensumCodigo, programa.getCodigo());
         for (dto.Materia m : materias) {
             pw.println("<option value=" +m.getMateriaPK().getCodigoMateria() + ">" + m.getMateriaPK().getCodigoMateria() + "-" + m.getNombre() + "</option>");

@@ -85,18 +85,18 @@ public class ControladorGrupos extends HttpServlet {
         int codigoPensum = (Integer.parseInt(request.getParameter("optionPensum")));
         int optionMateria = (Integer.parseInt(request.getParameter("optionMateria")));
         int codigoDocente = (Integer.parseInt(request.getParameter("optionDocente")));
-        String txtGrupo = (request.getParameter("txtGrupo"));
+
         int anio = Integer.parseInt(request.getParameter("anio"));
         int periodo = Integer.parseInt(request.getParameter("periodo"));
         dto.MateriaPeriodoPK materiaPeriodo = validarMateriaPeriodo(request, response, anio, periodo, optionMateria, codigoPensum);
-        validarMateriaPeriodoGrupo(request, response, materiaPeriodo, txtGrupo, codigoDocente);
-        listar(request, response);
+        validarMateriaPeriodoGrupo(request, response, materiaPeriodo,codigoDocente);
+     response.sendRedirect("ControladorGrupos?accion=listar");
 
     }
 
-    public void validarMateriaPeriodoGrupo(HttpServletRequest request, HttpServletResponse response, dto.MateriaPeriodoPK materiaPeriodo, String grupo, int codigoDocente) throws Exception {
+    public void validarMateriaPeriodoGrupo(HttpServletRequest request, HttpServletResponse response, dto.MateriaPeriodoPK materiaPeriodo, int codigoDocente) throws Exception {
         negocio.AdministrarGrupos admin = new negocio.AdministrarGrupos();
-        admin.validarMateriaPeriodoGrupo(materiaPeriodo, grupo, codigoDocente);
+        admin.validarMateriaPeriodoGrupo(materiaPeriodo, codigoDocente);
     }
 
     public dto.MateriaPeriodoPK validarMateriaPeriodo(HttpServletRequest request, HttpServletResponse response, int anio, int semestre, int codigoMateria, int codigoPensum) throws Exception {

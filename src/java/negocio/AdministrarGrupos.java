@@ -5,6 +5,8 @@
  */
 package negocio;
 
+import dao.MateriaPeriodoGrupoJpaController;
+import dao.MateriaPeriodoJpaController;
 import dao.exceptions.NonexistentEntityException;
 import dto.Materia;
 import dto.MateriaPeriodo;
@@ -27,15 +29,35 @@ public class AdministrarGrupos {
         return programa.getDepartamentoId().getDocenteList();
     }
     
-    public void validarMateriaPeriodoGrupo(dto.MateriaPeriodoPK materiaPeriodo, String grupo, int codigoDocente) throws Exception {
+    public void validarMateriaPeriodoGrupo(dto.MateriaPeriodoPK materiaPeriodo, int codigoDocente) throws Exception {
         negocio.AdministrarDocentes admin = new AdministrarDocentes();
         Conexion con = Conexion.getConexion();
         dao.MateriaPeriodoGrupoJpaController mpgDao = new dao.MateriaPeriodoGrupoJpaController(con.getBd());
-        dto.MateriaPeriodoGrupo mpg = new dto.MateriaPeriodoGrupo(grupo, codigoDocente, materiaPeriodo.getAnio(), materiaPeriodo.getSemestreAnio(), materiaPeriodo.getMateriaPensumCodigo(), materiaPeriodo.getMateriaCodigoMateria());
+        
+        dto.MateriaPeriodoGrupo mpg = new dto.MateriaPeriodoGrupo(obtenerUlitmoGrupo(materiaPeriodo), codigoDocente, materiaPeriodo.getAnio(), materiaPeriodo.getSemestreAnio(), materiaPeriodo.getMateriaPensumCodigo(), materiaPeriodo.getMateriaCodigoMateria());
         mpg.setMateriaPeriodo(new dto.MateriaPeriodo(materiaPeriodo));
         dto.Docente docente = admin.obtenerDocente(codigoDocente);
         mpg.setDocente(docente);
         mpgDao.create(mpg);
+    }
+    public String obtenerUlitmoGrupo(dto.MateriaPeriodoPK materiaPeriodo){
+    Conexion con = Conexion.getConexion();
+        dao.MateriaPeriodoGrupoJpaController mpgDao = new  MateriaPeriodoGrupoJpaController(con.getBd());
+        dao.MateriaPeriodoJpaController mpDao = new MateriaPeriodoJpaController(con.getBd());
+        int letra[] = new int[27];
+        
+        dto.MateriaPeriodo mp = (mpDao.findMateriaPeriodo(materiaPeriodo));
+        List<dto.MateriaPeriodoGrupo> mpg = mp.getMateriaPeriodoGrupoList();
+        for (MateriaPeriodoGrupo materiaPeriodoGrupo : mpg) {
+            letra[materiaPeriodoGrupo.getMateriaPeriodoGrupoPK().getGrupo().charAt(0)-65] = 1;
+        }
+        for (int i = 0; i < letra.length; i++) {
+            if(letra[i]==0){
+                char x = (char) ('A'+i);
+            return x+"";
+            }
+        }
+        return null;
     }
     
     public dto.MateriaPeriodoPK validarMateriaPeriodo(int anio, int semestre, int codigoMateria, int codigoPensum) throws Exception {

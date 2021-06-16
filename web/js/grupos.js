@@ -8,7 +8,7 @@
 
 
 $(document).ready(function () {
-    searchPensums()
+  searchPensums()
   searchMateria();
   
 });
@@ -17,7 +17,7 @@ $(document).ready(function () {
 function searchPensums() {
     $.post('../ControladorPensum?accion=obtenerPensums', {}, function (response) {
         $('#optionPensum').html(response);
-      $.post('../ControladorPensum?accion=listarMaterias', {pensumCodigo :$("#optionPensum").val() }, function (response) {
+      $.post('../ControladorPensum?accion=listarMaterias', {pensumCodigo:$("#optionPensum").val() }, function (response) {
         $('#optionMateria').html(response);
     });
     
@@ -29,7 +29,7 @@ function searchMateria() {
     console.log("Estoy en searchMateria");
     var p = $("#optionPensum").val();
     console.log(p); 
-    $.post('../ControladorPensum?accion=listarMaterias', {pensumCodigo : p}, function (response) {
+    $.post('../ControladorPensum?accion=listarMaterias', {pensumCodigo:p}, function (response) {
         $('#optionMateria').html(response);
     });
 }
