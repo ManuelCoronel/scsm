@@ -4,6 +4,7 @@
     Author     : jhoser
 --%>
 
+<%@page import="dto.Usuario"%>
 <%@page import="util.Conexion"%>
 <%@page import="dao.DocenteJpaController"%>
 <%@page import="dto.Docente"%>
@@ -15,6 +16,7 @@
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Lista Docente</title>
+        <script src="../js/JQuery.js"></script>
         <style>/* The switch - the box around the slider */
             .switch {
                 position: relative;
@@ -96,7 +98,11 @@
             <%
                 List<Docente> docentes = (List<Docente>) request.getSession().getAttribute("listaDocentes");
                 System.out.println(docentes.size());
+                Usuario u = (Usuario) request.getSession().getAttribute("usuario");
+
                 for (Docente teacher : docentes) {
+                    if (u.getDocente().getDepartamentoId().getId() == teacher.getDepartamentoId().getId()) {
+
             %>
             <tbody>
                 <tr>
@@ -112,10 +118,21 @@
                             <!-- Rounded switch -->
 
                             <label class="switch">
-                                <input type="checkbox" name="activarDocente"  value="activarDocente-<%=teacher.getCodigoDocente()%>" id="activarDocente-<%=teacher.getCodigoDocente()%>" onchange="validarCheck(<%=teacher.getCodigoDocente()%>)">
+                                <%if (teacher.getEstado() == 1) {%>
+                                <input type="hidden"  name="activarDocente2"  value="true-<%=teacher.getCodigoDocente()%>" id="activarDocente2-<%=teacher.getCodigoDocente()%>" >
+
+                                <input type="checkbox"  name="activarDocente"  value="true-<%=teacher.getCodigoDocente()%>" id="activarDocente-<%=teacher.getCodigoDocente()%>" onchange="validarCheck(<%=teacher.getCodigoDocente()%>)" checked>
+                                <%} else {%>
+                                <input type="hidden"  name="activarDocente2"  value="false-<%=teacher.getCodigoDocente()%>" id="activarDocente2-<%=teacher.getCodigoDocente()%>" >
+
+                                <input type="checkbox"  name="activarDocente"  value="false-<%=teacher.getCodigoDocente()%>" id="activarDocente-<%=teacher.getCodigoDocente()%>" onchange="validarCheck(<%=teacher.getCodigoDocente()%>)" >
+
+                                <%}%>
+
                                 <span class="slider round"></span>
                             </label>
-                            <%}%>  
+                            <%}
+                                }%>  
                             <input type="submit">
                         </form>
                     </td>
@@ -124,11 +141,18 @@
             </tbody>
 
         </table>
-      
+
     </body>
     <script>
         function validarCheck(codigo) {
-            console.log(document.getElementById("activarDocente-" + codigo).checked);
+            if (document.getElementById("activarDocente-" + codigo).checked) {
+                document.getElementById("activarDocente2-" + codigo).value = true + "-" + codigo;
+
+
+            } else {
+                document.getElementById("activarDocente2-" + codigo).value = false + "-" + codigo;
+
+            }
         }
     </script>
 </html>
