@@ -5,15 +5,18 @@
  */
 package control;
 
+import dto.Docente;
 import dto.Programa;
 import dto.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import negocio.Login;
 import negocio.RolDocente;
 
 /**
@@ -61,7 +64,6 @@ public class ControladorMicrocurriculoDocente extends HttpServlet {
             pw.println("<h1>Hizo algo</h1>");
 
         } catch (Exception e) {
-            System.out.println("estoy editando");
             pw.println("<h1>Error</h1>");
             e.printStackTrace();
             System.err.println(e);
@@ -85,11 +87,13 @@ public class ControladorMicrocurriculoDocente extends HttpServlet {
 
     public void microDocentes(HttpServletRequest request, HttpServletResponse response) throws IOException {
         RolDocente rd = new RolDocente();
-        Programa p = (Programa) request.getSession().getAttribute("programaSesion");
-        System.out.println(p.toString());
         Usuario u = (Usuario) request.getSession().getAttribute("usuario");
-        int codigo = u.getDocente().getCodigoDocente();
-        request.getSession().setAttribute("misMicrocurriculos", rd.microcurriculosDocentes(p, codigo));
+        Usuario nuevoUser = rd.buscarUsuario(u.getDocente().getCodigoDocente());
+        Login l = new Login();
+        Docente d = l.obtenerDocente(nuevoUser.getDocente().getCodigoDocente());
+        
+        int codigo = nuevoUser.getDocente().getCodigoDocente();
+        request.getSession().setAttribute("misMicrocurriculos", rd.microcurriculosDocentes(codigo));
         response.sendRedirect("jspTest/microcurriculoDocente.jsp");
     }
 

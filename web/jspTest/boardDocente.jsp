@@ -13,13 +13,8 @@
     </head>
     <body>
 
-
-        <%
-            request.getSession().removeAttribute("materias");
-        %>
         <a href="../ControladorMicrocurriculoDocente?accion=listarTodos"><button type="button">Mis Microcurriculo</button></a><br><br>
         <a href="../ControladorGrupos?accion=listar"><button type="button">Grupos</button></a><br>
-        <a href="listaPensum.jsp"><button type="button">lista Pensum</button></a><br>
 
     </body>
 </html>

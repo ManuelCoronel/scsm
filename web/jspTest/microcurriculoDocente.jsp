@@ -24,18 +24,27 @@
             <th>Accion</th>
         </thead>     
         <tbody>
+
             <%
                 List<MateriaPeriodo> mp = (List<MateriaPeriodo>) request.getSession().getAttribute("misMicrocurriculos");
+
                 for (MateriaPeriodo materia : mp) {
             %>
-        <td><%=materia.getMateriaPeriodoPK().getMateriaPensumCodigo()%></td> 
-        <td><%=materia.getMateriaPeriodoPK().getMateriaPensumCodigo()%></td>         
-        <td><%=materia.getMateriaPeriodoPK().getMateriaCodigoMateria()%></td>         
-        <td><%=materia.getMateriaPeriodoPK().getSemestreAnio()%></td>         
-        <td>ALGO1 ALGO2</td> 
-        <%}%>
-    </tbody>
+            <tr>
+                <td><%=materia.getMateria().getPensum().getPensumPK().getProgramaCodigo() + "-" + materia.getMateria().getPensum().getPensumPK().getCodigo()%></td> 
+                <td><%=materia.getMateria().getMateriaPK().getCodigoMateria()%></td> 
+                <td><%=materia.getMateria().getNombre()%></td> 
+                <td><%=materia.getMateria().getCreditos()%></td>                
+                <td><%=materia.getMateriaPeriodoPK().getSemestreAnio()%></td>         
+                <td>
+                    ALGO1
+                    ALGO2
+                </td> 
+            </tr>
+            <%}%>
 
-</table> 
+        </tbody>
+
+    </table> 
 </body>
 </html>
