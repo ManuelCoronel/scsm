@@ -44,8 +44,6 @@
                     <%}%>
                 </select><br>    <br>         
 
-                <label>Grupo </label>
-                <input type="text" name="txtGrupo" id="txtGrupo"><br><br>
 
 
 
