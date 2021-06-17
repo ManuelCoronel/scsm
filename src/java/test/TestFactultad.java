@@ -11,13 +11,20 @@ import dto.Departamento;
 import dto.Facultad;
 import java.util.ArrayList;
 import java.util.List;
+import negocio.AdministrarMicrocurriculo;
 /**
  *
  * @author Manuel
  */
 public class TestFactultad {
     
-    public static void main(String[] args) throws ClassNotFoundException {
+    
+    public static void main(String[] args){
+        AdministrarMicrocurriculo am=new AdministrarMicrocurriculo ();
+        am.listaMicrocurriculos(7, 1150606);
+    }
+    
+    /*public static void main(String[] args) throws ClassNotFoundException {
         Conexion con = Conexion.getConexion();
         FacultadJpaController facultadDao = new dao.FacultadJpaController(con.getBd());
       
@@ -34,7 +41,7 @@ public class TestFactultad {
 //        }
 
 
-    }
+    }*/
         
     
     

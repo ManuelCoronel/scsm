@@ -27,7 +27,7 @@ public class Login {
         dto.Usuario usuario = daoUsuario.findUsuario(usuarioPk);
         System.out.println(usuario);
 
-        if (usuario != null && usuario.getClave().equals(contrasena)) {
+        if (usuario != null && usuario.getClave().equals(contrasena) && usuario.getDocente().getEstado()==1) {
             return true;
         } else {
             return false;

@@ -198,7 +198,7 @@ public class ControladorMicrocurriculo extends HttpServlet {
     private void crearMicrocurriculo(HttpServletRequest request, HttpServletResponse response) throws Exception {
         new RegistroMicrocurriculoBackground(((Pensum) request.getSession().getAttribute("pensum"))).start();
     }
-
+   
     @Override
     public String getServletInfo() {
         return "Short description";

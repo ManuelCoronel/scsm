@@ -5,17 +5,20 @@
  */
 package negocio;
 
+import dao.SeccionMicrocurriculoJpaController;
 import dao.exceptions.NonexistentEntityException;
 import dto.Contenido;
 import dto.Materia;
 import dto.MateriaPK;
 import dto.Microcurriculo;
+import dto.MicrocurriculoPK;
 import dto.Pensum;
 import dto.SeccionMicrocurriculo;
 import dto.TablaMicrocurriculoInfo;
 import java.util.ArrayList;
 import java.util.List;
 import util.Conexion;
+import dto.SeccionCambio;
 
 /**
  *
@@ -224,6 +227,29 @@ public class AdministrarMicrocurriculo {
         Conexion con = Conexion.getConexion();
         dao.TipoAsignaturaJpaController daoTipoAsignatura = new dao.TipoAsignaturaJpaController(con.getBd());
         return daoTipoAsignatura.findTipoAsignaturaEntities();
+    }
+
+    // 7 1150606
+    public void listaMicrocurriculos(int idseccion, int idmateria) {
+        Conexion con = Conexion.getConexion();
+        dao.SeccionMicrocurriculoJpaController sec = new SeccionMicrocurriculoJpaController(con.getBd());
+        List<SeccionMicrocurriculo> secciones = sec.findSeccionMicrocurriculoEntities();
+
+        for (SeccionMicrocurriculo sm : secciones) {
+            List<Contenido> contenidos = sm.getContenidoList();
+            for (Contenido c : contenidos) {
+                if (sm.getSeccionId().getId() == idseccion && sm.getMicrocurriculo().getMateria().getMateriaPK().getCodigoMateria() == idmateria) {
+                    if (c.getSeccionMicrocurriculoId().getId() == sm.getId()) {
+                        System.out.println(c.getId());
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void cambioMicro() {
+
     }
 
 }
