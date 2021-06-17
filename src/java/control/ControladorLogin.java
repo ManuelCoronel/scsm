@@ -55,9 +55,13 @@ public class ControladorLogin extends HttpServlet {
         System.out.println(valido);
         if (valido) {
             cargarInformacion(request, response, codigo, login, rol);
-            response.sendRedirect("jspTest/board.jsp");
+            if (rol == 1) {
+                response.sendRedirect("jspTest/board.jsp");
+            } else {
+                response.sendRedirect("jspTest/boardDocente.jsp");
+            }
         } else {
-         
+
         }
 
     }
@@ -65,26 +69,23 @@ public class ControladorLogin extends HttpServlet {
     public static void cargarInformacion(HttpServletRequest request, HttpServletResponse response, int codigo, Login login, int rol) {
         dto.Usuario usuario = login.obtenerUsuario(codigo, rol);
         request.getSession().setAttribute("usuario", usuario);
-       
-        
+
         if (rol == 1) {
             System.out.println(usuario.getDocente().getProgramaList().get(0));
             cargarPrograma(request, response, usuario);
-           
+
         } else {
             cargarDepartamento(request, response, usuario);
         }
 
     }
-    
-   
 
-    public static void cargarDepartamento(HttpServletRequest request, HttpServletResponse response,dto.Usuario usuario) {
-            request.getSession().setAttribute("departamentoSesion",usuario.getDocente().getDepartamentoId().getNombreDepartamento());
+    public static void cargarDepartamento(HttpServletRequest request, HttpServletResponse response, dto.Usuario usuario) {
+        request.getSession().setAttribute("departamentoSesion", usuario.getDocente().getDepartamentoId().getNombreDepartamento());
     }
 
-    public static void cargarPrograma(HttpServletRequest request, HttpServletResponse response,dto.Usuario usuario) {
-           request.getSession().setAttribute("programaSesion",usuario.getDocente().getProgramaList().get(0));
+    public static void cargarPrograma(HttpServletRequest request, HttpServletResponse response, dto.Usuario usuario) {
+        request.getSession().setAttribute("programaSesion", usuario.getDocente().getProgramaList().get(0));
     }
 
     @Override

@@ -22,22 +22,20 @@
             <th>Creditos</th>
             <th>Semestre</th>
             <th>Accion</th>
-        </thead>
-        <%
-            List<MateriaPeriodo> mp = (List<MateriaPeriodo>) request.getSession().getAttribute("misMicrocurriculo");
-            for (MateriaPeriodo materia : mp) {
-        %>
+        </thead>     
         <tbody>
+            <%
+                List<MateriaPeriodo> mp = (List<MateriaPeriodo>) request.getSession().getAttribute("misMicrocurriculos");
+                for (MateriaPeriodo materia : mp) {
+            %>
         <td><%=materia.getMateriaPeriodoPK().getMateriaPensumCodigo()%></td> 
-        <td>a</td> 
-        <td>a</td> 
-        <td>a</td> 
-        <td>a</td> 
-        <td>a</td> 
-        <td>a</td> 
+        <td><%=materia.getMateriaPeriodoPK().getMateriaPensumCodigo()%></td>         
+        <td><%=materia.getMateriaPeriodoPK().getMateriaCodigoMateria()%></td>         
+        <td><%=materia.getMateriaPeriodoPK().getSemestreAnio()%></td>         
+        <td>ALGO1 ALGO2</td> 
+        <%}%>
     </tbody>
-    <%}%>
+
 </table> 
-<h1>Hello World!</h1>
 </body>
 </html>

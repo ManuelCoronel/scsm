@@ -26,7 +26,9 @@ public class RolDocente {
         List<MateriaPeriodoGrupo> lmg = ag.obtenerMateriaPeriodoGrupo(p);
         List<MateriaPeriodo> mp = new ArrayList<>();
         for (MateriaPeriodoGrupo materiaGrupo : lmg) {
+            System.out.println(materiaGrupo.getDocente().getCodigoDocente() + " " + codigoDocente);
             if (materiaGrupo.getDocente().getCodigoDocente() == codigoDocente) {
+                System.out.println(materiaGrupo.getDocente().getCodigoDocente() + " " + codigoDocente);
                 mp.add(materiaGrupo.getMateriaPeriodo());
             }
         }

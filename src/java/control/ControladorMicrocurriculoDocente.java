@@ -85,10 +85,10 @@ public class ControladorMicrocurriculoDocente extends HttpServlet {
 
     public void microDocentes(HttpServletRequest request, HttpServletResponse response) throws IOException {
         RolDocente rd = new RolDocente();
-        Programa p = (Programa) request.getSession().getAttribute("programa");
+        Programa p = (Programa) request.getSession().getAttribute("programaSesion");
+        System.out.println(p.toString());
         Usuario u = (Usuario) request.getSession().getAttribute("usuario");
         int codigo = u.getDocente().getCodigoDocente();
-        rd.microcurriculosDocentes(p, codigo);
         request.getSession().setAttribute("misMicrocurriculos", rd.microcurriculosDocentes(p, codigo));
         response.sendRedirect("jspTest/microcurriculoDocente.jsp");
     }

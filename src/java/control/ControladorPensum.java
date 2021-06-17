@@ -55,17 +55,32 @@ public class ControladorPensum extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        switch (request.getParameter("accion")) {
-            case "listarPensum":
-                this.listarPensum2(request, response);
+        PrintWriter pw = response.getWriter();
+        try {
+            switch (request.getParameter("accion")) {
+                case "listarPensum":
+                    this.listarPensum2(request, response);
+            }
+        } catch (Exception e) {
+            System.out.println("estoy editando");
+            pw.println("<h1>Error</h1>");
+            e.printStackTrace();
+            System.err.println(e);
         }
+        pw.flush();
     }
 
     public void listarPensum2(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //listar pensum
         AdministrarPensum admin = new AdministrarPensum();
         Usuario u = (Usuario) request.getSession().getAttribute("usuario");
-        List<Pensum> pensum = admin.obtenerPensum(u.getDocente().getProgramaList().get(0));
+        dto.Programa programa = (dto.Programa) request.getSession().getAttribute("programaSesion");
+        List<Pensum> pensum = admin.obtenerPensum(programa);
         request.getSession().setAttribute("listaPensum2", pensum);
+        //lista materias del pensum
+        int pensumCodigo = pensum.get(0).getPensumPK().getCodigo();
+        List<dto.Materia> materias = admin.obtenerMateriasPensum(pensumCodigo, programa.getCodigo());
+        request.getSession().setAttribute("listaMateriasTodas", materias);
 
         response.sendRedirect("jspTest/listaPensum.jsp");
 
@@ -116,7 +131,7 @@ public class ControladorPensum extends HttpServlet {
             listarPensums(request, response);
         }
         if (request.getParameter("accion").equalsIgnoreCase("listarMaterias")) {
-                listarMaterias(request, response);
+            listarMaterias(request, response);
         }
     }
 
@@ -126,7 +141,7 @@ public class ControladorPensum extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
         negocio.AdministrarPensum admin = new AdministrarPensum();
-         dto.Programa programa = (dto.Programa) request.getSession().getAttribute("programaSesion");
+        dto.Programa programa = (dto.Programa) request.getSession().getAttribute("programaSesion");
         int pensumCodigo = Integer.parseInt(request.getParameter("pensumCodigo"));
         List<dto.Materia> materias = admin.obtenerMateriasPensum(pensumCodigo, programa.getCodigo());
         for (dto.Materia m : materias) {

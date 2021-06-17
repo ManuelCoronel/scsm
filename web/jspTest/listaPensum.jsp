@@ -4,6 +4,7 @@
     Author     : jhoser
 --%>
 
+<%@page import="dto.Materia"%>
 <%@page import="dto.Pensum"%>
 <%@page import="java.util.List"%>
 <%@page import="dto.Usuario"%>
@@ -16,6 +17,26 @@
         <title>Lista Pensum</title>
     </head>
     <body>
+        <h1>LISTAR MATERIAS TODAS</h1>
+
+        <%
+            List<Materia> materias = (List<Materia>) request.getSession().getAttribute("listaMateriasTodas");
+            int mayor = 0;
+            for (Materia m : materias) {
+                if (m.getSemestre() > mayor) {
+
+                    mayor = m.getSemestre();%>
+        <h1><%= mayor%></h1>
+        <%
+            }
+        %>
+        Semestre  <%= m.getSemestre()%> <br>
+        Codigo <%= m.getMateriaPK().getCodigoMateria()%> <br>
+        Nombre <%= m.getNombre()%> <br>
+        Creditos <%= m.getCreditos()%> <br>
+
+        <%} %>
+
         <h1>Lista Pensum</h1>
         <table>
             <thead>
