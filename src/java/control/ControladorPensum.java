@@ -5,6 +5,8 @@
  */
 package control;
 
+import dto.Pensum;
+import dto.Usuario;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -53,6 +55,19 @@ public class ControladorPensum extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        switch (request.getParameter("accion")) {
+            case "listarPensum":
+                this.listarPensum2(request, response);
+        }
+    }
+
+    public void listarPensum2(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        AdministrarPensum admin = new AdministrarPensum();
+        Usuario u = (Usuario) request.getSession().getAttribute("usuario");
+        List<Pensum> pensum = admin.obtenerPensum(u.getDocente().getProgramaList().get(0));
+        request.getSession().setAttribute("listaPensum2", pensum);
+
+        response.sendRedirect("jspTest/listaPensum.jsp");
 
     }
 
@@ -117,7 +132,7 @@ public class ControladorPensum extends HttpServlet {
         System.out.println("DIGITO " + pensumCodigo);
         List<dto.Materia> materias = admin.obtenerMateriasPensum(pensumCodigo, programa.getCodigo());
         for (dto.Materia m : materias) {
-            pw.println("<option value=" +m.getMateriaPK().getCodigoMateria() + ">" + m.getMateriaPK().getCodigoMateria() + "-" + m.getNombre() + "</option>");
+            pw.println("<option value=" + m.getMateriaPK().getCodigoMateria() + ">" + m.getMateriaPK().getCodigoMateria() + "-" + m.getNombre() + "</option>");
         }
         pw.flush();
 
@@ -125,7 +140,7 @@ public class ControladorPensum extends HttpServlet {
 
     private void listarPensums(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter pw = new PrintWriter(response.getOutputStream());
-            response.setContentType("text/html; charset=UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
         negocio.AdministrarPensum admin = new AdministrarPensum();
         dto.Programa programa = (dto.Programa) request.getSession().getAttribute("programaSesion");
         List<dto.Pensum> pensums = admin.obtenerPensum(programa);

@@ -30,15 +30,13 @@
                 AdministrarPensum admin = new AdministrarPensum();
                 Usuario u = (Usuario) request.getSession().getAttribute("usuario");
 
-                List<Pensum> pensum = admin.obtenerPensum(u.getDocente().getProgramaList().get(0));
-                pensum.get(0).getPensumPK().getProgramaCodigo();
-                pensum.get(0).getPensumPK().getCodigo();
+                List<Pensum> pensum = (List<Pensum>) request.getSession().getAttribute("listaPensum2");
                 //creditos 
                 //cantidamaterias
-
-                for (Pensum p : pensum) {
-                    if (u.getDocente().getProgramaList().get(0).getDirectorPrograma().getCodigoDocente() == p.getPrograma().getDirectorPrograma().getCodigoDocente()) {
-                        int materiaXcreditos[] = admin.creditosMateriasPensum(p.getPensumPK().getCodigo(), p.getPensumPK().getProgramaCodigo());
+                if (pensum != null) {
+                    for (Pensum p : pensum) {
+                        if (u.getDocente().getProgramaList().get(0).getDirectorPrograma().getCodigoDocente() == p.getPrograma().getDirectorPrograma().getCodigoDocente()) {
+                            int materiaXcreditos[] = admin.creditosMateriasPensum(p.getPensumPK().getCodigo(), p.getPensumPK().getProgramaCodigo());
             %>
             <tbody>
                 <tr>
@@ -49,6 +47,7 @@
                 </tr>
             </tbody>
             <%}
+                    }
                 }%>
         </table>
     </body>
